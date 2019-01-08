@@ -1,0 +1,20 @@
+archivesBaseName=himalaya
+group=life.expert
+version=1.0.0
+nexusUsername=wilmerkrisp
+nexusPassword= x
+signing.keyId= XXXXXXXX //8 last digit of key
+signing.password= passfraze
+signing.secretKeyRingFile=/Users/wilmer/.gnupg/secret-keys.gpg
+#
+#   !!! NO SPACES a=b !!!
+#
+#  increase speed of gradle work
+#  only for dev envirenment NOT FOR CI or CD
+#
+#org.gradle.daemon=true
+#org.gradle.parallel=true
+#org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+#org.gradle.caching=true
+#org.gradle.logging.level=(quiet,warn,lifecycle,info,debug)
+#org.gradle.workers.max=4
