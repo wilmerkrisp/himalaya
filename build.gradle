@@ -1,0 +1,156 @@
+/**
+ *
+ * How to use
+ *
+ *  1) ./gradlew uploadArchives
+ *  3) ./gradlew closeAndReleaseRepository
+ *
+ *
+ * Optional
+ *
+ *  2) ./gradlew getStagingProfile  diagnostic task, get stagingProfileId
+ *  3) ./gradlew closeRepository    check errors on https://oss.sonatype.org/#stagingRepositories
+ *  4) ./gradlew releaseRepository  publish to https://search.maven.org/search?q=himalaya
+ *
+ *
+ *
+ *
+ * */
+
+
+plugins {
+    id 'java'
+    id 'base'
+    id 'java-library'
+    //id 'application'
+    id 'idea'
+    // id 'com.ewerk.gradle.plugins.auto-value' version '1.0.8'
+    id 'com.dorongold.task-tree' version '1.3.1' /* ./gradlew -q build taskTree */
+    id 'com.github.ben-manes.versions' version '0.20.0' /* ./gradlew -q dependencyUpdates */
+
+    id 'com.bmuschko.nexus' version '2.3.1'
+    id 'io.codearte.nexus-staging' version '0.20.0'
+}
+
+
+println "name:      $archivesBaseName"
+println "group:     " + project.getGroup()
+println "version:   $version"
+
+
+//sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    compileOnly 'org.jetbrains:annotations:16.0.3'
+
+
+    implementation 'com.google.flogger:flogger:0.3.1'
+    runtimeOnly 'com.google.flogger:flogger-system-backend:0.3.1'
+
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0-M1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.0-M1'
+    testImplementation 'org.mockito:mockito-core:2.23.4'
+    testImplementation 'com.google.truth:truth:0.42'
+
+
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+    implementation 'org.apache.commons:commons-collections4:4.2'
+    //implementation 'org.apache.commons:commons-configuration2:2.4'
+
+
+    implementation 'com.google.guava:guava:27.0.1-jre'
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+
+    implementation 'com.oath.cyclops:cyclops:10.1.1'
+    //implementation 'com.github.ben-manes.caffeine:caffeine:2.6.2'
+ 
+}
+
+
+test {
+    useJUnitPlatform()
+}
+
+
+/** https://github.com/bmuschko/gradle-nexus-plugin/
+ The Nexus plugin can add three tasks to your project:
+ •!	uploadArchives tasks
+ •	javadocJar: Assembles a jar archive containing the generated Javadoc API documentation of this project (added by default).
+ •	sourcesJar: Assembles a jar archive containing the main sources of this project (added by default).
+ •	testsJar: Assembles a jar archive containing the test sources of this project.
+ The output of all tasks is added to the archives configuration. To tell the plugin that any of these tasks should be added to the project or removed, you will need to set a specific extension property.
+ Additionally, it applies the Maven plugin as well as signing in order to leverage maven's install and uploadArchives tasks.
+ */
+
+modifyPom {
+    project {
+        name 'Hymalaya Framework'
+        description 'The library contains additional methods not included in guava, apache commons (for example, checking collections, etc).'
+        url 'https://github.com/wilmerkrisp/himalaya'
+        inceptionYear '2019'
+
+        scm {
+            url 'https://github.com/wilmerkrisp/himalaya'
+            connection 'scm:git:git://github.com/wilmerkrisp/himalaya.git'
+            developerConnection 'scm:git:ssh://git@github.com:wilmerkrisp/himalaya.git'
+        }
+
+        licenses {
+            license {
+                name 'CC BY License 4.0'
+                url 'https://github.com/wilmerkrisp/himalaya/blob/master/LICENSE'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'wilmerkrisp'
+                name 'Wilmer Krisp'
+                email 'wilmer.krisp@yahoo.com'
+            }
+        }
+    }
+}
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
+}
+
+nexus {
+    sign = true
+    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+    description = project.getGroup() + ' uploaded'
+}
+
+
+/** https://github.com/Codearte/gradle-nexus-staging-plugin/
+ •	closeRepository - closes an open repository with the uploaded artifacts. There should be just one open repository available in the staging profile (possible old/broken repositories can be dropped with Nexus GUI)
+ •	releaseRepository - releases a closed repository (required to put artifacts to Maven Central aka The Central Repository)
+ •	closeAndReleaseRepository - closes and releases a repository (an equivalent to closeRepository releaseRepository)
+ */
+nexusStaging {
+    // optional if packageGroup == project.getGroup()
+    //packageGroup = "life.expert"
+
+    // when not defined will be got from server using "packageGroup"
+    ////stagingProfileId = "8a6d45bdff93c4"
+    //stagingProfileId = "7edbe315063867"
+
+    // Dealing with error "Wrong number of received repositories in state 'open'" (http://bit.ly/2ybracm)
+    numberOfRetries = 50
+    delayBetweenRetriesInMillis = 3000
+
+    repositoryDescription = project.getGroup() + ' published'
+    ////stagingRepositoryId='central_bundles-16148'
+}
