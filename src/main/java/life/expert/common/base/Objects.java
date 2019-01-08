@@ -50,7 +50,7 @@ import com.google.gson.Gson;
 
 
 /**
- * }****</pre>
+ *  Objects
  */
 public final class Objects
 	{
@@ -67,7 +67,7 @@ public final class Objects
 	 *
 	 * <pre>{@code
 	 * this.item2(MyCommon.deepCopyOf( this.item2() ,  List.class ) );
-	 * }/pre>
+	 * }</pre>
 	 *
 	 *
 	 * @param <E>
