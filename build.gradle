@@ -46,7 +46,8 @@ repositories {
 
 dependencies {
 
-    compileOnly 'org.jetbrains:annotations:16.0.3'
+    //@NotNull annotations exposed in library public api
+    api 'org.jetbrains:annotations:16.0.3'
 
 
     implementation 'com.google.flogger:flogger:0.3.1'

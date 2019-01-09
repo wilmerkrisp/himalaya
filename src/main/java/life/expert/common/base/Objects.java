@@ -50,7 +50,7 @@ import com.google.gson.Gson;
 
 
 /**
- *  Objects
+ * Objects
  */
 public final class Objects
 	{
@@ -69,7 +69,6 @@ public final class Objects
 	 * this.item2(MyCommon.deepCopyOf( this.item2() ,  List.class ) );
 	 * }</pre>
 	 *
-	 *
 	 * @param <E>
 	 * 	the type of copied object
 	 * @param copied
@@ -77,16 +76,19 @@ public final class Objects
 	 * @param classOfObject
 	 * 	the class-literal of object. Type tag.
 	 *
-	 * @throws NullPointerException if argument nullable
-	 *
 	 * @return the copy
+	 *
+	 * @throws NullPointerException
+	 * 	if argument nullable
 	 */
-	
-	public static < E > E deepCopyOfObject( E copied ,
-	                                        Class< ? > classOfObject )
+	@NotNull
+	public static < E > E deepCopyOfObject( @NotNull E copied ,
+	                                        @NotNull Class< ? > classOfObject )
 		{
 		checkNotNull( copied ,
-		              "Argument should not be null." );
+		              "Сopied object should not be null." );
+		checkNotNull( classOfObject ,
+		             "Please write class of copied object. For example: List.class" );
 		
 		Gson g = gson_.get();
 		return (E) g.fromJson( g.toJson( copied ) ,
