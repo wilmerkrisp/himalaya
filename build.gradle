@@ -1,12 +1,12 @@
 /**
  *
- * How to use
+ * How to use:
  *
  *  1) ./gradlew uploadArchives
  *  3) ./gradlew closeAndReleaseRepository
  *
  *
- * Optional
+ * Optional steps:
  *
  *  2) ./gradlew getStagingProfile  diagnostic task, get stagingProfileId
  *  3) ./gradlew closeRepository    check errors on https://oss.sonatype.org/#stagingRepositories
@@ -39,8 +39,8 @@ println "version:   $version"
 
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_10
-    targetCompatibility = JavaVersion.VERSION_1_10
+    sourceCompatibility = JavaVersion.VERSION_1_11
+    targetCompatibility = JavaVersion.VERSION_1_11
 }
 
 repositories {

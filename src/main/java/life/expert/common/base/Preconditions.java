@@ -257,7 +257,7 @@ public final class Preconditions
 	 * 	the type parameter
 	 * @param collection
 	 * 	the collection
-	 * @param filter
+	 * @param invalidElement
 	 * 	the filter
 	 *
 	 * @return the t
@@ -269,20 +269,16 @@ public final class Preconditions
 	 */
 	@NotNull
 	public static < T extends Collection< E >, E > T checkCollection( @NotNull T collection ,
-	                                                                  @NotNull Predicate< E > filter )
+	                                                                  @NotNull Predicate< E > invalidElement )
 		{
 		notEmpty( collection );//null+empty
 		
-		if( collection.stream().anyMatch( filter ) )
-			{
-			throw new IllegalArgumentException( String.format( "Every element of collection should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
-			                                                   collection ,
-			                                                   getIndexesOfObjectsInCollection( collection ,
-			                                                                                    filter ) ) );
-			}
+		checkArgumentLazyMessage( !collection.stream().anyMatch( invalidElement ) ,
+		                          () -> String.format( "Every element of collection should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
+		                                               collection ,
+		                                               getIndexesOfObjectsInCollection( collection ,
+		                                                                                invalidElement ) ) );
 		
-		
-		//noNullElements(collection);
 		
 		return collection;
 		}
@@ -309,7 +305,7 @@ public final class Preconditions
 	 * 	the type parameter
 	 * @param map
 	 * 	the map
-	 * @param filter
+	 * @param invalidValue
 	 * 	the filter
 	 *
 	 * @return the map
@@ -321,17 +317,17 @@ public final class Preconditions
 	 */
 	@NotNull
 	public static < TKey, TValue > Map< TKey, TValue > checkMap( @NotNull Map< TKey, TValue > map ,
-	                                                             @NotNull Predicate< TValue > filter )
+	                                                             @NotNull Predicate< TValue > invalidValue )
 		{
 		notEmpty( map );//null+empty
 		
-		if( map.entrySet().stream().map( Map.Entry::getValue ).anyMatch( filter ) )
-			{
-			throw new IllegalArgumentException( String.format( "Every element of map should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
-			                                                   map ,
-			                                                   getIndexesOfObjectsInMap( map ,
-			                                                                             filter ) ) );
-			}
+		checkArgumentLazyMessage( !map.entrySet().stream().map( Map.Entry::getValue ).anyMatch( invalidValue ) ,
+		                          () -> String.format( "Every element of map should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
+		                                               map ,
+		                                               getIndexesOfObjectsInMap( map ,
+		                                                                         invalidValue ) ) );
+		
+		
 		
 		//noNullElements(collection);
 		
@@ -358,7 +354,7 @@ public final class Preconditions
 	 * 	the type parameter
 	 * @param collection
 	 * 	the collection
-	 * @param filter
+	 * @param invalidElement
 	 * 	the filter
 	 *
 	 * @return the t
@@ -370,23 +366,18 @@ public final class Preconditions
 	 */
 	@NotNull
 	public static < T extends Collection< E >, E > T checkCollectionRaiseIllegalStateException( @NotNull T collection ,
-	                                                                                            @NotNull Predicate< E > filter )
+	                                                                                            @NotNull Predicate< E > invalidElement )
 		{
 		checkState( collection != null ,
 		            "Collection should not be null." );
 		checkState( !collection.isEmpty() ,
 		            "Collection should not be empty." );
 		
-		
-		if( collection.stream().anyMatch( filter ) )
-			{
-			throw new IllegalStateException( String.format( "Every element of collection should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
-			                                                collection ,
-			                                                getIndexesOfObjectsInCollection( collection ,
-			                                                                                 filter ) ) );
-			}
-		
-		//noNullElements(collection);
+		checkStateLazyMessage( !collection.stream().anyMatch( invalidElement ) ,
+		                       () -> String.format( "Every element of collection should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
+		                                            collection ,
+		                                            getIndexesOfObjectsInCollection( collection ,
+		                                                                             invalidElement ) ) );
 		
 		return collection;
 		}
@@ -411,7 +402,7 @@ public final class Preconditions
 	 * 	the type parameter
 	 * @param map
 	 * 	the map
-	 * @param filter
+	 * @param invalidValue
 	 * 	the filter
 	 *
 	 * @return the map
@@ -423,24 +414,19 @@ public final class Preconditions
 	 */
 	@NotNull
 	public static < TKey, TValue > Map< TKey, TValue > checkMapRaiseIllegalStateException( @NotNull Map< TKey, TValue > map ,
-	                                                                                       @NotNull Predicate< TValue > filter )
+	                                                                                       @NotNull Predicate< TValue > invalidValue )
 		{
 		checkState( map != null ,
 		            "Map should not be null." );
 		checkState( !map.isEmpty() ,
 		            "Map should not be empty." );
 		
+		checkStateLazyMessage( !map.entrySet().stream().map( Map.Entry::getValue ).anyMatch( invalidValue ) ,
+		                       () -> String.format( "Every element of map should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
+		                                            map ,
+		                                            getIndexesOfObjectsInMap( map ,
+		                                                                      invalidValue ) ) );
 		
-		if( map.entrySet().stream().map( Map.Entry::getValue ).anyMatch( filter ) )
-			{
-			throw new IllegalStateException( String.format( "Every element of map should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
-			                                                map ,
-			                                                getIndexesOfObjectsInMap( map ,
-			                                                                          filter ) ) );
-			}
-		
-		
-		//noNullElements(collection);
 		
 		return map;
 		}
@@ -468,7 +454,7 @@ public final class Preconditions
 	 * 	the type parameter
 	 * @param collection
 	 * 	the collection
-	 * @param filter
+	 * @param invalidElement
 	 * 	the filter
 	 *
 	 * @return the boolean
@@ -478,10 +464,10 @@ public final class Preconditions
 	 */
 	@NotNull
 	public static < E > boolean checkCollectionReturnBool( @NotNull Collection< E > collection ,
-	                                                       @NotNull Predicate< E > filter )
+	                                                       @NotNull Predicate< E > invalidElement )
 		{
 		///assert collection==null: "Argument should not be null." ;
-		return ( collection.isEmpty() || collection.stream().anyMatch( filter ) ) ? true : false;
+		return ( collection.isEmpty() || collection.stream().anyMatch( invalidElement ) ) ? true : false;
 		
 		}
 	
@@ -510,7 +496,7 @@ public final class Preconditions
 	 * 	the type parameter
 	 * @param map
 	 * 	the map
-	 * @param filter
+	 * @param invalidValue
 	 * 	the filter
 	 *
 	 * @return the boolean
@@ -520,10 +506,10 @@ public final class Preconditions
 	 */
 	@NotNull
 	public static < TKey, TValue > boolean checkMapReturnBool( @NotNull Map< TKey, TValue > map ,
-	                                                           @NotNull Predicate< TValue > filter )
+	                                                           @NotNull Predicate< TValue > invalidValue )
 		{
 		///assert collection==null: "Argument should not be null." ;
-		return ( map.isEmpty() || map.entrySet().stream().map( Map.Entry::getValue ).anyMatch( filter ) ) ? true : false;
+		return ( map.isEmpty() || map.entrySet().stream().map( Map.Entry::getValue ).anyMatch( invalidValue ) ) ? true : false;
 		
 		}
 	
@@ -545,7 +531,7 @@ public final class Preconditions
 	 * 	the type parameter
 	 * @param collection
 	 * 	the collection
-	 * @param filter
+	 * @param invalidElement
 	 * 	the filter
 	 *
 	 * @return the t
@@ -554,14 +540,14 @@ public final class Preconditions
 	 */
 	@NotNull
 	public static < T extends Collection< E >, E > T checkCollectionRaiseAssertion( @NotNull T collection ,
-	                                                                                @NotNull Predicate< E > filter )
+	                                                                                @NotNull Predicate< E > invalidElement )
 		{
 		///assert collection==null: "Argument should not be null." ;
 		assert !collection.isEmpty() : "The validated collection is empty";
-		assert collection.stream().noneMatch( filter ) : String.format( "Every element of collection should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
-		                                                                collection ,
-		                                                                getIndexesOfObjectsInCollection( collection ,
-		                                                                                                 filter ) );
+		assert !collection.stream().anyMatch( invalidElement ) : String.format( "Every element of collection should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
+		                                                                        collection ,
+		                                                                        getIndexesOfObjectsInCollection( collection ,
+		                                                                                                         invalidElement ) );
 		return collection;
 		}
 	
@@ -583,7 +569,7 @@ public final class Preconditions
 	 * 	the type parameter
 	 * @param map
 	 * 	the map
-	 * @param filter
+	 * @param invalidValue
 	 * 	the filter
 	 *
 	 * @return the map
@@ -592,17 +578,44 @@ public final class Preconditions
 	 */
 	@NotNull
 	public static < TKey, TValue > Map< TKey, TValue > checkMapRaiseAssertion( @NotNull Map< TKey, TValue > map ,
-	                                                                           @NotNull Predicate< TValue > filter )
+	                                                                           @NotNull Predicate< TValue > invalidValue )
 		{
 		///assert collection==null: "Argument should not be null." ;
 		assert !map.isEmpty() : "The validated collection is empty";
-		assert map.entrySet().stream().map( Map.Entry::getValue ).noneMatch( filter ) : String.format( "Every element of map should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
-		                                                                                               map ,
-		                                                                                               getIndexesOfObjectsInMap( map ,
-		                                                                                                                         filter ) );
+		assert !map.entrySet().stream().map( Map.Entry::getValue ).anyMatch( invalidValue ) : String.format( "Every element of map should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
+		                                                                                                     map ,
+		                                                                                                     getIndexesOfObjectsInMap( map ,
+		                                                                                                                               invalidValue ) );
 		return map;
 		}
-		
+	
+	
+	
+	/**
+	 *
+	 */
+	public static void checkStateLazyMessage( boolean expression ,
+	                                          Supplier< String > errorMessage )
+		{
+		if( !expression )
+			{
+			throw new IllegalStateException( errorMessage.get() );
+			}
+		}
+	
+	
+	
+	/**
+	 *
+	 */
+	public static void checkArgumentLazyMessage( boolean expression ,
+	                                             Supplier< String > errorMessage )
+		{
+		if( !expression )
+			{
+			throw new IllegalArgumentException( errorMessage.get() );
+			}
+		}
 		
 		
 	}
