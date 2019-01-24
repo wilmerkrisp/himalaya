@@ -8,28 +8,6 @@ package life.expert.common.base;
 
 
 
-import org.jetbrains.annotations.*;                     //@NotNull
-import com.google.errorprone.annotations.Immutable;     //@Immutable
-
-import com.google.common.flogger.FluentLogger;          //log
-
-import static java.text.MessageFormat.format;           //format string
-
-import java.util.ResourceBundle;
-
-import com.google.common.collect.*;                     //ImmutableList
-
-import static com.google.common.base.Preconditions.*;   //checkArgument
-import static life.expert.common.base.Preconditions.*;  //checkCollection
-import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
-import static life.expert.common.base.Objects.*;        //deepCopyOfObject
-
-import java.util.function.*;                            //producer supplier
-
-import static cyclops.function.Memoize.*;               //memoizeSupplier
-import static java.util.stream.Collectors.*;            //toList streamAPI
-import static java.util.function.Predicate.*;           //isEqual streamAPI
-
 
 
 //@Header@
@@ -48,9 +26,45 @@ import static java.util.function.Predicate.*;           //isEqual streamAPI
 
 
 
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+
+
+
+
+
+
+
+
+
+/**
+ * Represents an operation on a String operand that produces a String result.  This is a specialization of {@code UnaryOperator} for
+ * the case where the operand is String.
+ *
+ * <p>This is a <a href="package-summary.html">functional interface</a>
+ * whose functional method is {@link #apply(Object)}.
+ *
+ 
+ *
+ * @see Function
+ * @since 1.8
+ */
+@FunctionalInterface
 public interface StringUnaryOperator
+	extends UnaryOperator< String >
 	{
 	
 	
 	
+	/**
+	 * Returns a unary operator that always returns its input argument.
+	 *
+	 
+	 *
+	 * @return a unary operator that always returns its input argument
+	 */
+	static StringUnaryOperator identity()
+		{
+		return t -> t;
+		}
 	}

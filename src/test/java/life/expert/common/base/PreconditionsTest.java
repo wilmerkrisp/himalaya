@@ -17,6 +17,10 @@ import com.google.common.flogger.FluentLogger;          //log
 
 import static java.text.MessageFormat.format;           //format string
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.google.common.collect.*;                     //ImmutableList
@@ -25,9 +29,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.base.Preconditions.*;   //checkArgument
-import static life.expert.common.base.Preconditions.*;  //checkCollection
+
 import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
-import static life.expert.common.base.Objects.*;        //deepCopyOfObject
+
 
 import java.util.function.*;                            //producer supplier
 
@@ -58,9 +62,43 @@ class PreconditionsTest
 	
 	
 	
+	private ImmutableList< String > badList_;
+	
+	
+	
+	private ImmutableList< String > goodList_;
+	
+	
+	
+	private ImmutableMap< String, String > badMap_;
+	
+	
+	
+	private ImmutableMap< String, String > goodMap_;
+	
+	
+	
 	@BeforeEach
 	void setUp()
 		{
+		badList_ = ImmutableList.of( "1" ,
+		                             "2" ,
+		                             "" );
+		goodList_ = ImmutableList.of( "1" ,
+		                              "2" ,
+		                              "3" );
+		badMap_ = ImmutableMap.of( "1" ,
+		                           "one" ,
+		                           "2" ,
+		                           "two" ,
+		                           "3" ,
+		                           "" );
+		goodMap_ = ImmutableMap.of( "1" ,
+		                            "one" ,
+		                            "2" ,
+		                            "two" ,
+		                            "3" ,
+		                            "three" );
 		}
 	
 	
@@ -75,6 +113,13 @@ class PreconditionsTest
 	@Test
 	void getIndexesOfObjectsInCollection()
 		{
+		String output1 = Preconditions.getIndexesOfObjectsInCollection( goodList_ ,
+		                                                                String::isBlank );
+		assertTrue( output1.isBlank() );
+		
+		String output2 = Preconditions.getIndexesOfObjectsInCollection( badList_ ,
+		                                                                String::isBlank );
+		assertFalse( output2.isBlank() );
 		}
 	
 	
@@ -82,6 +127,13 @@ class PreconditionsTest
 	@Test
 	void getIndexesOfObjectsInCollectionForLog()
 		{
+		String output1 = Preconditions.getIndexesOfObjectsInCollectionForLog( goodList_ ,
+		                                                                      String::isBlank );
+		assertTrue( output1.isBlank() );
+		
+		String output2 = Preconditions.getIndexesOfObjectsInCollectionForLog( badList_ ,
+		                                                                      String::isBlank );
+		assertFalse( output2.isBlank() );
 		}
 	
 	
@@ -89,6 +141,13 @@ class PreconditionsTest
 	@Test
 	void getKeysOfObjectsInMap()
 		{
+		String output1 = Preconditions.getKeysOfObjectsInMap( goodMap_ ,
+		                                                      String::isBlank );
+		assertTrue( output1.isBlank() );
+		
+		String output2 = Preconditions.getKeysOfObjectsInMap( badMap_ ,
+		                                                      String::isBlank );
+		assertFalse( output2.isBlank() );
 		}
 	
 	
@@ -96,6 +155,13 @@ class PreconditionsTest
 	@Test
 	void getKeysOfObjectsInMapForLog()
 		{
+		String output1 = Preconditions.getKeysOfObjectsInMap( goodMap_ ,
+		                                                      String::isBlank );
+		assertTrue( output1.isBlank() );
+		
+		String output2 = Preconditions.getKeysOfObjectsInMap( badMap_ ,
+		                                                      String::isBlank );
+		assertFalse( output2.isBlank() );
 		}
 	
 	
@@ -103,6 +169,15 @@ class PreconditionsTest
 	@Test
 	void getCountOfObjectsInCollection()
 		{
+		long output1 = Preconditions.getCountOfObjectsInCollection( goodList_ ,
+		                                                            String::isBlank );
+		assertTrue( output1 == 0 );
+		
+		long output2 = Preconditions.getCountOfObjectsInCollection( badList_ ,
+		                                                            String::isBlank );
+		assertFalse( output2 == 0 );
+		
+		
 		}
 	
 	
@@ -110,6 +185,13 @@ class PreconditionsTest
 	@Test
 	void getCountOfObjectsInMap()
 		{
+		long output1 = Preconditions.getCountOfObjectsInMap( goodMap_ ,
+		                                                     String::isBlank );
+		assertTrue( output1 == 0 );
+		
+		long output2 = Preconditions.getCountOfObjectsInMap( badMap_ ,
+		                                                     String::isBlank );
+		assertFalse( output2 == 0 );
 		}
 	
 	
@@ -117,6 +199,14 @@ class PreconditionsTest
 	@Test
 	void checkCollection()
 		{
+		Throwable thrown = assertThrows( IllegalArgumentException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkCollection( badList_ ,
+		                                                                String::isBlank );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		
 		}
 	
 	
@@ -124,6 +214,13 @@ class PreconditionsTest
 	@Test
 	void checkMap()
 		{
+		Throwable thrown = assertThrows( IllegalArgumentException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkMap( badMap_ ,
+		                                                         String::isBlank );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
 		}
 	
 	
@@ -131,6 +228,13 @@ class PreconditionsTest
 	@Test
 	void checkCollectionRaiseIllegalStateException()
 		{
+		Throwable thrown = assertThrows( IllegalStateException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkCollectionRaiseIllegalStateException( badList_ ,
+		                                                                                          String::isBlank );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
 		}
 	
 	
@@ -138,6 +242,13 @@ class PreconditionsTest
 	@Test
 	void checkMapRaiseIllegalStateException()
 		{
+		Throwable thrown = assertThrows( IllegalStateException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkMapRaiseIllegalStateException( badMap_ ,
+		                                                                                   String::isBlank );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
 		}
 	
 	
@@ -145,6 +256,13 @@ class PreconditionsTest
 	@Test
 	void checkCollectionReturnBool()
 		{
+		boolean output1 = Preconditions.checkCollectionReturnBool( goodList_ ,
+		                                                           String::isBlank );
+		assertFalse( output1 );
+		
+		boolean output2 = Preconditions.checkCollectionReturnBool( badList_ ,
+		                                                           String::isBlank );
+		assertTrue( output2 );
 		}
 	
 	
@@ -152,6 +270,13 @@ class PreconditionsTest
 	@Test
 	void checkMapReturnBool()
 		{
+		boolean output1 = Preconditions.checkMapReturnBool( goodMap_ ,
+		                                                    String::isBlank );
+		assertFalse( output1 );
+		
+		boolean output2 = Preconditions.checkMapReturnBool( badMap_ ,
+		                                                    String::isBlank );
+		assertTrue( output2 );
 		}
 	
 	
@@ -159,6 +284,13 @@ class PreconditionsTest
 	@Test
 	void checkCollectionRaiseAssertion()
 		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkCollectionRaiseAssertion( badList_ ,
+		                                                                              String::isBlank );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
 		}
 	
 	
@@ -166,6 +298,13 @@ class PreconditionsTest
 	@Test
 	void checkMapRaiseAssertion()
 		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkMapRaiseAssertion( badMap_ ,
+		                                                                       String::isBlank );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
 		}
 	
 	
@@ -173,6 +312,22 @@ class PreconditionsTest
 	@Test
 	void checkStateLazyMessage()
 		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkStateLazyMessage( false ,
+		                                                                      () ->
+		                                                                      {
+		                                                                      throw new AssertionError( "Not lazy" );
+		                                                                      } );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		
+		Preconditions.checkStateLazyMessage( true ,
+		                                     () ->
+		                                     {
+		                                     throw new IllegalArgumentException( "Not lazy" );
+		                                     } );
 		}
 	
 	
@@ -180,5 +335,22 @@ class PreconditionsTest
 	@Test
 	void checkArgumentLazyMessage()
 		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkArgumentLazyMessage( false ,
+		                                                                         () ->
+		                                                                         {
+		                                                                         throw new AssertionError( "Not lazy" );
+		                                                                         } );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		
+		Preconditions.checkArgumentLazyMessage( true ,
+		                                        () ->
+		                                        {
+		                                        throw new IllegalArgumentException( "Not lazy" );
+		                                        } );
+		 
 		}
 	}

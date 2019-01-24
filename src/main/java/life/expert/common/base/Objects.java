@@ -89,7 +89,7 @@ public final class Objects
 		              "Сopied object should not be null." );
 		checkNotNull( classOfObject ,
 		             "Please write class of copied object. For example: List.class" );
-		Exception
+		
 		Gson g = gson_.get();
 		return (E) g.fromJson( g.toJson( copied ) ,
 		                       classOfObject );

@@ -6,31 +6,8 @@ package life.expert.common.io;
 
 
 
-
-
-import org.jetbrains.annotations.*;                     //@NotNull
-import com.google.errorprone.annotations.Immutable;     //@Immutable
-
-import com.google.common.flogger.FluentLogger;          //log
-
-import static java.text.MessageFormat.format;           //format string
-
-import java.util.ResourceBundle;
-
-import com.google.common.collect.*;                     //ImmutableList
-
-import static com.google.common.base.Preconditions.*;   //checkArgument
-import static life.expert.common.base.Preconditions.*;  //checkCollection
-import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
-import static life.expert.common.base.Objects.*;        //deepCopyOfObject
-
-import java.util.function.*;                            //producer supplier
-
-import static cyclops.function.Memoize.*;               //memoizeSupplier
-import static java.util.stream.Collectors.*;            //toList streamAPI
-import static java.util.function.Predicate.*;           //isEqual streamAPI
-
-
+import java.io.IOException;
+import java.util.function.Consumer;
 
 //@Header@
 //--------------------------------------------------------------------------------
@@ -48,9 +25,9 @@ import static java.util.function.Predicate.*;           //isEqual streamAPI
 
 
 
-public interface ConsumerIO
+public interface ConsumerIO<T>
 	{
 	
-	
+	void accept(T t) throws IOException;
 	
 	}
