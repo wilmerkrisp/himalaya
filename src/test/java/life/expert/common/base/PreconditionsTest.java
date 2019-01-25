@@ -10,34 +10,10 @@ package life.expert.common.base;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.jetbrains.annotations.*;                     //@NotNull
-import com.google.errorprone.annotations.Immutable;     //@Immutable
-
-import com.google.common.flogger.FluentLogger;          //log
-
-import static java.text.MessageFormat.format;           //format string
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-
 import com.google.common.collect.*;                     //ImmutableList
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static com.google.common.base.Preconditions.*;   //checkArgument
-
-import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
-
-
-import java.util.function.*;                            //producer supplier
-
-import static cyclops.function.Memoize.*;               //memoizeSupplier
-import static java.util.stream.Collectors.*;            //toList streamAPI
-import static java.util.function.Predicate.*;           //isEqual streamAPI
 
 
 
@@ -76,6 +52,9 @@ class PreconditionsTest
 	
 	private ImmutableMap< String, String > goodMap_;
 	
+	private ImmutableList< String > emptyList_;
+	
+	private ImmutableMap< String, String > emptyMap_;
 	
 	
 	@BeforeEach
@@ -99,6 +78,11 @@ class PreconditionsTest
 		                            "two" ,
 		                            "3" ,
 		                            "three" );
+		
+		
+		emptyList_=ImmutableList.of();
+		
+		emptyMap_=ImmutableMap.of();
 		}
 	
 	
@@ -107,6 +91,437 @@ class PreconditionsTest
 	void tearDown()
 		{
 		}
+	
+	
+	//<editor-fold desc="Check collections and maps">
+	@Test
+	void checkArgument_Collection_filter()
+		{
+		Throwable thrown = assertThrows( IllegalArgumentException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkArgument( badList_ ,
+		                                                              String::isBlank );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		
+		}
+	
+	
+	
+	@Test
+	void checkArgument_Map_filter()
+		{
+		Throwable thrown = assertThrows( IllegalArgumentException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkArgument( badMap_ ,
+		                                                              String::isBlank );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	@Test
+	void checkArgumentThen_Collection_filter()
+		{
+		boolean output1 = Preconditions.checkArgumentThen( goodList_ ,
+		                                                   String::isBlank );
+		assertFalse( output1 );
+		
+		boolean output2 = Preconditions.checkArgumentThen( badList_ ,
+		                                                   String::isBlank );
+		assertTrue( output2 );
+		}
+	
+	
+	
+	@Test
+	void checkArgumentThen_Map_filter()
+		{
+		boolean output1 = Preconditions.checkArgumentThen( goodMap_ ,
+		                                                   String::isBlank );
+		assertFalse( output1 );
+		
+		boolean output2 = Preconditions.checkArgumentThen( badMap_ ,
+		                                                   String::isBlank );
+		assertTrue( output2 );
+		}
+	
+	
+	
+	@Test
+	void checkState_Collection_filter()
+		{
+		Throwable thrown = assertThrows( IllegalStateException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkState( badList_ ,
+		                                                           String::isBlank );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	@Test
+	void checkState_Map_filter()
+		{
+		Throwable thrown = assertThrows( IllegalStateException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkState( badMap_ ,
+		                                                           String::isBlank );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	@Test
+	void assertArgument_Collection_filter()
+		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.assertArgument( badList_ ,
+		                                                               String::isBlank );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	
+	@Test
+	void assertArgument_Map_filter()
+		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.assertArgument( badMap_ ,
+		                                                               String::isBlank );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	//</editor-fold>
+	
+	
+	
+	//<editor-fold desc="Generic checks">
+	
+	@Test
+	void checkArgument_bool()
+		{
+		Throwable thrown = assertThrows( IllegalArgumentException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkArgument( false , ()->"test" );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	@Test
+	void checkArgument_bool_LazyMessage()
+		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkArgument( false ,
+		                                                              () ->
+		                                                              {
+		                                                              throw new AssertionError( "Not lazy" );
+		                                                              } );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		
+		Preconditions.checkArgument( true ,
+		                             () ->
+		                             {
+		                             throw new IllegalArgumentException( "Not lazy" );
+		                             } );
+			
+		}
+	
+	@Test
+	void checkState_bool()
+		{
+		Throwable thrown = assertThrows( IllegalStateException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkState( false,()->"test" );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	@Test
+	void checkState_bool_LazyMessage()
+		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkState( false ,
+		                                                           () ->
+		                                                           {
+		                                                           throw new AssertionError( "Not lazy" );
+		                                                           } );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		
+		Preconditions.checkState( true ,
+		                          () ->
+		                          {
+		                          throw new IllegalArgumentException( "Not lazy" );
+		                          } );
+		}
+	
+	@Test
+	void assertArgument_bool()
+		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.assertArgument( false,()->"test"   );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	
+	
+	@Test
+	void checkArgumentNotNull()
+		{
+		Throwable thrown = assertThrows( IllegalArgumentException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkArgumentNotNull( null , ()->"test" );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	@Test
+	void checkStateNotNull()
+		{
+		Throwable thrown = assertThrows( IllegalStateException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkStateNotNull( null,()->"test" );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	@Test
+	void assertArgumentNotNull()
+		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.assertArgumentNotNull( null,()->"test"   );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	//</editor-fold>
+	
+	//<editor-fold desc="Check strings">
+	@Test
+	void checkArgument_String()
+		{
+		Throwable thrown = assertThrows( IllegalArgumentException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkArgument( "  "   );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	@Test
+	void checkArgumentThen_String()
+		{
+		boolean output1 = Preconditions.checkArgumentThen( "d"   );
+		assertFalse( output1 );
+		
+		boolean output2 = Preconditions.checkArgumentThen( "   " );
+		assertTrue( output2 );
+		}
+	
+	@Test
+	void checkState_String()
+		{
+		Throwable thrown = assertThrows( IllegalStateException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkState( "    ");
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	@Test
+	void assertArgument_String()
+		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.assertArgument( "    ");
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	//</editor-fold>
+	
+	//<editor-fold desc="Check numbers">
+	
+	
+	@Test
+	void checkArgument_Long()
+		{
+		Throwable thrown = assertThrows( IllegalArgumentException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkArgument( 0  );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	@Test
+	void checkArgumentThen_Long()
+		{
+		boolean output1 = Preconditions.checkArgumentThen( 1  );
+		assertFalse( output1 );
+		
+		boolean output2 = Preconditions.checkArgumentThen( 0 );
+		assertTrue( output2 );
+		}
+	
+	@Test
+	void checkState_Long()
+		{
+		Throwable thrown = assertThrows( IllegalStateException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkState( 0);
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	@Test
+	void assertArgument_Long()
+		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.assertArgument( 0);
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	//</editor-fold>
+	
+	//<editor-fold desc="Check collection and maps (subfunctions)">
+	
+	@Test
+	void checkArgument_Collection()
+		{
+		Throwable thrown = assertThrows( IllegalArgumentException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkArgument( emptyList_ );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		
+		}
+	
+	
+	@Test
+	void checkArgumentThen_Collection()
+		{
+		boolean output1 = Preconditions.checkArgumentThen(badList_ );
+		assertFalse( output1 );
+		
+		boolean output2 = Preconditions.checkArgumentThen( emptyList_  );
+		assertTrue( output2 );
+		}
+	
+	@Test
+	void checkState_Collection()
+		{
+		Throwable thrown = assertThrows( IllegalStateException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkState( emptyList_ );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	@Test
+	void assertArgument_Collection()
+		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.assertArgument(emptyList_ );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	@Test
+	void checkArgument_Map()
+		{
+		Throwable thrown = assertThrows( IllegalArgumentException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkArgument(emptyMap_ );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	@Test
+	void checkArgumentThen_Map()
+		{
+		boolean output1 = Preconditions.checkArgumentThen( badMap_ );
+		assertFalse( output1 );
+		
+		boolean output2 = Preconditions.checkArgumentThen( emptyMap_);
+		assertTrue( output2 );
+		}
+	
+	@Test
+	void checkState_Map()
+		{
+		Throwable thrown = assertThrows( IllegalStateException.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.checkState( emptyMap_ );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	@Test
+	void assertArgument_Map()
+		{
+		Throwable thrown = assertThrows( AssertionError.class ,
+		                                 () ->
+		                                 {
+		                                 Preconditions.assertArgument( emptyMap_ );
+		                                 } );
+		assertNotNull( thrown.getMessage() );
+		}
+	
+	
+	
+	
+	
+	//</editor-fold>
+	
+	
+	//<editor-fold desc="Log functions">
+	
 	
 	
 	
@@ -196,161 +611,12 @@ class PreconditionsTest
 	
 	
 	
-	@Test
-	void checkCollection()
-		{
-		Throwable thrown = assertThrows( IllegalArgumentException.class ,
-		                                 () ->
-		                                 {
-		                                 Preconditions.checkCollection( badList_ ,
-		                                                                String::isBlank );
-		                                 } );
-		assertNotNull( thrown.getMessage() );
-		
-		}
 	
 	
 	
-	@Test
-	void checkMap()
-		{
-		Throwable thrown = assertThrows( IllegalArgumentException.class ,
-		                                 () ->
-		                                 {
-		                                 Preconditions.checkMap( badMap_ ,
-		                                                         String::isBlank );
-		                                 } );
-		assertNotNull( thrown.getMessage() );
-		}
+
 	
 	
 	
-	@Test
-	void checkCollectionRaiseIllegalStateException()
-		{
-		Throwable thrown = assertThrows( IllegalStateException.class ,
-		                                 () ->
-		                                 {
-		                                 Preconditions.checkCollectionRaiseIllegalStateException( badList_ ,
-		                                                                                          String::isBlank );
-		                                 } );
-		assertNotNull( thrown.getMessage() );
-		}
 	
-	
-	
-	@Test
-	void checkMapRaiseIllegalStateException()
-		{
-		Throwable thrown = assertThrows( IllegalStateException.class ,
-		                                 () ->
-		                                 {
-		                                 Preconditions.checkMapRaiseIllegalStateException( badMap_ ,
-		                                                                                   String::isBlank );
-		                                 } );
-		assertNotNull( thrown.getMessage() );
-		}
-	
-	
-	
-	@Test
-	void checkCollectionReturnBool()
-		{
-		boolean output1 = Preconditions.checkCollectionReturnBool( goodList_ ,
-		                                                           String::isBlank );
-		assertFalse( output1 );
-		
-		boolean output2 = Preconditions.checkCollectionReturnBool( badList_ ,
-		                                                           String::isBlank );
-		assertTrue( output2 );
-		}
-	
-	
-	
-	@Test
-	void checkMapReturnBool()
-		{
-		boolean output1 = Preconditions.checkMapReturnBool( goodMap_ ,
-		                                                    String::isBlank );
-		assertFalse( output1 );
-		
-		boolean output2 = Preconditions.checkMapReturnBool( badMap_ ,
-		                                                    String::isBlank );
-		assertTrue( output2 );
-		}
-	
-	
-	
-	@Test
-	void checkCollectionRaiseAssertion()
-		{
-		Throwable thrown = assertThrows( AssertionError.class ,
-		                                 () ->
-		                                 {
-		                                 Preconditions.checkCollectionRaiseAssertion( badList_ ,
-		                                                                              String::isBlank );
-		                                 } );
-		assertNotNull( thrown.getMessage() );
-		}
-	
-	
-	
-	@Test
-	void checkMapRaiseAssertion()
-		{
-		Throwable thrown = assertThrows( AssertionError.class ,
-		                                 () ->
-		                                 {
-		                                 Preconditions.checkMapRaiseAssertion( badMap_ ,
-		                                                                       String::isBlank );
-		                                 } );
-		assertNotNull( thrown.getMessage() );
-		}
-	
-	
-	
-	@Test
-	void checkStateLazyMessage()
-		{
-		Throwable thrown = assertThrows( AssertionError.class ,
-		                                 () ->
-		                                 {
-		                                 Preconditions.checkStateLazyMessage( false ,
-		                                                                      () ->
-		                                                                      {
-		                                                                      throw new AssertionError( "Not lazy" );
-		                                                                      } );
-		                                 } );
-		assertNotNull( thrown.getMessage() );
-		
-		Preconditions.checkStateLazyMessage( true ,
-		                                     () ->
-		                                     {
-		                                     throw new IllegalArgumentException( "Not lazy" );
-		                                     } );
-		}
-	
-	
-	
-	@Test
-	void checkArgumentLazyMessage()
-		{
-		Throwable thrown = assertThrows( AssertionError.class ,
-		                                 () ->
-		                                 {
-		                                 Preconditions.checkArgumentLazyMessage( false ,
-		                                                                         () ->
-		                                                                         {
-		                                                                         throw new AssertionError( "Not lazy" );
-		                                                                         } );
-		                                 } );
-		assertNotNull( thrown.getMessage() );
-		
-		Preconditions.checkArgumentLazyMessage( true ,
-		                                        () ->
-		                                        {
-		                                        throw new IllegalArgumentException( "Not lazy" );
-		                                        } );
-		 
-		}
 	}
