@@ -5,14 +5,19 @@ package life.expert.common.io;
 
 
 
+
+
+
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 
 
@@ -23,6 +28,8 @@ import java.util.Optional;
 //                           wilmer 2019/01/23
 //
 //--------------------------------------------------------------------------------
+
+
 
 
 
@@ -57,7 +64,8 @@ public final class FileHelper
 		{
 		try
 			{
-			return Optional.ofNullable( file.toURI().toURL() );
+			return Optional.ofNullable( file.toURI()
+			                                .toURL() );
 			}
 		catch( MalformedURLException e )
 			{
@@ -95,7 +103,8 @@ public final class FileHelper
 			if( Files.notExists( path ) )
 				{
 				Files.createDirectories( parent );
-				Files.createFile( path ).toFile();
+				Files.createFile( path )
+				     .toFile();
 				System.out.println( "Target file " + path.toAbsolutePath() + " will be created." );
 				}
 			else
@@ -105,12 +114,39 @@ public final class FileHelper
 			}
 		catch( IOException exception )
 			{
-			throw new RuntimeException( "Please set correct path for file with filename. For example file  \"$buildDir/architecture/classdiagram.dot\" " ,
-			                            exception );
+			throw new RuntimeException( "Please set correct path for file with filename. For example file  \"$buildDir/architecture/classdiagram.dot\" " , exception );
 			}
 		return path.toFile();
 		}
-		
+	
+	
+	
+	public static void ioWrapper( RunnableIO operation ,
+	                        String errorMessage )
+		{
+		try
+			{
+			operation.run();
+			}
+		catch( IOException exception )
+			{
+			throw new RuntimeException( errorMessage , exception );
+			}
+		}
+	
+	
+	
+	public static RunnableIO writerWrapper( File file ,
+	                                  Supplier< String > textToWrite )
+		{
+		return () ->
+		{
+		try( final PrintWriter writer = new PrintWriter( file ) )
+			{
+			writer.print( textToWrite.get() );
+			}
+		};
+		}
 		
 		
 	}
