@@ -8,6 +8,9 @@ package life.expert.common.async;
 
 
 
+import life.expert.common.io.ConsumerIO;
+import life.expert.common.io.RunnableIO;
+import life.expert.common.io.SupplierIO;
 import org.jetbrains.annotations.*;                     //@NotNull
 import com.google.errorprone.annotations.Immutable;     //@Immutable
 
@@ -15,6 +18,9 @@ import com.google.common.flogger.FluentLogger;          //log
 
 import static java.text.MessageFormat.format;           //format string
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ResourceBundle;
 
 import com.google.common.collect.*;                     //ImmutableList
@@ -24,6 +30,8 @@ import static com.google.common.base.Preconditions.*;   //checkArgument
 import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
 import static life.expert.common.base.Objects.*;        //deepCopyOfObject
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import java.util.function.*;                            //producer supplier
 
 import static cyclops.function.Memoize.*;               //memoizeSupplier
@@ -71,7 +79,7 @@ import java.util.Optional;
  *
  *
  *
- * }</pre>
+ * }**</pre>
  */
 public final class ThreadUtils
 	{
@@ -89,81 +97,131 @@ public final class ThreadUtils
 	
 	
 	/**
-	 * constants
-	 * !CHANGE_ME_DESCRIPTION!
+	 * Delay.
 	 *
-	 * <pre>{@code
-	 *
-	 *
-	 * example 1
-	 *
-	 *           s_const (THIS not allowed)
-	 *
-	 *
-	 * }</pre>
+	 * @param second
+	 * 	the second
 	 */
-	public static final String stringOne = new String( "Test string." );
-	
-	
-	
-	private static void fs_service1_()
+	public static void delay( long second )
 		{
+		interruptedWrapper( () -> Thread.sleep( 1000 * second ) );
+		}
+	
+	//<editor-fold desc="wrappers">
+	
+	
+	
+	/**
+	 * Io wrapper.
+	 *
+	 * @param operation
+	 * 	the operation
+	 */
+	public static void interruptedWrapper( @NotNull RunnableInterrupted operation )
+		{
+		if( operation == null )
+			{
+			throw new NullPointerException();
+			}
 		
-		
-		return;
+		try
+			{
+			operation.run();
+			}
+		catch( InterruptedException | ExecutionException | TimeoutException exception )
+			{
+			throw new RuntimeException( exception );
+			}
 		}
 	
 	
 	
 	/**
-	 * method public
-	 * !CHANGE_ME_DESCRIPTION!
+	 * Io wrapper e.
 	 *
-	 * <pre>{@code
+	 * @param <E>
+	 * 	the type parameter
+	 * @param operation
+	 * 	the operation
 	 *
-	 *
-	 * example 1
-	 *
-	 *           ThreadUtils.fs_service();  (THIS not allowed)
-	 *
-	 *
-	 *
-	 * }</pre>
+	 * @return the e
 	 */
-	public static void fs_service2()
+	public static < E > E interruptedWrapper( @NotNull SupplierInterrupted< E > operation )
 		{
+		if( operation == null )
+			{
+			throw new NullPointerException();
+			}
 		
-		
-		return;
+		try
+			{
+			return operation.get();
+			}
+		catch( InterruptedException | ExecutionException | TimeoutException exception )
+			{
+			throw new RuntimeException( exception );
+			}
 		}
 	
 	
 	
 	/**
-	 * STATIC method test with argument of ANYTYPE
-	 * STATIC generic methods allowed
-	 * !CHANGE_ME_DESCRIPTION!
+	 * Io optional optional.
 	 *
-	 * <pre>{@code
+	 * @param <E>
+	 * 	the type parameter
+	 * @param operation
+	 * 	the operation
 	 *
-	 *
-	 * example 1
-	 *
-	 *           ThreadUtils.fg_service("stroka");
-	 *           ThreadUtils.fg_service(12);
-	 *
-	 *
-	 *
-	 * }</pre>
+	 * @return the optional
 	 */
-	public static < E   /* extends super VC_ & VI_ */ /* extends super VCG_<?> & VIG_<?> */ /* extends super VCG_< E > & VIG_< E > */ /* extends super VCG_<String> & VIG_<String> */ > void fg_service( @NotNull final E p_1 )
+	public static < E > Optional< E > interruptedOptional( @Nullable SupplierInterrupted< E > operation )
 		{
-		
-		
-		
-		return;
+		if( operation == null )
+			{
+			return Optional.empty();
+			}
+		try
+			{
+			return Optional.ofNullable( operation.get() );
+			}
+		catch( InterruptedException | ExecutionException | TimeoutException exception )
+			{
+			return Optional.empty();
+			}
 		}
+	
+	
+	
+	/**
+	 * Io wrapper.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param input
+	 * 	the input
+	 * @param operation
+	 * 	the operation
+	 */
+	public static < E > void interruptedWrapper( @Nullable E input ,
+	                                             @NotNull ConsumerInterrupted< E > operation )
+		{
+		if( operation == null )
+			{
+			throw new NullPointerException();
+			}
 		
-		
-		
+		try
+			{
+			operation.accept( input );
+			}
+		catch( InterruptedException | ExecutionException | TimeoutException exception )
+			{
+			throw new RuntimeException( exception );
+			}
+		}
+	//</editor-fold>
+	
+	
+	
 	}

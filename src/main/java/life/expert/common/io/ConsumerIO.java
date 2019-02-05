@@ -25,9 +25,27 @@ import java.util.function.Consumer;
 
 
 
+/**
+ * The interface Consumer io.
+ *
+ * @param <T>
+ * 	the type parameter
+ */
+@FunctionalInterface
 public interface ConsumerIO<T>
 	{
 	
+	
+	
+	/**
+	 * Accept.
+	 *
+	 * @param t
+	 * 	the t
+	 *
+	 * @throws IOException
+	 * 	the io exception
+	 */
 	void accept(T t) throws IOException;
 	
 	}

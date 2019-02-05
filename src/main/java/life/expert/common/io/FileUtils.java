@@ -44,7 +44,7 @@ import java.util.function.Supplier;
 /**
  * The type File helper.
  */
-public final class FileHelper
+public final class FileUtils
 	{
 	
 	
@@ -58,7 +58,7 @@ public final class FileHelper
 	
 	
 	
-	private FileHelper()
+	private FileUtils()
 		{
 		super();
 		
@@ -76,7 +76,7 @@ public final class FileHelper
 	 *
 	 * @return the optional
 	 */
-	public static Optional< URL > fileToUrl( File file )
+	public static Optional< URL > fileToUrl( @NotNull File file )
 		{
 		try
 			{
@@ -187,10 +187,10 @@ public final class FileHelper
 	 * @param errorMessage
 	 * 	the error message
 	 */
-	public static void ioWrapper(@NotNull RunnableIO operation ,
-	                             @NotNull String errorMessage )
+	public static void ioWrapper( @NotNull RunnableIO operation ,
+	                              @NotNull String errorMessage )
 		{
-		if( operation == null || errorMessage==null  )
+		if( operation == null || errorMessage == null )
 			{
 			throw new NullPointerException();
 			}
@@ -215,10 +215,10 @@ public final class FileHelper
 	 * @param errorMessage
 	 * 	the error message
 	 */
-	public static void ioWrapper(@NotNull RunnableIO operation ,
-	                             @NotNull Supplier< String > errorMessage )
+	public static void ioWrapper( @NotNull RunnableIO operation ,
+	                              @NotNull Supplier< String > errorMessage )
 		{
-		if( operation == null || errorMessage==null  )
+		if( operation == null || errorMessage == null )
 			{
 			throw new NullPointerException();
 			}
@@ -245,9 +245,9 @@ public final class FileHelper
 	 *
 	 * @return the e
 	 */
-	public static < E > E ioWrapper(@NotNull SupplierIO< E > operation )
+	public static < E > E ioWrapper( @NotNull SupplierIO< E > operation )
 		{
-		if( operation == null   )
+		if( operation == null )
 			{
 			throw new NullPointerException();
 			}
@@ -276,10 +276,10 @@ public final class FileHelper
 	 *
 	 * @return the e
 	 */
-	public static < E > E ioWrapper( SupplierIO< E > operation ,
-	                                 String errorMessage )
+	public static < E > E ioWrapper( @NotNull SupplierIO< E > operation ,
+	                                 @NotNull String errorMessage )
 		{
-		if( operation == null || errorMessage==null  )
+		if( operation == null || errorMessage == null )
 			{
 			throw new NullPointerException();
 			}
@@ -308,9 +308,14 @@ public final class FileHelper
 	 *
 	 * @return the e
 	 */
-	public static < E > E ioWrapper( SupplierIO< E > operation ,
-	                                 Supplier< String > errorMessage )
+	public static < E > E ioWrapper( @NotNull SupplierIO< E > operation ,
+	                                 @NotNull Supplier< String > errorMessage )
 		{
+		if( operation == null || errorMessage == null )
+			{
+			throw new NullPointerException();
+			}
+		
 		try
 			{
 			return operation.get();
@@ -333,8 +338,13 @@ public final class FileHelper
 	 *
 	 * @return the optional
 	 */
-	public static < E > Optional< E > ioOptional( SupplierIO< E > operation )
+	public static < E > Optional< E > ioOptional( @Nullable SupplierIO< E > operation )
 		{
+		if( operation == null )
+			{
+			return Optional.empty();
+			}
+		
 		try
 			{
 			return Optional.ofNullable( operation.get() );
@@ -359,10 +369,15 @@ public final class FileHelper
 	 * @param errorMessage
 	 * 	the error message
 	 */
-	public static < E > void ioWrapper( E input ,
-	                                    ConsumerIO< E > operation ,
-	                                    String errorMessage )
+	public static < E > void ioWrapper( @Nullable E input ,
+	                                    @NotNull ConsumerIO< E > operation ,
+	                                    @NotNull String errorMessage )
 		{
+		if( operation == null || errorMessage == null )
+			{
+			throw new NullPointerException();
+			}
+		
 		try
 			{
 			operation.accept( input );
@@ -385,9 +400,14 @@ public final class FileHelper
 	 * @param operation
 	 * 	the operation
 	 */
-	public static < E > void ioWrapper( E input ,
-	                                    ConsumerIO< E > operation )
+	public static < E > void ioWrapper( @Nullable E input ,
+	                                    @NotNull ConsumerIO< E > operation )
 		{
+		if( operation == null )
+			{
+			throw new NullPointerException();
+			}
+		
 		try
 			{
 			operation.accept( input );
@@ -412,10 +432,15 @@ public final class FileHelper
 	 * @param errorMessage
 	 * 	the error message
 	 */
-	public static < E > void ioWrapper( E input ,
-	                                    ConsumerIO< E > operation ,
-	                                    Supplier< String > errorMessage )
+	public static < E > void ioWrapper( @Nullable E input ,
+	                                    @NotNull ConsumerIO< E > operation ,
+	                                    @NotNull Supplier< String > errorMessage )
 		{
+		if( operation == null || errorMessage == null )
+			{
+			throw new NullPointerException();
+			}
+		
 		try
 			{
 			operation.accept( input );
@@ -427,31 +452,7 @@ public final class FileHelper
 		}
 	
 	
-	
-	/**
-	 * Io optional.
-	 *
-	 * @param <E>
-	 * 	the type parameter
-	 * @param input
-	 * 	the input
-	 * @param operation
-	 * 	the operation
-	 *
-	 * @return the optional
-	 */
-	public static < E > Optional< E > ioOptional( E input ,
-	                                              ConsumerIO< E > operation )
-		{
-		try
-			{
-			operation.accept( input );
-			}
-		catch( IOException exception )
-			{
-			return Optional.empty();
-			}
-		}
+ 
 	
 	
 	
@@ -465,9 +466,14 @@ public final class FileHelper
 	 *
 	 * @return the runnable io
 	 */
-	public static RunnableIO writerWrapper( File file ,
-	                                        Supplier< String > textToWrite )
+	public static RunnableIO writerWrapper( @NotNull File file ,
+	                                        @NotNull Supplier< String > textToWrite )
 		{
+		if( file == null || textToWrite == null )
+			{
+			throw new NullPointerException();
+			}
+		
 		return () ->
 		{
 		try( final PrintWriter writer = new PrintWriter( file ) )
