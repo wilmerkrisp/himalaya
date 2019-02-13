@@ -31,6 +31,8 @@ import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
 import static life.expert.common.base.Objects.*;        //deepCopyOfObject
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 import java.util.function.*;                            //producer supplier
 
@@ -79,10 +81,15 @@ import java.util.Optional;
  *
  *
  *
- * }**</pre>
+ * }****</pre>
  */
 public final class ThreadUtils
 	{
+	
+	
+	
+	// constant
+	private static final int WAIT_TIME_RATIO_FOR_WAITING_TASKS = 100;
 	
 	
 	
@@ -106,6 +113,49 @@ public final class ThreadUtils
 		{
 		interruptedWrapper( () -> Thread.sleep( 1000 * second ) );
 		}
+	
+	
+	
+	/**
+	 * Executor executor.
+	 *
+	 * @param size
+	 * 	the size
+	 * @param waitTimeRatio
+	 * 	the wait time ratio
+	 *
+	 * @return the executor
+	 */
+	@NotNull
+	public static Executor executor( int size ,
+	                                 int waitTimeRatio )
+		{
+		int thr_num = Runtime.getRuntime()
+		                     .availableProcessors() * ( waitTimeRatio == 0 ? 1 : waitTimeRatio );
+		return Executors.newFixedThreadPool( Math.min( size , thr_num ) , ( Runnable r ) ->
+		{
+		Thread t = new Thread( r );
+		t.setDaemon( true );
+		return t;
+		} );
+		}
+	
+	
+	
+	/**
+	 * Executor executor.
+	 *
+	 * @param size
+	 * 	the size
+	 *
+	 * @return the executor
+	 */
+	@NotNull
+	public static Executor executorForWaitingTasks( int size )
+		{
+		return executor( size , WAIT_TIME_RATIO_FOR_WAITING_TASKS );
+		}
+	
 	
 	//<editor-fold desc="wrappers">
 	
