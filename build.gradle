@@ -52,21 +52,21 @@ repositories {
 dependencies {
 
     //@NotNull annotations exposed in library public api
-    api 'org.jetbrains:annotations:16.0.3'
+    api 'org.jetbrains:annotations:17.0.0'
 
 
     implementation 'com.google.flogger:flogger:0.3.1'
     runtimeOnly 'com.google.flogger:flogger-system-backend:0.3.1'
 
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0-M1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.0-M1'
-    testImplementation 'org.mockito:mockito-core:2.23.4'
-    testImplementation 'com.google.truth:truth:0.42'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.0'
+    testImplementation 'org.mockito:mockito-core:2.24.5'
+    testImplementation 'com.google.truth:truth:0.43'
 
 
     implementation 'org.apache.commons:commons-lang3:3.8.1'
-    implementation 'org.apache.commons:commons-collections4:4.2'
+    implementation 'org.apache.commons:commons-collections4:4.3'
     //implementation 'org.apache.commons:commons-configuration2:2.4'
 
 
@@ -74,8 +74,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
 
-    implementation 'com.oath.cyclops:cyclops:10.1.1'
+    implementation 'com.oath.cyclops:cyclops:10.2.0'
     //implementation 'com.github.ben-manes.caffeine:caffeine:2.6.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
 
 }
 
