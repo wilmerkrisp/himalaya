@@ -56,32 +56,42 @@ public class LogUtils
 	private static final long DEFAULT_DELAY_ = 1;
 	
 	
+	
+	private static final String FORMAT_             = "[%s]   %s";
+	
+	
+	
+	private static final String FORMAT_DELAY_       = "[%s]   %s delay(%d)";
+	
+	
+	
+	private static final String FORMAT_IN_          = "[%s]   %s in (%s)";
+	
+	
+	
+	private static final String FORMAT_IN_DELAY_    = "[%s]   %s in (%s) delay(%d)";
+	
+	
+	
+	private static final String FORMAT_OUT_         = "[%s]   %s out(%s)";
+	
+	
+	
+	private static final String FORMAT_OUT_DELAY_   = "[%s]   %s out(%s) delay(%d)";
+	
+	
+	
+	private static final String FORMAT_INOUT_       = "[%s]   %s in (%s) out(%s)";
+	
+	
+	
+	private static final String FORMAT_INOUT_DELAY_ = "[%s]   %s in (%s) out(%s) delay(%d)";
+	
+	
+	
 	//<editor-fold desc="common">
 	
 	
-	
-	/**
-	 * Log at info.
-	 *
-	 * @param template
-	 * 	the template
-	 */
-	public static void logAtInfo( String template )
-		{
-		String format_template = template == null || template.isBlank() ? "logAtInfo    thread(%s)" : template;
-		logger_.atInfo()
-		       .log( Strings.lenientFormat( format_template , Thread.currentThread() ) );
-		}
-	
-	
-	
-	/**
-	 * Log at info.
-	 */
-	public static void logAtInfo()
-		{
-		logAtInfo( "" );
-		}
 	
 	//</editor-fold>
 	
@@ -96,20 +106,17 @@ public class LogUtils
 	 *
 	 * @param <E>
 	 * 	the type parameter
-	 * @param template
-	 * 	the template
+	 * @param message
+	 * 	the message
 	 *
 	 * @return the consumer
 	 */
-	public static <E> Consumer<E> logAtInfoConsumer( String template )
+	public static <E> Consumer<E> logAtInfoConsumer( String message )
 		{
-		String format_template = template == null || template.isBlank() ? "logAtInfoConsumer input(%s)    thread(%s)" : template;
-		
 		return ( o ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( format_template , o , Thread.currentThread() ) );
-			
+		       .log( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , o ) );
 		};
 		}
 	
@@ -125,7 +132,7 @@ public class LogUtils
 	 */
 	public static <E> Consumer<E> logAtInfoConsumer()
 		{
-		return logAtInfoConsumer( "" );
+		return logAtInfoConsumer( null );
 		}
 	
 	
@@ -137,22 +144,20 @@ public class LogUtils
 	 * 	the type parameter
 	 * @param <R>
 	 * 	the type parameter
-	 * @param template
-	 * 	the template
+	 * @param message
+	 * 	the message
 	 * @param returnObject
 	 * 	the return object
 	 *
 	 * @return the function
 	 */
-	public static <T, R> Function<T,R> logAtInfoFunction( String template ,
+	public static <T, R> Function<T,R> logAtInfoFunction( String message ,
 	                                                      R returnObject )
 		{
-		String format_template = template == null || template.isBlank() ? "logAtInfoFunction in(%s) out(%s)    thread(%s)" : template;
-		
 		return ( o ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( format_template , o , returnObject , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , o , returnObject ) );
 		return returnObject;
 		};
 		}
@@ -173,7 +178,7 @@ public class LogUtils
 	 */
 	public static <T, R> Function<T,R> logAtInfoFunction( R returnObject )
 		{
-		return logAtInfoFunction( "" , returnObject );
+		return logAtInfoFunction( null , returnObject );
 		}
 	
 	
@@ -183,19 +188,17 @@ public class LogUtils
 	 *
 	 * @param <E>
 	 * 	the type parameter
-	 * @param template
-	 * 	the template
+	 * @param message
+	 * 	the message
 	 *
 	 * @return the function
 	 */
-	public static <E> Function<E,E> logAtInfoUnaryOperator( String template )
+	public static <E> Function<E,E> logAtInfoUnaryOperator( String message )
 		{
-		String format_template = template == null || template.isBlank() ? "logAtInfoUnaryOperator inout(%s)    thread(%s)" : template;
-		
 		return ( o ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( format_template , o , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , o ) );
 		return o;
 		};
 		}
@@ -212,7 +215,7 @@ public class LogUtils
 	 */
 	public static <E> Function<E,E> logAtInfoUnaryOperator()
 		{
-		return logAtInfoUnaryOperator( "" );
+		return logAtInfoUnaryOperator( null );
 		}
 	
 	
@@ -222,22 +225,20 @@ public class LogUtils
 	 *
 	 * @param <E>
 	 * 	the type parameter
-	 * @param template
-	 * 	the template
+	 * @param message
+	 * 	the message
 	 * @param returnObject
 	 * 	the return object
 	 *
 	 * @return the callable
 	 */
-	public static <E> Callable<E> logAtInfoSupplier( String template ,
+	public static <E> Callable<E> logAtInfoSupplier( String message ,
 	                                                 E returnObject )
 		{
-		String format_template = template == null || template.isBlank() ? "logAtInfoSupplier out(%s)    thread(%s)" : template;
-		
 		return () ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( format_template , returnObject , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , returnObject ) );
 		return returnObject;
 		};
 		}
@@ -266,19 +267,17 @@ public class LogUtils
 	 *
 	 * @param <E>
 	 * 	the type parameter
-	 * @param template
-	 * 	the template
+	 * @param message
+	 * 	the message
 	 *
 	 * @return the action
 	 */
-	public static <E> Action logAtInfoRunnable( String template )
+	public static <E> Action logAtInfoRunnable( String message )
 		{
-		String format_template = template == null || template.isBlank() ? "logAtInfoRunnable    thread(%s)" : template;
-		
 		return () ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( format_template , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message ) );
 		};
 		}
 	
@@ -294,7 +293,7 @@ public class LogUtils
 	 */
 	public static <E> Action logAtInfoRunnable()
 		{
-		return logAtInfoRunnable( "" );
+		return logAtInfoRunnable( null );
 		}
 	
 	
@@ -311,22 +310,20 @@ public class LogUtils
 	 *
 	 * @param <E>
 	 * 	the type parameter
-	 * @param template
-	 * 	the template
+	 * @param message
+	 * 	the message
 	 * @param second
 	 * 	the second
 	 *
 	 * @return the e
 	 */
-	public static <E> Function<E,E> delayUnaryOperator( String template ,
+	public static <E> Function<E,E> delayUnaryOperator( String message ,
 	                                                    long second )
 		{
-		String format_template = template == null || template.isBlank() ? "delayUnaryOperator inout(%s) delay(%d)    thread(%s)" : template;
-		
 		return ( x ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( format_template , x , second , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , x , second ) );
 		ThreadUtils.delay( second );
 		return x;
 		};
@@ -346,7 +343,7 @@ public class LogUtils
 	 */
 	public static <E> Function<E,E> delayUnaryOperator( long second )
 		{
-		return delayUnaryOperator( "" , second );
+		return delayUnaryOperator( null , second );
 		}
 	
 	
@@ -358,8 +355,8 @@ public class LogUtils
 	 * 	the type parameter
 	 * @param <R>
 	 * 	the type parameter
-	 * @param template
-	 * 	the template
+	 * @param message
+	 * 	the message
 	 * @param returnObject
 	 * 	the return object
 	 * @param second
@@ -367,16 +364,14 @@ public class LogUtils
 	 *
 	 * @return the function
 	 */
-	public static <T, R> Function<T,R> delayFunction( String template ,
+	public static <T, R> Function<T,R> delayFunction( String message ,
 	                                                  R returnObject ,
 	                                                  long second )
 		{
-		String format_template = template == null || template.isBlank() ? "delayFunction in(%s) out(%s) delay(%d)    thread(%s)" : template;
-		
 		return ( x ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( format_template , x , returnObject , second , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_INOUT_DELAY_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , x , returnObject , second ) );
 		ThreadUtils.delay( second );
 		return returnObject;
 		};
@@ -401,7 +396,7 @@ public class LogUtils
 	public static <T, R> Function<T,R> delayFunction( R returnObject ,
 	                                                  long second )
 		{
-		return delayFunction( "" , returnObject , second );
+		return delayFunction( null , returnObject , second );
 		}
 	
 	
@@ -411,22 +406,20 @@ public class LogUtils
 	 *
 	 * @param <E>
 	 * 	the type parameter
-	 * @param template
-	 * 	the template
+	 * @param message
+	 * 	the message
 	 * @param second
 	 * 	the second
 	 *
 	 * @return the consumer
 	 */
-	public static <E> Consumer<E> delayConsumer( String template ,
+	public static <E> Consumer<E> delayConsumer( String message ,
 	                                             long second )
 		{
-		String format_template = template == null || template.isBlank() ? "delayConsumer in(%s) delay(%d)    thread(%s)" : template;
-		
 		return ( x ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( format_template , x , second , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , x , second ) );
 		ThreadUtils.delay( second );
 		};
 		}
@@ -445,7 +438,7 @@ public class LogUtils
 	 */
 	public static <E> Consumer<E> delayConsumer( long second )
 		{
-		return delayConsumer( "" , second );
+		return delayConsumer( null , second );
 		}
 	
 	
@@ -455,8 +448,8 @@ public class LogUtils
 	 *
 	 * @param <E>
 	 * 	the type parameter
-	 * @param template
-	 * 	the template
+	 * @param message
+	 * 	the message
 	 * @param passThought
 	 * 	the pass thought
 	 * @param second
@@ -464,16 +457,14 @@ public class LogUtils
 	 *
 	 * @return the consumer
 	 */
-	public static <E> Supplier<E> delaySupplier( String template ,
+	public static <E> Supplier<E> delaySupplier( String message ,
 	                                             E passThought ,
 	                                             long second )
 		{
-		String format_template = template == null || template.isBlank() ? "delaySupplier out(%s) delay(%d)    thread(%s)" : template;
-		
 		return () ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( format_template , passThought , second , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_OUT_DELAY_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , passThought , second ) );
 		ThreadUtils.delay( second );
 		return passThought;
 		};
@@ -496,7 +487,7 @@ public class LogUtils
 	public static <E> Supplier<E> delaySupplier( E passThought ,
 	                                             long second )
 		{
-		return delaySupplier( "" , passThought , second );
+		return delaySupplier( null , passThought , second );
 		}
 	
 	
@@ -506,22 +497,20 @@ public class LogUtils
 	 *
 	 * @param <E>
 	 * 	the type parameter
-	 * @param template
-	 * 	the template
+	 * @param message
+	 * 	the message
 	 * @param second
 	 * 	the second
 	 *
 	 * @return the action
 	 */
-	public static <E> Action delayRunnable( String template ,
+	public static <E> Action delayRunnable( String message ,
 	                                        long second )
 		{
-		String format_template = template == null || template.isBlank() ? "delayRunnable delay(%d)    thread(%s)" : template;
-		
 		return () ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( format_template , second , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_DELAY_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , second ) );
 		ThreadUtils.delay( second );
 		};
 		}
@@ -540,7 +529,7 @@ public class LogUtils
 	 */
 	public static <E> Action delayRunnable( long second )
 		{
-		return delayRunnable( "" , second );
+		return delayRunnable( null , second );
 		}
 	
 	//</editor-fold>
@@ -560,9 +549,8 @@ public class LogUtils
 	 */
 	public static <E> E defaultDelayUnaryOperator( E object )
 		{
-		
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( "defaultDelayUnaryOperator delay(%d)    thread(%s)" , DEFAULT_DELAY_ , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_INOUT_DELAY_ , Thread.currentThread() , "defaultDelayUnaryOperator" , object , object , DEFAULT_DELAY_ ) );
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		return object;
 		}
@@ -580,7 +568,7 @@ public class LogUtils
 	public static <E> void defaultDelayConsumer( E object )
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( "defaultDelayConsumer delay(%d)    thread(%s)" , DEFAULT_DELAY_ , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_IN_DELAY_ , Thread.currentThread() , "defaultDelayConsumer" , object , DEFAULT_DELAY_ ) );
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		
 		}
@@ -596,7 +584,7 @@ public class LogUtils
 	public static <E> void defaultDelayRunnable()
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( "defaultDelayRunnable delay(%d)    thread(%s)" , DEFAULT_DELAY_ , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_DELAY_ , Thread.currentThread() , "defaultDelayRunnable" , DEFAULT_DELAY_ ) );
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		}
 	
@@ -604,7 +592,7 @@ public class LogUtils
 	//</editor-fold>
 	
 	
-	
+	//<editor-fold desc="decorator">
 	/**
 	 * Log at info consumer proxy consumer.
 	 *
@@ -615,15 +603,48 @@ public class LogUtils
 	 *
 	 * @return the consumer
 	 */
-	//<editor-fold desc="proxy">
-	public static <E> Consumer<E> logAtInfoConsumerProxy( Consumer<E> consumer )
+	
+	
+	/**
+	 * Log at info.
+	 *
+	 * @param message
+	 * 	the message
+	 */
+	public static void logAtInfo( String message )
 		{
-		String template = "Consumer input(%s)    thread(%s)";
-		
+		logger_.atInfo()
+		       .log( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message ) );
+		}
+	
+	
+	
+	/**
+	 * Log at info.
+	 */
+	public static void logAtInfo()
+		{
+		logAtInfo( "" );
+		}
+	
+	
+	
+	/**
+	 * Log at info consumer.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param consumer
+	 * 	the consumer
+	 *
+	 * @return the consumer
+	 */
+	public static <E> Consumer<E> logAtInfo( Consumer<E> consumer )
+		{
 		return ( o ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( template , o , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , "logAtInfoConsumer" , o ) );
 		consumer.accept( o );
 		};
 		}
@@ -642,41 +663,39 @@ public class LogUtils
 	 *
 	 * @return the function
 	 */
-	public static <T, R> Function<T,R> logAtInfoFunctionProxy( Function<T,R> function )
+	public static <T, R> Function<T,R> logAtInfo( Function<T,R> function )
 		{
-		String template = "Function in(%s)     thread(%s)";
-		
 		return ( o ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( template , o , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , "logAtInfoFunction" , o ) );
 		return function.apply( o );
 		};
 		}
 	
 	
 	
-	/**
-	 * Log at info unary operator proxy function.
-	 *
-	 * @param <E>
-	 * 	the type parameter
-	 * @param operator
-	 * 	the operator
-	 *
-	 * @return the function
-	 */
-	public static <E> Function<E,E> logAtInfoUnaryOperatorProxy( Function<E,E> operator )
-		{
-		String template = "logAtInfoUnaryOperatorProxy in(%s)     thread(%s)";
-		
-		return ( o ) ->
-		{
-		logger_.atInfo()
-		       .log( Strings.lenientFormat( template , o , Thread.currentThread() ) );
-		return operator.apply( o );
-		};
-		}
+	//	/**
+	//	 * Log at info unary operator proxy function.
+	//	 *
+	//	 * @param <E>
+	//	 * 	the type parameter
+	//	 * @param operator
+	//	 * 	the operator
+	//	 *
+	//	 * @return the function
+	//	 */
+	//	public static <E> Function<E,E> logAtInfo( Function<E,E> operator )
+	//		{
+	//		String template = "[%s]   logAtInfoUnaryOperatorProxy in(%s)";
+	//
+	//		return ( o ) ->
+	//		{
+	//		logger_.atInfo()
+	//		       .log( Strings.lenientFormat( template , o , Thread.currentThread() ) );
+	//		return operator.apply( o );
+	//		};
+	//		}
 	
 	
 	
@@ -690,14 +709,12 @@ public class LogUtils
 	 *
 	 * @return the callable
 	 */
-	public static <E> Callable<E> logAtInfoSupplierProxy( Callable<E> supplier )
+	public static <E> Callable<E> logAtInfo( Callable<E> supplier )
 		{
-		String template = "logAtInfoSupplierProxy out(%s)    thread(%s)";
-		
 		return () ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( template , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , "logAtInfoSupplier" ) );
 		return supplier.call();
 		};
 		}
@@ -714,14 +731,12 @@ public class LogUtils
 	 *
 	 * @return the action
 	 */
-	public static <E> Action logAtInfoRunnableProxy( Action runnable )
+	public static <E> Action logAtInfo( Action runnable )
 		{
-		String template = "logAtInfoRunnableProxy    thread(%s)";
-		
 		return () ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( template , Thread.currentThread() ) );
+		       .log( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , "logAtInfoRunnable" ) );
 		runnable.run();
 		};
 		}
