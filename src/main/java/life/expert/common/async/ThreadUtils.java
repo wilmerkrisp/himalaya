@@ -8,6 +8,7 @@ package life.expert.common.async;
 
 
 
+import com.oath.cyclops.internal.stream.spliterators.push.Operator;
 import life.expert.common.io.ConsumerIO;
 import life.expert.common.io.RunnableIO;
 import life.expert.common.io.SupplierIO;
@@ -81,7 +82,7 @@ import java.util.Optional;
  *
  *
  *
- * }****</pre>
+ * }*******</pre>
  */
 public final class ThreadUtils
 	{
@@ -112,6 +113,71 @@ public final class ThreadUtils
 	public static void delay( long second )
 		{
 		interruptedWrapper( () -> Thread.sleep( 1000 * second ) );
+		}
+	
+	
+	
+	/**
+	 * Delay function e.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param second
+	 * 	the second
+	 *
+	 * @return the e
+	 */
+	public static <E> UnaryOperator<E> delayUnaryOperator( long second )
+		{
+		return ( x ) ->
+		{
+		delay( second );
+		return x;
+		};
+		}
+	
+	
+	
+	/**
+	 * Delay second consumer consumer.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param second
+	 * 	the second
+	 *
+	 * @return the consumer
+	 */
+	public static <E> Consumer<E> delayConsumer( long second )
+		{
+		return ( x ) ->
+		{
+		delay( second );
+		};
+		}
+	
+	
+	
+	/**
+	 * Delay second supplier consumer.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param passThought
+	 * 	the pass thought
+	 * @param second
+	 * 	the second
+	 *
+	 * @return the consumer
+	 */
+	public static <E> Supplier<E> delaySupplier( E passThought ,
+	                                             long second )
+		{
+		return () ->
+		{
+		delay( second );
+		return passThought;
+		};
 		}
 	
 	
@@ -196,7 +262,7 @@ public final class ThreadUtils
 	 *
 	 * @return the e
 	 */
-	public static < E > E interruptedWrapper( @NotNull SupplierInterrupted< E > operation )
+	public static <E> E interruptedWrapper( @NotNull SupplierInterrupted<E> operation )
 		{
 		if( operation == null )
 			{
@@ -225,7 +291,7 @@ public final class ThreadUtils
 	 *
 	 * @return the optional
 	 */
-	public static < E > Optional< E > interruptedOptional( @Nullable SupplierInterrupted< E > operation )
+	public static <E> Optional<E> interruptedOptional( @Nullable SupplierInterrupted<E> operation )
 		{
 		if( operation == null )
 			{
@@ -253,8 +319,8 @@ public final class ThreadUtils
 	 * @param operation
 	 * 	the operation
 	 */
-	public static < E > void interruptedWrapper( @Nullable E input ,
-	                                             @NotNull ConsumerInterrupted< E > operation )
+	public static <E> void interruptedWrapper( @Nullable E input ,
+	                                           @NotNull ConsumerInterrupted<E> operation )
 		{
 		if( operation == null )
 			{
