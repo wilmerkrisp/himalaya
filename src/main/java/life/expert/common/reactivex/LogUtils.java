@@ -63,7 +63,7 @@ public class LogUtils
 	
 	
 	
-	private static final String FORMAT_DELAY_ = "%s   %s delay(%d)";
+	private static final String FORMAT_DELAY_ = "%s   %s delay(%s)";
 	
 	
 	
@@ -71,7 +71,7 @@ public class LogUtils
 	
 	
 	
-	private static final String FORMAT_IN_DELAY_ = "%s   %s in (%s) delay(%d)";
+	private static final String FORMAT_IN_DELAY_ = "%s   %s in (%s) delay(%s)";
 	
 	
 	
@@ -79,7 +79,7 @@ public class LogUtils
 	
 	
 	
-	private static final String FORMAT_OUT_DELAY_ = "%s   %s out(%s) delay(%d)";
+	private static final String FORMAT_OUT_DELAY_ = "%s   %s out(%s) delay(%s)";
 	
 	
 	
@@ -87,7 +87,7 @@ public class LogUtils
 	
 	
 	
-	private static final String FORMAT_INOUT_DELAY_ = "%s   %s in (%s) out(%s) delay(%d)";
+	private static final String FORMAT_INOUT_DELAY_ = "%s   %s in (%s) out(%s) delay(%s)";
 	
 	
 	
@@ -475,7 +475,7 @@ public class LogUtils
 	 *
 	 * @return the consumer
 	 */
-	public static <E> Supplier<E> delaySupplier( String message ,
+	public static <E> Callable<E> delaySupplier( String message ,
 	                                             E passThought ,
 	                                             long second )
 		{
@@ -502,7 +502,7 @@ public class LogUtils
 	 *
 	 * @return the supplier
 	 */
-	public static <E> Supplier<E> delaySupplier( E passThought ,
+	public static <E> Callable<E> delaySupplier( E passThought ,
 	                                             long second )
 		{
 		return delaySupplier( null , passThought , second );
