@@ -8,6 +8,7 @@ package life.expert.common.async;
 
 
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.oath.cyclops.internal.stream.spliterators.push.Operator;
 import life.expert.common.io.ConsumerIO;
 import life.expert.common.io.RunnableIO;
@@ -34,6 +35,10 @@ import static life.expert.common.base.Objects.*;        //deepCopyOfObject
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.*;                            //producer supplier
 
@@ -82,7 +87,7 @@ import java.util.Optional;
  *
  *
  *
- * }*******</pre>
+ * }**********</pre>
  */
 public final class ThreadUtils
 	{
@@ -101,6 +106,8 @@ public final class ThreadUtils
 		
 		throw new UnsupportedOperationException( "Dont use this PRIVATE constructor.Please use constructor with parameters." );
 		}
+	
+	//<editor-fold desc="delay">
 	
 	
 	
@@ -182,8 +189,43 @@ public final class ThreadUtils
 	
 	
 	
+	//</editor-fold>
+	
+	
+	
+	//<editor-fold desc="executors">
+	
+	
+	
 	/**
 	 * Executor executor.
+	 *
+	 * @param name
+	 * 	the name
+	 * @param size
+	 * 	the size
+	 * @param waitTimeRatio
+	 * 	the wait time ratio
+	 *
+	 * @return the executor
+	 */
+	@NotNull
+	public static Executor executorDaemon( String name ,
+	                                       int size ,
+	                                       int waitTimeRatio )
+		{
+		ThreadFactory thread_factory = new ThreadFactoryBuilder().setNameFormat( name == null ? "pool%d" : name + "%d" )
+		                                                         .setDaemon( true )
+		                                                         .build();
+		int thr_num = Runtime.getRuntime()
+		                     .availableProcessors() * ( waitTimeRatio == 0 ? 1 : waitTimeRatio );
+		return Executors.newFixedThreadPool( Math.min( size , thr_num ) , thread_factory );
+		}
+	
+	
+	
+	/**
+	 * Executor daemon executor.
 	 *
 	 * @param size
 	 * 	the size
@@ -193,17 +235,10 @@ public final class ThreadUtils
 	 * @return the executor
 	 */
 	@NotNull
-	public static Executor executor( int size ,
-	                                 int waitTimeRatio )
+	public static Executor executorDaemon( int size ,
+	                                       int waitTimeRatio )
 		{
-		int thr_num = Runtime.getRuntime()
-		                     .availableProcessors() * ( waitTimeRatio == 0 ? 1 : waitTimeRatio );
-		return Executors.newFixedThreadPool( Math.min( size , thr_num ) , ( Runnable r ) ->
-		{
-		Thread t = new Thread( r );
-		t.setDaemon( true );
-		return t;
-		} );
+		return executorDaemon( null , size , waitTimeRatio );
 		}
 	
 	
@@ -219,8 +254,34 @@ public final class ThreadUtils
 	@NotNull
 	public static Executor executorForWaitingTasks( int size )
 		{
-		return executor( size , WAIT_TIME_RATIO_FOR_WAITING_TASKS );
+		return executorDaemon( size , WAIT_TIME_RATIO_FOR_WAITING_TASKS );
 		}
+	
+	
+	
+	/**
+	 * Executor custom executor.
+	 *
+	 * @param name
+	 * 	the name
+	 * @param size
+	 * 	the size
+	 *
+	 * @return the executor
+	 */
+	@NotNull
+	public static Executor executorCustom( String name ,
+	                                       int size )
+		{
+		ThreadFactory thread_factory = new ThreadFactoryBuilder().setNameFormat( name == null ? "pool%d" : name + "%d" )
+		                                                         .setDaemon( true )
+		                                                         .build();
+		return new ThreadPoolExecutor( size , size , 0L , TimeUnit.MILLISECONDS , new LinkedBlockingQueue<>( 1000 ) , thread_factory );
+		}
+	
+	
+	
+	//</editor-fold>
 	
 	
 	//<editor-fold desc="wrappers">

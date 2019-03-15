@@ -24,10 +24,12 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 
+import io.reactivex.Scheduler;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import life.expert.common.async.ThreadUtils;
 //import io.reactivex.functions.Consumer;
 
@@ -57,41 +59,57 @@ public class LogUtils
 	
 	
 	
-	private static final String FORMAT_             = "[%s]   %s";
+	private static final String FORMAT_ = "%s   %s";
 	
 	
 	
-	private static final String FORMAT_DELAY_       = "[%s]   %s delay(%d)";
+	private static final String FORMAT_DELAY_ = "%s   %s delay(%d)";
 	
 	
 	
-	private static final String FORMAT_IN_          = "[%s]   %s in (%s)";
+	private static final String FORMAT_IN_ = "%s   %s in (%s)";
 	
 	
 	
-	private static final String FORMAT_IN_DELAY_    = "[%s]   %s in (%s) delay(%d)";
+	private static final String FORMAT_IN_DELAY_ = "%s   %s in (%s) delay(%d)";
 	
 	
 	
-	private static final String FORMAT_OUT_         = "[%s]   %s out(%s)";
+	private static final String FORMAT_OUT_ = "%s   %s out(%s)";
 	
 	
 	
-	private static final String FORMAT_OUT_DELAY_   = "[%s]   %s out(%s) delay(%d)";
+	private static final String FORMAT_OUT_DELAY_ = "%s   %s out(%s) delay(%d)";
 	
 	
 	
-	private static final String FORMAT_INOUT_       = "[%s]   %s in (%s) out(%s)";
+	private static final String FORMAT_INOUT_ = "%s   %s in (%s) out(%s)";
 	
 	
 	
-	private static final String FORMAT_INOUT_DELAY_ = "[%s]   %s in (%s) out(%s) delay(%d)";
+	private static final String FORMAT_INOUT_DELAY_ = "%s   %s in (%s) out(%s) delay(%d)";
 	
 	
 	
 	//<editor-fold desc="common">
 	
 	
+	
+	/**
+	 * Fixed scheduler.
+	 *
+	 * @param name
+	 * 	the name
+	 * @param size
+	 * 	the size
+	 *
+	 * @return the scheduler
+	 */
+	public static Scheduler fixed( String name ,
+	                               int size )
+		{
+		return Schedulers.from( ThreadUtils.executorCustom( name , size ) );
+		}
 	
 	//</editor-fold>
 	
