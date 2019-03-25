@@ -1,4 +1,4 @@
-package life.expert.common.reactivestreams;
+package life.expert.common.async;
 //@Header@
 //--------------------------------------------------------------------------------
 //
@@ -19,13 +19,17 @@ import com.google.common.base.Strings;
 import com.google.common.flogger.FluentLogger;
 
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 
-import io.reactivex.Scheduler;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
+//import io.reactivex.Scheduler;
+//import io.reactivex.functions.Action;
+//import io.reactivex.functions.Consumer;
+//import io.reactivex.functions.Function;
+//import io.reactivex.schedulers.Schedulers;
 import life.expert.common.async.ThreadUtils;
 //import io.reactivestreams.functions.Consumer;
 
@@ -40,7 +44,7 @@ import life.expert.common.async.ThreadUtils;
 /**
  * The type Log utils.
  *
- * import static life.expert.common.reactivestreams.LogUtils.*;
+ * import static life.expert.common.async.LogUtils.*;
  */
 public class LogUtils
 	{
@@ -86,28 +90,7 @@ public class LogUtils
 	private static final String FORMAT_INOUT_DELAY_ = "%s   %s in (%s) out(%s) delay(%s)";
 	
 	
-	
-	//<editor-fold desc="common">
-	
-	
-	
-	/**
-	 * Fixed scheduler.
-	 *
-	 * @param name
-	 * 	the name
-	 * @param size
-	 * 	the size
-	 *
-	 * @return the scheduler
-	 */
-	public static Scheduler fixed( String name ,
-	                               int size )
-		{
-		return Schedulers.from( ThreadUtils.executorCustom( name , size ) );
-		}
-	
-	//</editor-fold>
+
 	
 	
 	
@@ -207,7 +190,7 @@ public class LogUtils
 	 *
 	 * @return the function
 	 */
-	public static <E> Function<E,E> logAtInfoUnaryOperator( String message )
+	public static <E> UnaryOperator<E> logAtInfoUnaryOperator( String message )
 		{
 		return ( o ) ->
 		{
@@ -227,7 +210,7 @@ public class LogUtils
 	 *
 	 * @return the function
 	 */
-	public static <E> Function<E,E> logAtInfoUnaryOperator()
+	public static <E> UnaryOperator<E> logAtInfoUnaryOperator()
 		{
 		return logAtInfoUnaryOperator( null );
 		}
@@ -246,8 +229,8 @@ public class LogUtils
 	 *
 	 * @return the callable
 	 */
-	public static <E> Callable<E> logAtInfoSupplier( String message ,
-	                                                 E returnObject )
+	public static <E> Supplier<E> logAtInfoSupplier( String message ,
+	                                                    E returnObject )
 		{
 		return () ->
 		{
@@ -269,7 +252,7 @@ public class LogUtils
 	 *
 	 * @return the callable
 	 */
-	public static <E> Callable<E> logAtInfoSupplier( E returnObject )
+	public static <E> Supplier<E> logAtInfoSupplier( E returnObject )
 		{
 		return logAtInfoSupplier( returnObject );
 		}
@@ -286,7 +269,7 @@ public class LogUtils
 	 *
 	 * @return the action
 	 */
-	public static <E> Action logAtInfoRunnable( String message )
+	public static <E> Runnable logAtInfoRunnable( String message )
 		{
 		return () ->
 		{
@@ -305,7 +288,7 @@ public class LogUtils
 	 *
 	 * @return the action
 	 */
-	public static <E> Action logAtInfoRunnable()
+	public static <E> Runnable logAtInfoRunnable()
 		{
 		return logAtInfoRunnable( null );
 		}
@@ -317,6 +300,9 @@ public class LogUtils
 	
 	//<editor-fold desc="log+delay">
 	
+	
+	
+
 	
 	
 	/**
@@ -331,7 +317,7 @@ public class LogUtils
 	 *
 	 * @return the e
 	 */
-	public static <E> Function<E,E> delayUnaryOperator( String message ,
+	public static <E> UnaryOperator<E> delayUnaryOperator( String message ,
 	                                                    long second )
 		{
 		return ( x ) ->
@@ -355,7 +341,7 @@ public class LogUtils
 	 *
 	 * @return the function
 	 */
-	public static <E> Function<E,E> delayUnaryOperator( long second )
+	public static <E> UnaryOperator<E> delayUnaryOperator( long second )
 		{
 		return delayUnaryOperator( null , second );
 		}
@@ -471,7 +457,7 @@ public class LogUtils
 	 *
 	 * @return the consumer
 	 */
-	public static <E> Callable<E> delaySupplier( String message ,
+	public static <E> Supplier<E> delaySupplier( String message ,
 	                                             E passThought ,
 	                                             long second )
 		{
@@ -498,7 +484,7 @@ public class LogUtils
 	 *
 	 * @return the supplier
 	 */
-	public static <E> Callable<E> delaySupplier( E passThought ,
+	public static <E> Supplier<E> delaySupplier( E passThought ,
 	                                             long second )
 		{
 		return delaySupplier( null , passThought , second );
@@ -518,7 +504,7 @@ public class LogUtils
 	 *
 	 * @return the action
 	 */
-	public static <E> Action delayRunnable( String message ,
+	public static <E> Runnable delayRunnable( String message ,
 	                                        long second )
 		{
 		return () ->
@@ -541,7 +527,7 @@ public class LogUtils
 	 *
 	 * @return the action
 	 */
-	public static <E> Action delayRunnable( long second )
+	public static <E> Runnable delayRunnable( long second )
 		{
 		return delayRunnable( null , second );
 		}
@@ -628,7 +614,7 @@ public class LogUtils
 	public static void logAtInfo( String message )
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message ) );
+		       .log( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , message == null||message.isBlank() ? "logAtInfoConsumer" : message ) );
 		}
 	
 	
@@ -723,13 +709,13 @@ public class LogUtils
 	 *
 	 * @return the callable
 	 */
-	public static <E> Callable<E> logAtInfo( Callable<E> supplier )
+	public static <E> Supplier<E> logAtInfo( Supplier<E> supplier )
 		{
 		return () ->
 		{
 		logger_.atInfo()
 		       .log( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , "logAtInfoSupplier" ) );
-		return supplier.call();
+		return supplier.get();
 		};
 		}
 	
@@ -745,7 +731,7 @@ public class LogUtils
 	 *
 	 * @return the action
 	 */
-	public static <E> Action logAtInfo( Action runnable )
+	public static <E> Runnable logAtInfo( Runnable runnable )
 		{
 		return () ->
 		{

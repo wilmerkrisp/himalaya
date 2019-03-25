@@ -97,6 +97,8 @@ public final class ThreadUtils
 	// constant
 	private static final int WAIT_TIME_RATIO_FOR_WAITING_TASKS = 100;
 	
+ 
+	
 	
 	
 	private ThreadUtils()
@@ -107,8 +109,30 @@ public final class ThreadUtils
 		throw new UnsupportedOperationException( "Dont use this PRIVATE constructor.Please use constructor with parameters." );
 		}
 	
-	//<editor-fold desc="delay">
 	
+	
+
+	
+	
+	//<editor-fold desc="common">
+	
+	
+	//
+	//	/**
+	//	 * Fixed scheduler.
+	//	 *
+	//	 * @param name
+	//	 * 	the name
+	//	 * @param size
+	//	 * 	the size
+	//	 *
+	//	 * @return the scheduler
+	//	 */
+	//	public static Scheduler fixed( String name ,
+	//	                               int size )
+	//		{
+	//		return Schedulers.from( ThreadUtils.executorCustom( name , size ) );
+	//		}
 	
 	
 	/**
@@ -122,75 +146,7 @@ public final class ThreadUtils
 		interruptedWrapper( () -> Thread.sleep( 1000 * second ) );
 		}
 	
-	
-	
-	/**
-	 * Delay function e.
-	 *
-	 * @param <E>
-	 * 	the type parameter
-	 * @param second
-	 * 	the second
-	 *
-	 * @return the e
-	 */
-	public static <E> UnaryOperator<E> delayUnaryOperator( long second )
-		{
-		return ( x ) ->
-		{
-		delay( second );
-		return x;
-		};
-		}
-	
-	
-	
-	/**
-	 * Delay second consumer consumer.
-	 *
-	 * @param <E>
-	 * 	the type parameter
-	 * @param second
-	 * 	the second
-	 *
-	 * @return the consumer
-	 */
-	public static <E> Consumer<E> delayConsumer( long second )
-		{
-		return ( x ) ->
-		{
-		delay( second );
-		};
-		}
-	
-	
-	
-	/**
-	 * Delay second supplier consumer.
-	 *
-	 * @param <E>
-	 * 	the type parameter
-	 * @param passThought
-	 * 	the pass thought
-	 * @param second
-	 * 	the second
-	 *
-	 * @return the consumer
-	 */
-	public static <E> Supplier<E> delaySupplier( E passThought ,
-	                                             long second )
-		{
-		return () ->
-		{
-		delay( second );
-		return passThought;
-		};
-		}
-	
-	
-	
 	//</editor-fold>
-	
 	
 	
 	//<editor-fold desc="executors">
