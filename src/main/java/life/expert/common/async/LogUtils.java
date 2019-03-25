@@ -1,8 +1,8 @@
-package life.expert.common.reactivex;
+package life.expert.common.reactivestreams;
 //@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.common.reactivex
+//                          himalaya  life.expert.common.reactivestreams
 //                           wilmer 2019/03/05
 //
 //--------------------------------------------------------------------------------
@@ -20,18 +20,14 @@ import com.google.common.flogger.FluentLogger;
 
 import java.util.concurrent.Callable;
 
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
-
 
 import io.reactivex.Scheduler;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import life.expert.common.async.ThreadUtils;
-//import io.reactivex.functions.Consumer;
+//import io.reactivestreams.functions.Consumer;
 
 
 
@@ -44,7 +40,7 @@ import life.expert.common.async.ThreadUtils;
 /**
  * The type Log utils.
  *
- * import static life.expert.common.reactivex.LogUtils.*;
+ * import static life.expert.common.reactivestreams.LogUtils.*;
  */
 public class LogUtils
 	{
