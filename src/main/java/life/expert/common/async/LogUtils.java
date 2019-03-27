@@ -254,7 +254,7 @@ public class LogUtils
 	 */
 	public static <E> Supplier<E> logAtInfoSupplier( E returnObject )
 		{
-		return logAtInfoSupplier( returnObject );
+		return logAtInfoSupplier(null, returnObject );
 		}
 	
 	
