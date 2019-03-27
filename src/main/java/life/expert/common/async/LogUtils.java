@@ -154,7 +154,7 @@ public class LogUtils
 		return ( o ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , o , returnObject ) );
+		       .log( Strings.lenientFormat( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtInfoFunction" : message , o , returnObject ) );
 		return returnObject;
 		};
 		}
@@ -195,7 +195,7 @@ public class LogUtils
 		return ( o ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , o ) );
+		       .log( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtInfoUnaryOperator" : message , o ) );
 		return o;
 		};
 		}
@@ -235,7 +235,7 @@ public class LogUtils
 		return () ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , returnObject ) );
+		       .log( Strings.lenientFormat( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtInfoSupplier" : message , returnObject ) );
 		return returnObject;
 		};
 		}
@@ -274,7 +274,7 @@ public class LogUtils
 		return () ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message ) );
+		       .log( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , message == null ? "logAtInfoRunnable" : message ) );
 		};
 		}
 	
@@ -323,7 +323,7 @@ public class LogUtils
 		return ( x ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , x , second ) );
+		       .log( Strings.lenientFormat( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayUnaryOperator" : message , x , second ) );
 		ThreadUtils.delay( second );
 		return x;
 		};
@@ -371,7 +371,7 @@ public class LogUtils
 		return ( x ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( FORMAT_INOUT_DELAY_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , x , returnObject , second ) );
+		       .log( Strings.lenientFormat( FORMAT_INOUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunction" : message , x , returnObject , second ) );
 		ThreadUtils.delay( second );
 		return returnObject;
 		};
@@ -419,7 +419,7 @@ public class LogUtils
 		return ( x ) ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , x , second ) );
+		       .log( Strings.lenientFormat( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayConsumer" : message , x , second ) );
 		ThreadUtils.delay( second );
 		};
 		}
@@ -464,7 +464,7 @@ public class LogUtils
 		return () ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( FORMAT_OUT_DELAY_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , passThought , second ) );
+		       .log( Strings.lenientFormat( FORMAT_OUT_DELAY_ , Thread.currentThread() , message == null ? "delaySupplier" : message , passThought , second ) );
 		ThreadUtils.delay( second );
 		return passThought;
 		};
@@ -510,7 +510,7 @@ public class LogUtils
 		return () ->
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( FORMAT_DELAY_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , second ) );
+		       .log( Strings.lenientFormat( FORMAT_DELAY_ , Thread.currentThread() , message == null ? "delayRunnable" : message , second ) );
 		ThreadUtils.delay( second );
 		};
 		}
@@ -614,7 +614,7 @@ public class LogUtils
 	public static void logAtInfo( String message )
 		{
 		logger_.atInfo()
-		       .log( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , message == null||message.isBlank() ? "logAtInfoConsumer" : message ) );
+		       .log( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , message == null||message.isBlank() ? "logAtInfo" : message ) );
 		}
 	
 	
