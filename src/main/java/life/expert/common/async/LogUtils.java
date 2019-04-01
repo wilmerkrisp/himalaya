@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Callable;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -86,6 +87,10 @@ public class LogUtils
 	
 	
 	
+	private static final String FORMAT_IN2_ = "%s   %s in (%s) in (%s)";
+	
+	
+	
 	private static final String FORMAT_IN_DELAY_ = "%s   %s in (%s) delay(%s)";
 	
 	
@@ -102,7 +107,15 @@ public class LogUtils
 	
 	
 	
+	private static final String FORMAT_IN2OUT_ = "%s   %s in (%s) in (%s) out(%s)";
+	
+	
+	
 	private static final String FORMAT_INOUT_DELAY_ = "%s   %s in (%s) out(%s) delay(%s)";
+	
+	
+	
+	private static final String FORMAT_IN2OUT_DELAY_ = "%s   %s in (%s) in (%s) out(%s) delay(%s)";
 	
 	
 	
@@ -186,6 +199,55 @@ public class LogUtils
 	public static <T, R> Function<T,R> logAtInfoFunction( R returnObject )
 		{
 		return logAtInfoFunction( null , returnObject );
+		}
+	
+	
+	
+	/**
+	 * Log at info function function.
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param <U>
+	 * 	the type parameter
+	 * @param <R>
+	 * 	the type parameter
+	 * @param message
+	 * 	the message
+	 * @param returnObject
+	 * 	the return object
+	 *
+	 * @return the function
+	 */
+	public static <T, U, R> BiFunction<T,U,R> logAtInfoBiFunction( String message ,
+	                                                               R returnObject )
+		{
+		return ( a , b ) ->
+		{
+		log_( Strings.lenientFormat( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "logAtInfoFunction" : message , a , b , returnObject ) );
+		return returnObject;
+		};
+		}
+	
+	
+	
+	/**
+	 * Log at info function function.
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param <U>
+	 * 	the type parameter
+	 * @param <R>
+	 * 	the type parameter
+	 * @param returnObject
+	 * 	the return object
+	 *
+	 * @return the function
+	 */
+	public static <T, U, R> BiFunction<T,U,R> logAtInfoBiFunction( R returnObject )
+		{
+		return logAtInfoBiFunction( null , returnObject );
 		}
 	
 	
@@ -399,6 +461,62 @@ public class LogUtils
 	                                                  long second )
 		{
 		return delayFunction( null , returnObject , second );
+		}
+	
+	
+	
+	/**
+	 * Delay function function.
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param <U>
+	 * 	the type parameter
+	 * @param <R>
+	 * 	the type parameter
+	 * @param message
+	 * 	the message
+	 * @param returnObject
+	 * 	the return object
+	 * @param second
+	 * 	the second
+	 *
+	 * @return the function
+	 */
+	public static <T, U, R> BiFunction<T,U,R> delayBiFunction( String message ,
+	                                                           R returnObject ,
+	                                                           long second )
+		{
+		return ( a , b ) ->
+		{
+		log_( Strings.lenientFormat( FORMAT_IN2OUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunction" : message , a , b , returnObject , second ) );
+		ThreadUtils.delay( second );
+		return returnObject;
+		};
+		}
+	
+	
+	
+	/**
+	 * Delay function function.
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param <U>
+	 * 	the type parameter
+	 * @param <R>
+	 * 	the type parameter
+	 * @param returnObject
+	 * 	the return object
+	 * @param second
+	 * 	the second
+	 *
+	 * @return the function
+	 */
+	public static <T, U, R> BiFunction<T,U,R> delayBiFunction( R returnObject ,
+	                                                           long second )
+		{
+		return delayBiFunction( null , returnObject , second );
 		}
 	
 	
@@ -666,6 +784,30 @@ public class LogUtils
 		};
 		}
 	
+	
+	
+	/**
+	 * Log at info function proxy function.
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param <U>
+	 * 	the type parameter
+	 * @param <R>
+	 * 	the type parameter
+	 * @param function
+	 * 	the function
+	 *
+	 * @return the function
+	 */
+	public static <T, U, R> BiFunction<T,U,R> logAtInfo( BiFunction<T,U,R> function )
+		{
+		return ( a , b ) ->
+		{
+		log_( Strings.lenientFormat( FORMAT_IN2_ , Thread.currentThread() , "logAtInfoFunction" , a , b ) );
+		return function.apply( a , b );
+		};
+		}
 	
 	
 	//	/**
