@@ -8,7 +8,9 @@ package life.expert.common.io;
 
 
 
-import com.google.common.flogger.FluentLogger;
+import life.expert.common.async.LogUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +56,22 @@ public final class FileUtils
 	
 	
 	
-	private static final FluentLogger logger_ = FluentLogger.forEnclosingClass();
+	private static final Logger logger_ = LoggerFactory.getLogger( FileUtils.class );
+	
+	
+	
+	private static final void log_( String format ,
+	                                Object... arguments )
+		{
+		logger_.info( format , arguments );
+		}
+	
+	
+	
+	private static final void logAtError_( String message )
+		{
+		logger_.error( message );
+		}
 	
 	
 	
@@ -76,7 +93,7 @@ public final class FileUtils
 	 *
 	 * @return the optional
 	 */
-	public static Optional< URL > fileToUrl( @NotNull File file )
+	public static Optional<URL> fileToUrl( @NotNull File file )
 		{
 		try
 			{
@@ -126,21 +143,21 @@ public final class FileUtils
 				//Path build_dir = project.getBuildDir().toPath();
 				//parent = defaultDir.resolve( file);
 				path = defaultDir.resolve( fileName );
-				logger_.atInfo()
-				       .log( "Parent is null. Using default dir: %s" , path.toAbsolutePath() );
+				log_( "Parent is null. Using default dir: {}" , path.toAbsolutePath()
+				                                                    .toString() );
 				}
 			if( Files.notExists( path ) )
 				{
 				Files.createDirectories( parent );
 				Files.createFile( path )
 				     .toFile();
-				logger_.atInfo()
-				       .log( "Target file will be created: %s" , path.toAbsolutePath() );
+				log_( "Target file will be created: {}" , path.toAbsolutePath()
+				                                              .toString() );
 				}
 			else
 				{
-				logger_.atInfo()
-				       .log( "Target file will be retrieved: %s" , path.toAbsolutePath() );
+				log_( "Target file will be retrieved: {}" , path.toAbsolutePath()
+				                                                .toString() );
 				}
 			}
 		catch( IOException exception )
@@ -216,7 +233,7 @@ public final class FileUtils
 	 * 	the error message
 	 */
 	public static void ioWrapper( @NotNull RunnableIO operation ,
-	                              @NotNull Supplier< String > errorMessage )
+	                              @NotNull Supplier<String> errorMessage )
 		{
 		if( operation == null || errorMessage == null )
 			{
@@ -245,7 +262,7 @@ public final class FileUtils
 	 *
 	 * @return the e
 	 */
-	public static < E > E ioWrapper( @NotNull SupplierIO< E > operation )
+	public static <E> E ioWrapper( @NotNull SupplierIO<E> operation )
 		{
 		if( operation == null )
 			{
@@ -276,8 +293,8 @@ public final class FileUtils
 	 *
 	 * @return the e
 	 */
-	public static < E > E ioWrapper( @NotNull SupplierIO< E > operation ,
-	                                 @NotNull String errorMessage )
+	public static <E> E ioWrapper( @NotNull SupplierIO<E> operation ,
+	                               @NotNull String errorMessage )
 		{
 		if( operation == null || errorMessage == null )
 			{
@@ -308,8 +325,8 @@ public final class FileUtils
 	 *
 	 * @return the e
 	 */
-	public static < E > E ioWrapper( @NotNull SupplierIO< E > operation ,
-	                                 @NotNull Supplier< String > errorMessage )
+	public static <E> E ioWrapper( @NotNull SupplierIO<E> operation ,
+	                               @NotNull Supplier<String> errorMessage )
 		{
 		if( operation == null || errorMessage == null )
 			{
@@ -338,7 +355,7 @@ public final class FileUtils
 	 *
 	 * @return the optional
 	 */
-	public static < E > Optional< E > ioOptional( @Nullable SupplierIO< E > operation )
+	public static <E> Optional<E> ioOptional( @Nullable SupplierIO<E> operation )
 		{
 		if( operation == null )
 			{
@@ -369,9 +386,9 @@ public final class FileUtils
 	 * @param errorMessage
 	 * 	the error message
 	 */
-	public static < E > void ioWrapper( @Nullable E input ,
-	                                    @NotNull ConsumerIO< E > operation ,
-	                                    @NotNull String errorMessage )
+	public static <E> void ioWrapper( @Nullable E input ,
+	                                  @NotNull ConsumerIO<E> operation ,
+	                                  @NotNull String errorMessage )
 		{
 		if( operation == null || errorMessage == null )
 			{
@@ -400,8 +417,8 @@ public final class FileUtils
 	 * @param operation
 	 * 	the operation
 	 */
-	public static < E > void ioWrapper( @Nullable E input ,
-	                                    @NotNull ConsumerIO< E > operation )
+	public static <E> void ioWrapper( @Nullable E input ,
+	                                  @NotNull ConsumerIO<E> operation )
 		{
 		if( operation == null )
 			{
@@ -432,9 +449,9 @@ public final class FileUtils
 	 * @param errorMessage
 	 * 	the error message
 	 */
-	public static < E > void ioWrapper( @Nullable E input ,
-	                                    @NotNull ConsumerIO< E > operation ,
-	                                    @NotNull Supplier< String > errorMessage )
+	public static <E> void ioWrapper( @Nullable E input ,
+	                                  @NotNull ConsumerIO<E> operation ,
+	                                  @NotNull Supplier<String> errorMessage )
 		{
 		if( operation == null || errorMessage == null )
 			{
@@ -452,9 +469,6 @@ public final class FileUtils
 		}
 	
 	
- 
-	
-	
 	
 	/**
 	 * Writer wrapper runnable io.
@@ -467,7 +481,7 @@ public final class FileUtils
 	 * @return the runnable io
 	 */
 	public static RunnableIO writerWrapper( @NotNull File file ,
-	                                        @NotNull Supplier< String > textToWrite )
+	                                        @NotNull Supplier<String> textToWrite )
 		{
 		if( file == null || textToWrite == null )
 			{
