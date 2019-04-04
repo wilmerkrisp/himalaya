@@ -58,9 +58,10 @@ public class LogUtils
 	
 	
 	
-	private static final void log_( String message )
+	private static final void log_( String format ,
+	                                Object... arguments )
 		{
-		logger_.info( message );
+		logger_.info( format , arguments );
 		}
 	
 	
@@ -76,51 +77,51 @@ public class LogUtils
 	
 	
 	
-	private static final String FORMAT_ = "%s   %s";
+	private static final String FORMAT_ = "{}   {}";
 	
 	
 	
-	private static final String FORMAT_DELAY_ = "%s   %s delay(%s)";
+	private static final String FORMAT_DELAY_ = "{}   {} delay({})";
 	
 	
 	
-	private static final String FORMAT_IN_ = "%s   %s in (%s)";
+	private static final String FORMAT_IN_ = "{}   {} in ({})";
 	
 	
 	
-	private static final String FORMAT_IN2_ = "%s   %s in (%s) in (%s)";
+	private static final String FORMAT_IN2_ = "{}   {} in ({}) in ({})";
 	
 	
 	
-	private static final String FORMAT_IN_DELAY_ = "%s   %s in (%s) delay(%s)";
+	private static final String FORMAT_IN_DELAY_ = "{}   {} in ({}) delay({})";
 	
 	
 	
-	private static final String FORMAT_IN2_DELAY_ = "%s   %s in (%s) in (%s) delay(%s)";
+	private static final String FORMAT_IN2_DELAY_ = "{}   {} in ({}) in ({}) delay({})";
 	
 	
 	
-	private static final String FORMAT_OUT_ = "%s   %s out(%s)";
+	private static final String FORMAT_OUT_ = "{}   {} out({})";
 	
 	
 	
-	private static final String FORMAT_OUT_DELAY_ = "%s   %s out(%s) delay(%s)";
+	private static final String FORMAT_OUT_DELAY_ = "{}   {} out({}) delay({})";
 	
 	
 	
-	private static final String FORMAT_INOUT_ = "%s   %s in (%s) out(%s)";
+	private static final String FORMAT_INOUT_ = "{}   {} in ({}) out({})";
 	
 	
 	
-	private static final String FORMAT_IN2OUT_ = "%s   %s in (%s) in (%s) out(%s)";
+	private static final String FORMAT_IN2OUT_ = "{}   {} in ({}) in ({}) out({})";
 	
 	
 	
-	private static final String FORMAT_INOUT_DELAY_ = "%s   %s in (%s) out(%s) delay(%s)";
+	private static final String FORMAT_INOUT_DELAY_ = "{}   {} in ({}) out({}) delay({})";
 	
 	
 	
-	private static final String FORMAT_IN2OUT_DELAY_ = "%s   %s in (%s) in (%s) out(%s) delay(%s)";
+	private static final String FORMAT_IN2OUT_DELAY_ = "{}   {} in ({}) in ({}) out({}) delay({})";
 	
 	
 	
@@ -142,7 +143,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , o ) );
+		log_( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , o );
 		};
 		}
 	
@@ -179,7 +180,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN2_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , a , b ) );
+		log_( FORMAT_IN2_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , a , b );
 		};
 		}
 	
@@ -221,7 +222,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtInfoFunction" : message , o , returnObject ) );
+		log_( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtInfoFunction" : message , o , returnObject );
 		return returnObject;
 		};
 		}
@@ -268,7 +269,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "logAtInfoFunction" : message , a , b , returnObject ) );
+		log_( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "logAtInfoFunction" : message , a , b , returnObject );
 		return returnObject;
 		};
 		}
@@ -310,7 +311,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtInfoUnaryOperator" : message , o ) );
+		log_( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtInfoUnaryOperator" : message , o );
 		return o;
 		};
 		}
@@ -349,7 +350,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		log_( Strings.lenientFormat( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtInfoSupplier" : message , returnObject ) );
+		log_( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtInfoSupplier" : message , returnObject );
 		return returnObject;
 		};
 		}
@@ -387,7 +388,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		log_( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , message == null ? "logAtInfoRunnable" : message ) );
+		log_( FORMAT_ , Thread.currentThread() , message == null ? "logAtInfoRunnable" : message );
 		};
 		}
 	
@@ -432,7 +433,7 @@ public class LogUtils
 		{
 		return ( x ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayUnaryOperator" : message , x , second ) );
+		log_( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayUnaryOperator" : message , x , second );
 		ThreadUtils.delay( second );
 		return x;
 		};
@@ -479,7 +480,7 @@ public class LogUtils
 		{
 		return ( x ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_INOUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunction" : message , x , returnObject , second ) );
+		log_( FORMAT_INOUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunction" : message , x , returnObject , second );
 		ThreadUtils.delay( second );
 		return returnObject;
 		};
@@ -533,7 +534,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN2OUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunction" : message , a , b , returnObject , second ) );
+		log_( FORMAT_IN2OUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunction" : message , a , b , returnObject , second );
 		ThreadUtils.delay( second );
 		return returnObject;
 		};
@@ -582,7 +583,7 @@ public class LogUtils
 		{
 		return ( x ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayConsumer" : message , x , second ) );
+		log_( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayConsumer" : message , x , second );
 		ThreadUtils.delay( second );
 		};
 		}
@@ -625,7 +626,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN2_DELAY_ , Thread.currentThread() , message == null ? "delayConsumer" : message , a , b , second ) );
+		log_( FORMAT_IN2_DELAY_ , Thread.currentThread() , message == null ? "delayConsumer" : message , a , b , second );
 		ThreadUtils.delay( second );
 		};
 		}
@@ -671,7 +672,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		log_( Strings.lenientFormat( FORMAT_OUT_DELAY_ , Thread.currentThread() , message == null ? "delaySupplier" : message , passThought , second ) );
+		log_( FORMAT_OUT_DELAY_ , Thread.currentThread() , message == null ? "delaySupplier" : message , passThought , second );
 		ThreadUtils.delay( second );
 		return passThought;
 		};
@@ -716,7 +717,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		log_( Strings.lenientFormat( FORMAT_DELAY_ , Thread.currentThread() , message == null ? "delayRunnable" : message , second ) );
+		log_( FORMAT_DELAY_ , Thread.currentThread() , message == null ? "delayRunnable" : message , second );
 		ThreadUtils.delay( second );
 		};
 		}
@@ -739,6 +740,121 @@ public class LogUtils
 		}
 	
 	//</editor-fold>
+	
+	
+	//<editor-fold desc="log+delay+error">
+	
+	
+	
+	/**
+	 * Delay supplier with error supplier.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param message
+	 * 	the message
+	 * @param passThought
+	 * 	the pass thought
+	 * @param errValueForCompare
+	 * 	the err value for compare
+	 * @param second
+	 * 	the second
+	 *
+	 * @return the supplier
+	 */
+	public static <E> Supplier<E> delaySupplierWithError( String message ,
+	                                                      E passThought ,
+	                                                      E errValueForCompare ,
+	                                                      long second )
+		{
+		return () ->
+		{
+		
+		log_( FORMAT_OUT_DELAY_ , Thread.currentThread() , message == null ? "delaySupplierWithError" : message , passThought , second );
+		ThreadUtils.delay( second );
+		if( passThought.equals( errValueForCompare ) )
+			{
+			throw new IllegalArgumentException( "delaySupplierWithError" );
+			}
+		return passThought;
+		};
+		}
+	
+	
+	
+	/**
+	 * Delay function e.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param message
+	 * 	the message
+	 * @param errValueForCompare
+	 * 	the err value for compare
+	 * @param second
+	 * 	the second
+	 *
+	 * @return the e
+	 */
+	public static <E> UnaryOperator<E> delayUnaryOperatorWithError( String message ,
+	                                                                E errValueForCompare ,
+	                                                                long second )
+		{
+		return ( x ) ->
+		{
+		log_( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayUnaryOperatorWithError" : message , x , second );
+		ThreadUtils.delay( second );
+		if( x.equals( errValueForCompare ) )
+			{
+			throw new IllegalArgumentException( "delaySupplierWithError" );
+			}
+		return x;
+		};
+		}
+	
+	
+	
+	/**
+	 * Delay function function.
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param <R>
+	 * 	the type parameter
+	 * @param message
+	 * 	the message
+	 * @param errValueForCompare
+	 * 	the err value for compare
+	 * @param returnObject
+	 * 	the return object
+	 * @param second
+	 * 	the second
+	 *
+	 * @return the function
+	 */
+	public static <T, R> Function<T,R> delayFunctionWithError( String message ,
+	                                                           T errValueForCompare ,
+	                                                           R returnObject ,
+	                                                           long second )
+		{
+		return ( x ) ->
+		{
+		log_( FORMAT_INOUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunctionWithError" : message , x , returnObject , second );
+		ThreadUtils.delay( second );
+		if( x.equals( errValueForCompare ) )
+			{
+			throw new IllegalArgumentException( "delayFunctionWithError" );
+			}
+		return returnObject;
+		};
+		}
+	
+	
+	
+	//</editor-fold>
+	
+	
+	
 	//<editor-fold desc="log+delay+default">
 	
 	
@@ -755,7 +871,7 @@ public class LogUtils
 	 */
 	public static <E> E defaultDelayUnaryOperator( E object )
 		{
-		log_( Strings.lenientFormat( FORMAT_INOUT_DELAY_ , Thread.currentThread() , "defaultDelayUnaryOperator" , object , object , DEFAULT_DELAY_ ) );
+		log_( FORMAT_INOUT_DELAY_ , Thread.currentThread() , "defaultDelayUnaryOperator" , object , object , DEFAULT_DELAY_ );
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		return object;
 		}
@@ -772,7 +888,7 @@ public class LogUtils
 	 */
 	public static <E> void defaultDelayConsumer( E object )
 		{
-		log_( Strings.lenientFormat( FORMAT_IN_DELAY_ , Thread.currentThread() , "defaultDelayConsumer" , object , DEFAULT_DELAY_ ) );
+		log_( FORMAT_IN_DELAY_ , Thread.currentThread() , "defaultDelayConsumer" , object , DEFAULT_DELAY_ );
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		
 		}
@@ -794,7 +910,7 @@ public class LogUtils
 	public static <E, F> void defaultDelayBiConsumer( E left ,
 	                                                  F right )
 		{
-		log_( Strings.lenientFormat( FORMAT_IN2_DELAY_ , Thread.currentThread() , "defaultDelayConsumer" , left , right , DEFAULT_DELAY_ ) );
+		log_( FORMAT_IN2_DELAY_ , Thread.currentThread() , "defaultDelayBiConsumer" , left , right , DEFAULT_DELAY_ );
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		
 		}
@@ -809,7 +925,7 @@ public class LogUtils
 	 */
 	public static <E> void defaultDelayRunnable()
 		{
-		log_( Strings.lenientFormat( FORMAT_DELAY_ , Thread.currentThread() , "defaultDelayRunnable" , DEFAULT_DELAY_ ) );
+		log_( FORMAT_DELAY_ , Thread.currentThread() , "defaultDelayRunnable" , DEFAULT_DELAY_ );
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		}
 	
@@ -838,7 +954,7 @@ public class LogUtils
 	 */
 	public static void logAtInfo( String message )
 		{
-		log_( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtInfo" : message ) );
+		log_( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtInfo" : message );
 		}
 	
 	
@@ -867,7 +983,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , "logAtInfoConsumerWrapper" , o ) );
+		log_( FORMAT_IN_ , Thread.currentThread() , "logAtInfoConsumerWrapper" , o );
 		consumer.accept( o );
 		};
 		}
@@ -890,7 +1006,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN2_ , Thread.currentThread() , "logAtInfoBiConsumerWrapper" , a , b ) );
+		log_( FORMAT_IN2_ , Thread.currentThread() , "logAtInfoBiConsumerWrapper" , a , b );
 		consumer.accept( a , b );
 		};
 		}
@@ -913,7 +1029,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , "logAtInfoFunctionWrapper" , o ) );
+		log_( FORMAT_IN_ , Thread.currentThread() , "logAtInfoFunctionWrapper" , o );
 		return function.apply( o );
 		};
 		}
@@ -938,7 +1054,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN2_ , Thread.currentThread() , "logAtInfoBiFunctionWrapper" , a , b ) );
+		log_( FORMAT_IN2_ , Thread.currentThread() , "logAtInfoBiFunctionWrapper" , a , b );
 		return function.apply( a , b );
 		};
 		}
@@ -956,12 +1072,12 @@ public class LogUtils
 	//	 */
 	//	public static <E> Function<E,E> logAtInfo( Function<E,E> operator )
 	//		{
-	//		String template = "[%s]   logAtInfoUnaryOperatorProxy in(%s)";
+	//		String template = "[{}]   logAtInfoUnaryOperatorProxy in({})";
 	//
 	//		return ( o ) ->
 	//		{
 	//		logger_.atInfo()
-	//		       .log( Strings.lenientFormat( template , o , Thread.currentThread() ) );
+	//		       .log(   template , o , Thread.currentThread() ) );
 	//		return operator.apply( o );
 	//		};
 	//		}
@@ -982,7 +1098,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		log_( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , "logAtInfoSupplierWrapper" ) );
+		log_( FORMAT_ , Thread.currentThread() , "logAtInfoSupplierWrapper" );
 		return supplier.get();
 		};
 		}
@@ -1003,7 +1119,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		log_( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , "logAtInfoRunnableWrapper" ) );
+		log_( FORMAT_ , Thread.currentThread() , "logAtInfoRunnableWrapper" );
 		runnable.run();
 		};
 		}
