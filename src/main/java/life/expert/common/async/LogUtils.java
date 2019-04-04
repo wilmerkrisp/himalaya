@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Callable;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -95,6 +96,10 @@ public class LogUtils
 	
 	
 	
+	private static final String FORMAT_IN2_DELAY_ = "%s   %s in (%s) in (%s) delay(%s)";
+	
+	
+	
 	private static final String FORMAT_OUT_ = "%s   %s out(%s)";
 	
 	
@@ -154,6 +159,45 @@ public class LogUtils
 	public static <E> Consumer<E> logAtInfoConsumer()
 		{
 		return logAtInfoConsumer( null );
+		}
+	
+	
+	
+	/**
+	 * Log at info consumer consumer.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param <F>
+	 * 	the type parameter
+	 * @param message
+	 * 	the message
+	 *
+	 * @return the consumer
+	 */
+	public static <E, F> BiConsumer<E,F> logAtInfoBiConsumer( String message )
+		{
+		return ( a , b ) ->
+		{
+		log_( Strings.lenientFormat( FORMAT_IN2_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , a , b ) );
+		};
+		}
+	
+	
+	
+	/**
+	 * Log at info consumer consumer.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param <F>
+	 * 	the type parameter
+	 *
+	 * @return the consumer
+	 */
+	public static <E, F> BiConsumer<E,F> logAtInfoBiConsumer()
+		{
+		return logAtInfoBiConsumer( null );
 		}
 	
 	
@@ -563,6 +607,51 @@ public class LogUtils
 	
 	
 	/**
+	 * Delay second consumer consumer.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param <F>
+	 * 	the type parameter
+	 * @param message
+	 * 	the message
+	 * @param second
+	 * 	the second
+	 *
+	 * @return the consumer
+	 */
+	public static <E, F> BiConsumer<E,F> delayBiConsumer( String message ,
+	                                                      long second )
+		{
+		return ( a , b ) ->
+		{
+		log_( Strings.lenientFormat( FORMAT_IN2_DELAY_ , Thread.currentThread() , message == null ? "delayConsumer" : message , a , b , second ) );
+		ThreadUtils.delay( second );
+		};
+		}
+	
+	
+	
+	/**
+	 * Delay consumer consumer.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param <F>
+	 * 	the type parameter
+	 * @param second
+	 * 	the second
+	 *
+	 * @return the consumer
+	 */
+	public static <E, F> BiConsumer<E,F> delayBiConsumer( long second )
+		{
+		return delayBiConsumer( null , second );
+		}
+	
+	
+	
+	/**
 	 * Delay second supplier consumer.
 	 *
 	 * @param <E>
@@ -691,6 +780,28 @@ public class LogUtils
 	
 	
 	/**
+	 * Delay second consumer consumer.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param <F>
+	 * 	the type parameter
+	 * @param left
+	 * 	the left
+	 * @param right
+	 * 	the right
+	 */
+	public static <E, F> void defaultDelayBiConsumer( E left ,
+	                                                  F right )
+		{
+		log_( Strings.lenientFormat( FORMAT_IN2_DELAY_ , Thread.currentThread() , "defaultDelayConsumer" , left , right , DEFAULT_DELAY_ ) );
+		ThreadUtils.delay( DEFAULT_DELAY_ );
+		
+		}
+	
+	
+	
+	/**
 	 * Delay runnable action.
 	 *
 	 * @param <E>
@@ -752,12 +863,35 @@ public class LogUtils
 	 *
 	 * @return the consumer
 	 */
-	public static <E> Consumer<E> logAtInfo( Consumer<E> consumer )
+	public static <E> Consumer<E> logAtInfoConsumerWrapper( Consumer<E> consumer )
 		{
 		return ( o ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , "logAtInfoConsumer" , o ) );
+		log_( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , "logAtInfoConsumerWrapper" , o ) );
 		consumer.accept( o );
+		};
+		}
+	
+	
+	
+	/**
+	 * Log at info consumer.
+	 *
+	 * @param <E>
+	 * 	the type parameter
+	 * @param <F>
+	 * 	the type parameter
+	 * @param consumer
+	 * 	the consumer
+	 *
+	 * @return the consumer
+	 */
+	public static <E, F> BiConsumer<E,F> logAtInfoBiConsumerWrapper( BiConsumer<E,F> consumer )
+		{
+		return ( a , b ) ->
+		{
+		log_( Strings.lenientFormat( FORMAT_IN2_ , Thread.currentThread() , "logAtInfoBiConsumerWrapper" , a , b ) );
+		consumer.accept( a , b );
 		};
 		}
 	
@@ -775,11 +909,11 @@ public class LogUtils
 	 *
 	 * @return the function
 	 */
-	public static <T, R> Function<T,R> logAtInfo( Function<T,R> function )
+	public static <T, R> Function<T,R> logAtInfoFunctionWrapper( Function<T,R> function )
 		{
 		return ( o ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , "logAtInfoFunction" , o ) );
+		log_( Strings.lenientFormat( FORMAT_IN_ , Thread.currentThread() , "logAtInfoFunctionWrapper" , o ) );
 		return function.apply( o );
 		};
 		}
@@ -800,11 +934,11 @@ public class LogUtils
 	 *
 	 * @return the function
 	 */
-	public static <T, U, R> BiFunction<T,U,R> logAtInfo( BiFunction<T,U,R> function )
+	public static <T, U, R> BiFunction<T,U,R> logAtInfoBiFunctionWrapper( BiFunction<T,U,R> function )
 		{
 		return ( a , b ) ->
 		{
-		log_( Strings.lenientFormat( FORMAT_IN2_ , Thread.currentThread() , "logAtInfoFunction" , a , b ) );
+		log_( Strings.lenientFormat( FORMAT_IN2_ , Thread.currentThread() , "logAtInfoBiFunctionWrapper" , a , b ) );
 		return function.apply( a , b );
 		};
 		}
@@ -844,11 +978,11 @@ public class LogUtils
 	 *
 	 * @return the callable
 	 */
-	public static <E> Supplier<E> logAtInfo( Supplier<E> supplier )
+	public static <E> Supplier<E> logAtInfoSupplierWrapper( Supplier<E> supplier )
 		{
 		return () ->
 		{
-		log_( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , "logAtInfoSupplier" ) );
+		log_( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , "logAtInfoSupplierWrapper" ) );
 		return supplier.get();
 		};
 		}
@@ -865,11 +999,11 @@ public class LogUtils
 	 *
 	 * @return the action
 	 */
-	public static <E> Runnable logAtInfo( Runnable runnable )
+	public static <E> Runnable logAtInfoRunnableWrapper( Runnable runnable )
 		{
 		return () ->
 		{
-		log_( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , "logAtInfoRunnable" ) );
+		log_( Strings.lenientFormat( FORMAT_ , Thread.currentThread() , "logAtInfoRunnableWrapper" ) );
 		runnable.run();
 		};
 		}
