@@ -15,7 +15,7 @@
  *
  *
  * increase gradle
- * 	./gradlew wrapper --gradle-version=5.3
+ * 	./gradlew wrapper --gradle-version=5.4
  *
  * */
 
@@ -60,16 +60,16 @@ dependencies {
    // implementation 'com.google.flogger:flogger:0.4'
     //runtimeOnly 'com.google.flogger:flogger-system-backend:0.4'
 
-    implementation  'org.slf4j:slf4j-api:1.7.26'
+    implementation  'org.slf4j:slf4j-api:1.8.0-beta4'
 
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.0-M1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.0-M1'
-    testImplementation 'org.mockito:mockito-core:2.25.1'
-    testImplementation 'com.google.truth:truth:0.43'
+    testImplementation 'org.mockito:mockito-core:2.27.0'
+    testImplementation 'com.google.truth:truth:0.44'
 
 
-    implementation 'org.apache.commons:commons-lang3:3.8.1'
+    implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'org.apache.commons:commons-collections4:4.3'
     //implementation 'org.apache.commons:commons-configuration2:2.4'
 
