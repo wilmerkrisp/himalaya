@@ -13,7 +13,7 @@ package life.expert.common.base;
 //@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.common.base
+//                          himalaya  life.expert.utils.base
 //                           wilmer 2019/01/23
 //
 //--------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ import java.util.function.UnaryOperator;
  * Represents an operation on a String operand that produces a String result.  This is a specialization of {@code UnaryOperator} for
  * the case where the operand is String.
  *
- * <p>This is a <a href="package-summary.html">functional interface</a>
+ *    This is a <a href="package-summary.html">functional interface</a>
  * whose functional method is {@link #apply(Object)}.
  *
  

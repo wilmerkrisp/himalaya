@@ -578,13 +578,13 @@ public final class Preconditions
 	 * Helper method for checking input args of collection type or constructor in immutable colls
 	 * Checking every element in collection with Predicate  (usual test for nullable or empty elements)
 	 *
-	 * If you need simply test collection for empty elements use Apache common's Validate.notEmpty method instead
+	 * If you need simply test collection for empty elements use Apache utils's Validate.notEmpty method instead
 	 *
 	 *
 	 * For example, you can use the method (which raise IllegalArgumentException)
 	 * - inside constructors of immutable objects
 	 * - inside methods for testing inputs arguments
-	 * <pre>{@code
+	 *  <pre>{@code
 	 *      checkCollection(c,String::isBlank);
 	 *      checkCollection(c,Objects::isNull);
 	 * }***********************</pre>
@@ -619,12 +619,12 @@ public final class Preconditions
 	 * Helper method for checking input args of map type or constructor in immutable colls
 	 * Checking every element in map with Predicate (usual test for nullable or empty entries values)
 	 *
-	 * If you need simply test map for empty elements use Apache common's Validate.notEmpty method instead
+	 * If you need simply test map for empty elements use Apache utils's Validate.notEmpty method instead
 	 *
 	 * For example, you can use the method (which raise IllegalArgumentException)
 	 * - inside constructors of immutable objects
 	 * - inside methods for testing inputs arguments
-	 * <pre>{@code
+	 *  <pre>{@code
 	 *      checkMap(m,String::isBlank);
 	 *      checkMap(m,Objects::isNull);
 	 * }***********************</pre>
@@ -665,7 +665,7 @@ public final class Preconditions
 	 * For example, you can use the method (if you need return optional in your method instead raise exception)
 	 * - inside methods for testing inputs arguments
 	 * - inside methods of mutable objects for checking object's state before execution
-	 * <pre>{@code
+	 *  <pre>{@code
 	 *      if ( checkCollectionIsEmpty(c,String::isBlank) )
 	 *              return Optional.empty();
 	 *
@@ -704,7 +704,7 @@ public final class Preconditions
 	 * For example, you can use the method (if you need return optional in your method instead raise exception)
 	 * - inside methods for testing inputs arguments
 	 * - inside methods of mutable objects for checking object's state before execution
-	 * <pre>{@code
+	 *  <pre>{@code
 	 *      if ( checkMapIsEmpty(m,String::isBlank) )
 	 *              return Optional.empty();
 	 *
@@ -745,7 +745,7 @@ public final class Preconditions
 	 *
 	 * For example, you can use the method (which raise IllegalStateException)
 	 * - inside methods of mutable objects for checking object's state before execution
-	 * <pre>{@code
+	 *  <pre>{@code
 	 *      checkCollectionRaiseIllegalStateException(c,String::isBlank);
 	 *      checkCollectionRaiseIllegalStateException(c,Objects::isNull);
 	 * }***********************</pre>
@@ -785,7 +785,7 @@ public final class Preconditions
 	 *
 	 * For example, you can use the method (which raise IllegalStateException)
 	 * - inside methods of mutable objects for checking object's state before execution
-	 * <pre>{@code
+	 *  <pre>{@code
 	 *      checkMapRaiseIllegalStateException(c,String::isBlank);
 	 *      checkMapRaiseIllegalStateException(c,Objects::isNull);
 	 * }***********************</pre>
@@ -823,7 +823,7 @@ public final class Preconditions
 	 * Checking every element in collection with Predicate (usual test for nullable or empty elements)
 	 *
 	 * Usually this method for check input args in private methods for raise assertion instead exception.
-	 * <pre>{@code
+	 *  <pre>{@code
 	 *      checkCollectionRaiseAssertion(c,String::isBlank);
 	 *      checkCollectionRaiseAssertion(c,Objects::isNull);
 	 * }***********************</pre>
@@ -859,7 +859,7 @@ public final class Preconditions
 	 * Checking every element in map with Predicate (usual test for nullable or empty entries values)
 	 *
 	 * Usually this method for check input args in private methods for raise assertion instead exception.
-	 * <pre>{@code
+	 *  <pre>{@code
 	 *      checkMapRaiseAssertion(c,String::isBlank);
 	 *      checkMapRaiseAssertion(c,Objects::isNull);
 	 * }***********************</pre>
@@ -1386,7 +1386,7 @@ public final class Preconditions
 	 * Method checks every element in collection with Predicate (usual test for nullable or empty elements)
 	 *
 	 * You can use the method in log methods (and also in checkCollection, checkCollectionRaiseIllegalStateException, checkCollectionRaiseAssertion).
-	 * <pre>{@code
+	 *  <pre>{@code
 	 * throw new IllegalArgumentException( String.format( "Every element of collection should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
 	 * 			                                                   collection ,
 	 * 			                                                   getIndexesOfObjectsInCollection( collection ,
@@ -1425,7 +1425,7 @@ public final class Preconditions
 	 * Method checks every element in collection with Predicate (usual test for nullable or empty elements)
 	 *
 	 * You can use the method in log methods (and also in checkCollection, checkCollectionRaiseIllegalStateException, checkCollectionRaiseAssertion).
-	 * <pre>{@code
+	 *  <pre>{@code
 	 * throw new IllegalArgumentException( String.format( "Every element of collection should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
 	 * 			                                                   collection ,
 	 * 			                                                   getIndexesOfObjectsInCollection( collection ,
@@ -1465,7 +1465,7 @@ public final class Preconditions
 	 * Method checks every element in map with Predicate (usual test for nullable or empty entries values)
 	 *
 	 * You can use the method in log methods (and also in checkMap, checkMapRaiseIllegalStateException, checkMapRaiseAssertion).
-	 * <pre>{@code
+	 *  <pre>{@code
 	 *  throw new IllegalArgumentException( String.format( "Every element of map should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
 	 * 			                                                   map ,
 	 * 			                                                   getKeysOfObjectsInMap( map ,
@@ -1508,7 +1508,7 @@ public final class Preconditions
 	 * Method checks every element in map with Predicate (usual test for nullable or empty entries values)
 	 *
 	 * You can use the method in log methods (and also in checkMap, checkMapRaiseIllegalStateException, checkMapRaiseAssertion).
-	 * <pre>{@code
+	 *  <pre>{@code
 	 *  throw new IllegalArgumentException( String.format( "Every element of map should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
 	 * 			                                                   map ,
 	 * 			                                                   getKeysOfObjectsInMap( map ,
@@ -1550,7 +1550,7 @@ public final class Preconditions
 	 * Method checks every element in collection with Predicate (usual test for nullable or empty elements)
 	 *
 	 * You can use the method in log methods.
-	 * <pre>{@code
+	 *  <pre>{@code
 	 *
 	 * }***********************</pre>
 	 *
@@ -1587,7 +1587,7 @@ public final class Preconditions
 	 * Method checks every element in map with Predicate (usual test for nullable or empty entries values)
 	 *
 	 * You can use the method in log methods.
-	 * <pre>{@code
+	 *  <pre>{@code
 	 *
 	 * }***********************</pre>
 	 *

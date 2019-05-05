@@ -1,7 +1,7 @@
 package life.expert.common.async;//@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.common.async
+//                          himalaya  life.expert.utils.async
 //                           wilmer 2019/02/05
 //
 //--------------------------------------------------------------------------------

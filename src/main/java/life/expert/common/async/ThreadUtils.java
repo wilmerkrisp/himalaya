@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
 import com.google.common.collect.*;                     //ImmutableList
 
 import static com.google.common.base.Preconditions.*;   //checkArgument
-//import static life.expert.common.base.Preconditions.*;  //checkCollection
+//import static life.expert.utils.base.Preconditions.*;  //checkCollection
 import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
 import static life.expert.common.base.Objects.*;        //deepCopyOfObject
 
@@ -54,7 +54,7 @@ import java.util.Optional;
 //@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.common.async
+//                          himalaya  life.expert.utils.async
 //                           wilmer 2019/02/05
 //
 //--------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ import java.util.Optional;
  * - интрфейсы использовать только для задания типа
  *
  *
- * <pre>{@code
+ *  <pre>{@code
  *
  *
  *
@@ -116,7 +116,7 @@ public final class ThreadUtils
 
 	
 	
-	//<editor-fold desc="common">
+	//<editor-fold desc="utils">
 	
 	
 	//

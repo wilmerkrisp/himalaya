@@ -8,6 +8,7 @@ package life.expert.common.base;
 
 
 
+import lombok.Getter;
 import org.jetbrains.annotations.*;
 
 
@@ -56,16 +57,14 @@ public final class Objects
 	{
 	
 	
-	
-	//using cyclop's lazy load
-	private static final Supplier< Gson > gson_ = memoizeSupplier( Gson::new );
-	
+	@Getter( lazy=true)
+	private static final  Gson gson_ =  new Gson();
 	
 	
 	/**
 	 * helper method: deep copy with google gson
 	 *
-	 * <pre>{@code
+	 *  <pre>{@code
 	 * this.item2(MyCommon.deepCopyOf( this.item2() ,  List.class ) );
 	 * }</pre>
 	 *
@@ -82,15 +81,15 @@ public final class Objects
 	 * 	if argument nullable
 	 */
 	@NotNull
-	public static < E > E deepCopyOfObject( @NotNull E copied ,
-	                                        @NotNull Class< ? > classOfObject )
+	public static <E> E deepCopyOfObject( @NotNull E copied ,
+	                                      @NotNull Class<?> classOfObject )
 		{
 		checkNotNull( copied ,
 		              "Сopied object should not be null." );
 		checkNotNull( classOfObject ,
-		             "Please write class of copied object. For example: List.class" );
+		              "Please write class of copied object. For example: List.class" );
 		
-		Gson g = gson_.get();
+		Gson g = getGson_();
 		return (E) g.fromJson( g.toJson( copied ) ,
 		                       classOfObject );
 		}

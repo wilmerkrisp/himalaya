@@ -35,12 +35,12 @@ public interface RunnableIO
 	
 	
 	/**
-	 * When an object implementing interface <code>Runnable</code> is used
+	 * When an object implementing interface <pre>{@code Runnable}</pre> is used
 	 * to create a thread, starting the thread causes the object's
-	 * <code>run</code> method to be called in that separately executing
+	 * <pre>{@code run}</pre> method to be called in that separately executing
 	 * thread.
-	 * <p>
-	 * The general contract of the method <code>run</code> is that it may
+	 *
+	 * The general contract of the method <pre>{@code run}</pre> is that it may
 	 * take any action whatsoever.
 	 *
 	 * @throws IOException

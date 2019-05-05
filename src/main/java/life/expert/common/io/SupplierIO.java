@@ -23,10 +23,10 @@ import java.io.IOException;
 /**
  * Represents a supplier of results.
  *
- * <p>There is no requirement that a new or distinct result be returned each
+ *    There is no requirement that a new or distinct result be returned each
  * time the supplier is invoked.
  *
- * <p>This is a <a href="package-summary.html">functional interface</a>
+ *    This is a <a href="package-summary.html">functional interface</a>
  * whose functional method is {@link #get()}.
  *
  * @param <T>
