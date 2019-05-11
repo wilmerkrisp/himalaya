@@ -1,4 +1,11 @@
 package life.expert.common.io;
+//@Header@
+//--------------------------------------------------------------------------------
+//
+//                          himalaya  life.expert.common.io
+//                           wilmer 2019/05/09
+//
+//--------------------------------------------------------------------------------
 
 
 
@@ -8,32 +15,23 @@ package life.expert.common.io;
 
 
 
-import life.expert.common.async.LogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.stream.BaseStream;
 
-
-
-//@Header@
-//--------------------------------------------------------------------------------
-//
-//                          himalaya  life.expert.utils.io
-//                           wilmer 2019/01/23
-//
-//--------------------------------------------------------------------------------
+import static life.expert.common.async.LogUtils.logAtDebugUnaryOperator;
+import static life.expert.common.function.CheckedUtils.consumerToBoolean;
+import static life.expert.common.function.NullableUtils.nullableFunction;
+import static reactor.core.publisher.Mono.*;
+import static reactor.core.publisher.Mono.justOrEmpty;
 
 
 
@@ -44,458 +42,166 @@ import java.util.function.Supplier;
 
 
 /**
- * The type File helper.
+ * The type File utils.
  */
-public final class FileUtils
+@Slf4j
+@UtilityClass
+public class FileUtils
 	{
 	
-	
-	
-	// constant
-	private static final String DEFAULT_FILENAME = "default.txt";
+	//<editor-fold desc="read file">
 	
 	
 	
-	private static final Logger logger_ = LoggerFactory.getLogger( FileUtils.class );
-	
-	
-	
-	private static final void log_( String format ,
-	                                Object... arguments )
+	/**
+	 * Lines from path flux.
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the flux
+	 */
+	public static Flux<String> linesFromPath( Mono<Path> path )
 		{
-		logger_.info( format , arguments );
-		}
-	
-	
-	
-	private static final void logAtError_( String message )
-		{
-		logger_.error( message );
-		}
-	
-	
-	
-	private FileUtils()
-		{
-		super();
-		
-		throw new UnsupportedOperationException( "Dont use this PRIVATE constructor.Please use constructor with parameters." );
+		return path.flatMapMany( FileUtils::linesFromPath );
 		}
 	
 	
 	
 	/**
-	 * for using inside streamApi
-	 * hide exception and return optional
+	 * Lines from path flux.
 	 *
-	 * @param file
-	 * 	the file
+	 * @param path
+	 * 	the path
 	 *
-	 * @return the optional
+	 * @return the flux
 	 */
-	public static Optional<URL> fileToUrl( @NotNull File file )
+	public static Flux<String> linesFromPath( Path path )
 		{
-		try
-			{
-			return Optional.ofNullable( file.toURI()
-			                                .toURL() );
-			}
-		catch( MalformedURLException | NullPointerException e )
-			{
-			return Optional.empty();
-			}
+		return Flux.using( () -> Files.lines( path ) , Flux::fromStream , BaseStream::close );
 		}
 	
 	
 	
 	/**
-	 * Create or retrieve file file.
+	 * Lines from path flux.
 	 *
-	 * @param file
-	 * 	the file
-	 * @param directory
-	 * 	the directory
+	 * @param path
+	 * 	the path
 	 *
-	 * @return the file
+	 * @return the flux
 	 */
-	public static File createOrRetrieveFile( @Nullable final String file ,
-	                                         @Nullable final Path directory )
+	public static Flux<String> linesFromPath( String path )
 		{
-		String fileName = file;
-		if( fileName == null || fileName.isBlank() )
-			{
-			fileName = DEFAULT_FILENAME;
-			}
-		
-		Path defaultDir = directory;
-		if( defaultDir == null )
-			{
-			defaultDir = Path.of( "" );
-			}
-		
-		Path path   = Paths.get( fileName );
-		Path parent = path.getParent();
-		
-		try
-			{
-			if( parent == null )
-				{
-				//Path build_dir = project.getBuildDir().toPath();
-				//parent = defaultDir.resolve( file);
-				path = defaultDir.resolve( fileName );
-				log_( "Parent is null. Using default dir: {}" , path.toAbsolutePath()
-				                                                    .toString() );
-				}
-			if( Files.notExists( path ) )
-				{
-				Files.createDirectories( parent );
-				Files.createFile( path )
-				     .toFile();
-				log_( "Target file will be created: {}" , path.toAbsolutePath()
-				                                              .toString() );
-				}
-			else
-				{
-				log_( "Target file will be retrieved: {}" , path.toAbsolutePath()
-				                                                .toString() );
-				}
-			}
-		catch( IOException exception )
-			{
-			throw new RuntimeException( "Please set correct path for file with filename. For example file  \"$buildDir/architecture/classdiagram.dot\" " , exception );
-			}
-		return path.toFile();
+		return linesFromPath( Paths.get( path ) );
 		}
 	
-	//<editor-fold desc="wrappers">
-	
-	
-	
-	/**
-	 * Io wrapper.
-	 *
-	 * @param operation
-	 * 	the operation
-	 */
-	public static void ioWrapper( @NotNull RunnableIO operation )
-		{
-		if( operation == null )
-			{
-			throw new NullPointerException();
-			}
-		
-		try
-			{
-			operation.run();
-			}
-		catch( IOException exception )
-			{
-			throw new RuntimeException( exception );
-			}
-		}
-	
-	
-	
-	/**
-	 * Io wrapper.
-	 *
-	 * @param operation
-	 * 	the operation
-	 * @param errorMessage
-	 * 	the error message
-	 */
-	public static void ioWrapper( @NotNull RunnableIO operation ,
-	                              @NotNull String errorMessage )
-		{
-		if( operation == null || errorMessage == null )
-			{
-			throw new NullPointerException();
-			}
-		
-		try
-			{
-			operation.run();
-			}
-		catch( IOException exception )
-			{
-			throw new RuntimeException( errorMessage , exception );
-			}
-		}
-	
-	
-	
-	/**
-	 * Io wrapper.
-	 *
-	 * @param operation
-	 * 	the operation
-	 * @param errorMessage
-	 * 	the error message
-	 */
-	public static void ioWrapper( @NotNull RunnableIO operation ,
-	                              @NotNull Supplier<String> errorMessage )
-		{
-		if( operation == null || errorMessage == null )
-			{
-			throw new NullPointerException();
-			}
-		
-		try
-			{
-			operation.run();
-			}
-		catch( IOException exception )
-			{
-			throw new RuntimeException( errorMessage.get() , exception );
-			}
-		}
-	
-	
-	
-	/**
-	 * Io wrapper e.
-	 *
-	 * @param <E>
-	 * 	the type parameter
-	 * @param operation
-	 * 	the operation
-	 *
-	 * @return the e
-	 */
-	public static <E> E ioWrapper( @NotNull SupplierIO<E> operation )
-		{
-		if( operation == null )
-			{
-			throw new NullPointerException();
-			}
-		
-		try
-			{
-			return operation.get();
-			}
-		catch( IOException exception )
-			{
-			throw new RuntimeException( exception );
-			}
-		}
-	
-	
-	
-	/**
-	 * Io wrapper e.
-	 *
-	 * @param <E>
-	 * 	the type parameter
-	 * @param operation
-	 * 	the operation
-	 * @param errorMessage
-	 * 	the error message
-	 *
-	 * @return the e
-	 */
-	public static <E> E ioWrapper( @NotNull SupplierIO<E> operation ,
-	                               @NotNull String errorMessage )
-		{
-		if( operation == null || errorMessage == null )
-			{
-			throw new NullPointerException();
-			}
-		
-		try
-			{
-			return operation.get();
-			}
-		catch( IOException exception )
-			{
-			throw new RuntimeException( errorMessage , exception );
-			}
-		}
-	
-	
-	
-	/**
-	 * Io wrapper e.
-	 *
-	 * @param <E>
-	 * 	the type parameter
-	 * @param operation
-	 * 	the operation
-	 * @param errorMessage
-	 * 	the error message
-	 *
-	 * @return the e
-	 */
-	public static <E> E ioWrapper( @NotNull SupplierIO<E> operation ,
-	                               @NotNull Supplier<String> errorMessage )
-		{
-		if( operation == null || errorMessage == null )
-			{
-			throw new NullPointerException();
-			}
-		
-		try
-			{
-			return operation.get();
-			}
-		catch( IOException exception )
-			{
-			throw new RuntimeException( errorMessage.get() , exception );
-			}
-		}
-	
-	
-	
-	/**
-	 * Io optional optional.
-	 *
-	 * @param <E>
-	 * 	the type parameter
-	 * @param operation
-	 * 	the operation
-	 *
-	 * @return the optional
-	 */
-	public static <E> Optional<E> ioOptional( @Nullable SupplierIO<E> operation )
-		{
-		if( operation == null )
-			{
-			return Optional.empty();
-			}
-		
-		try
-			{
-			return Optional.ofNullable( operation.get() );
-			}
-		catch( IOException exception )
-			{
-			return Optional.empty();
-			}
-		}
-	
-	
-	
-	/**
-	 * Io wrapper.
-	 *
-	 * @param <E>
-	 * 	the type parameter
-	 * @param input
-	 * 	the input
-	 * @param operation
-	 * 	the operation
-	 * @param errorMessage
-	 * 	the error message
-	 */
-	public static <E> void ioWrapper( @Nullable E input ,
-	                                  @NotNull ConsumerIO<E> operation ,
-	                                  @NotNull String errorMessage )
-		{
-		if( operation == null || errorMessage == null )
-			{
-			throw new NullPointerException();
-			}
-		
-		try
-			{
-			operation.accept( input );
-			}
-		catch( IOException exception )
-			{
-			throw new RuntimeException( errorMessage , exception );
-			}
-		}
-	
-	
-	
-	/**
-	 * Io wrapper.
-	 *
-	 * @param <E>
-	 * 	the type parameter
-	 * @param input
-	 * 	the input
-	 * @param operation
-	 * 	the operation
-	 */
-	public static <E> void ioWrapper( @Nullable E input ,
-	                                  @NotNull ConsumerIO<E> operation )
-		{
-		if( operation == null )
-			{
-			throw new NullPointerException();
-			}
-		
-		try
-			{
-			operation.accept( input );
-			}
-		catch( IOException exception )
-			{
-			throw new RuntimeException( exception );
-			}
-		}
-	
-	
-	
-	/**
-	 * Io wrapper.
-	 *
-	 * @param <E>
-	 * 	the type parameter
-	 * @param input
-	 * 	the input
-	 * @param operation
-	 * 	the operation
-	 * @param errorMessage
-	 * 	the error message
-	 */
-	public static <E> void ioWrapper( @Nullable E input ,
-	                                  @NotNull ConsumerIO<E> operation ,
-	                                  @NotNull Supplier<String> errorMessage )
-		{
-		if( operation == null || errorMessage == null )
-			{
-			throw new NullPointerException();
-			}
-		
-		try
-			{
-			operation.accept( input );
-			}
-		catch( IOException exception )
-			{
-			throw new RuntimeException( errorMessage.get() , exception );
-			}
-		}
-	
-	
-	
-	/**
-	 * Writer wrapper runnable io.
-	 *
-	 * @param file
-	 * 	the file
-	 * @param textToWrite
-	 * 	the text to write
-	 *
-	 * @return the runnable io
-	 */
-	public static RunnableIO writerWrapper( @NotNull File file ,
-	                                        @NotNull Supplier<String> textToWrite )
-		{
-		if( file == null || textToWrite == null )
-			{
-			throw new NullPointerException();
-			}
-		
-		return () ->
-		{
-		try( final PrintWriter writer = new PrintWriter( file ) )
-			{
-			writer.print( textToWrite.get() );
-			}
-		};
-		}
 	//</editor-fold>
+	
+	
+	//<editor-fold desc="create file">
+	
+	
+	
+	/**
+	 * Create file mono.
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Boolean> createFile( Path path )
+		{
+		return createFile( justOrEmpty( path ) );
+		}
+	
+	
+	
+	/**
+	 * Create file mono.
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Boolean> createFile( String path )
+		{
+		return createFile( Paths.get( path ) );
+		}
+	
+	
+	
+	/**
+	 * Create file mono.
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Boolean> createFile( Mono<Path> path )
+		{
+		return path.map( Path::toFile )
+		           .map( consumerToBoolean( org.apache.commons.io.FileUtils::touch ) );
+		}
+	
+	
+	
+	/**
+	 * Create file mono.
+	 *
+	 * @param path
+	 * 	the path
+	 * @param defaultParentDirectory
+	 * 	the default parent directory
+	 * @param defaultFileName
+	 * 	the default file name
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Boolean> createFile( String path ,
+	                                        String defaultParentDirectory ,
+	                                        String defaultFileName )
+		{
+		
+		var path_ = Flux.from( justOrEmpty( path ) )
+		                .takeWhile( StringUtils::isNotBlank )
+		                .map( p -> Paths.get( p ) );
+		
+		var default_name = Flux.from( justOrEmpty( defaultFileName ) )
+		                       .takeWhile( StringUtils::isNotBlank )
+		                       .map( p -> Paths.get( p ) );
+		
+		var default_root = Flux.from( justOrEmpty( defaultParentDirectory ) )
+		                       .takeWhile( StringUtils::isNotBlank )
+		                       .map( p -> Paths.get( p ) );
+		
+		
+		var name = path_.flatMap( nullableFunction( Path::getFileName ) )
+		                .switchIfEmpty( default_name );
+		
+		
+		var root = path_.flatMap( nullableFunction( Path::getParent ) )
+		                .switchIfEmpty( default_root );
+		
+		
+		var name_root = Flux.concat( root , name )
+		                    .reduce( Path::resolve );
+		
+		return createFile( name_root.single() );
+		}
+	
+	
+ 
+	
+	
+	
+	
+	
+	//</editor-fold>
+	
+	
 	
 	}
