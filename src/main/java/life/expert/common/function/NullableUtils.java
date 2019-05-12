@@ -110,7 +110,7 @@ public final class NullableUtils
 	public static <T, R> Function<T,Mono<R>> nullableFunction( Function<T,R> function )
 		{
 		//return t -> Mono.fromSupplier( () -> function.apply( t ) );
-		return t -> Mono.justOrEmpty( function.apply( t ) );
+		return t -> fromSupplier( () -> ( function.apply( t ) );
 		}
 	
 	
@@ -131,7 +131,7 @@ public final class NullableUtils
 	 */
 	public static <T1, T2, R> BiFunction<T1,T2,Mono<R>> nullableBiFunction( BiFunction<T1,T2,R> function )
 		{
-		return ( t1 , t2 ) -> Mono.justOrEmpty( function.apply( t1 , t2 ) );
+		return ( t1 , t2 ) -> fromSupplier( () -> function.apply( t1 , t2 ) );
 		}
 	
 	
@@ -154,7 +154,7 @@ public final class NullableUtils
 	 */
 	public static <T1, T2, T3, R> Function3<T1,T2,T3,Mono<R>> nullableFunction3( Function3<T1,T2,T3,R> function )
 		{
-		return ( t1 , t2 , t3 ) -> Mono.justOrEmpty( function.apply( t1 , t2 , t3 ) );
+		return ( t1 , t2 , t3 ) -> fromSupplier( () -> function.apply( t1 , t2 , t3 ) );
 		}
 	
 	
@@ -179,7 +179,7 @@ public final class NullableUtils
 	 */
 	public static <T1, T2, T3, T4, R> Function4<T1,T2,T3,T4,Mono<R>> nullableFunction4( Function4<T1,T2,T3,T4,R> function )
 		{
-		return ( t1 , t2 , t3 , t4 ) -> Mono.justOrEmpty( function.apply( t1 , t2 , t3 , t4 ) );
+		return ( t1 , t2 , t3 , t4 ) -> fromSupplier( () -> function.apply( t1 , t2 , t3 , t4 ) );
 		}
 	
 	
@@ -206,7 +206,7 @@ public final class NullableUtils
 	 */
 	public static <T1, T2, T3, T4, T5, R> Function5<T1,T2,T3,T4,T5,Mono<R>> nullableFunction5( Function5<T1,T2,T3,T4,T5,R> function )
 		{
-		return ( t1 , t2 , t3 , t4 , t5 ) -> Mono.justOrEmpty( function.apply( t1 , t2 , t3 , t4 , t5 ) );
+		return ( t1 , t2 , t3 , t4 , t5 ) -> fromSupplier( () -> function.apply( t1 , t2 , t3 , t4 , t5 ) );
 		}
 	
 	
@@ -235,7 +235,7 @@ public final class NullableUtils
 	 */
 	public static <T1, T2, T3, T4, T5, T6, R> Function6<T1,T2,T3,T4,T5,T6,Mono<R>> nullableFunction6( Function6<T1,T2,T3,T4,T5,T6,R> function )
 		{
-		return ( t1 , t2 , t3 , t4 , t5 , t6 ) -> Mono.justOrEmpty( function.apply( t1 , t2 , t3 , t4 , t5 , t6 ) );
+		return ( t1 , t2 , t3 , t4 , t5 , t6 ) -> fromSupplier( () -> function.apply( t1 , t2 , t3 , t4 , t5 , t6 ) );
 		}
 	
 	
@@ -266,7 +266,7 @@ public final class NullableUtils
 	 */
 	public static <T1, T2, T3, T4, T5, T6, T7, R> Function7<T1,T2,T3,T4,T5,T6,T7,Mono<R>> nullableFunction7( Function7<T1,T2,T3,T4,T5,T6,T7,R> function )
 		{
-		return ( t1 , t2 , t3 , t4 , t5 , t6 , t7 ) -> Mono.justOrEmpty( function.apply( t1 , t2 , t3 , t4 , t5 , t6 , t7 ) );
+		return ( t1 , t2 , t3 , t4 , t5 , t6 , t7 ) -> fromSupplier( () -> function.apply( t1 , t2 , t3 , t4 , t5 , t6 , t7 ) );
 		}
 	
 	
@@ -299,7 +299,7 @@ public final class NullableUtils
 	 */
 	public static <T1, T2, T3, T4, T5, T6, T7, T8, R> Function8<T1,T2,T3,T4,T5,T6,T7,T8,Mono<R>> nullableFunction8( Function8<T1,T2,T3,T4,T5,T6,T7,T8,R> function )
 		{
-		return ( t1 , t2 , t3 , t4 , t5 , t6 , t7 , t8 ) -> Mono.justOrEmpty( function.apply( t1 , t2 , t3 , t4 , t5 , t6 , t7 , t8 ) );
+		return ( t1 , t2 , t3 , t4 , t5 , t6 , t7 , t8 ) -> fromSupplier( () -> function.apply( t1 , t2 , t3 , t4 , t5 , t6 , t7 , t8 ) );
 		}
 	
 	
@@ -316,7 +316,8 @@ public final class NullableUtils
 	 */
 	public static <R> Supplier<Mono<R>> nullableSupplier( Supplier<R> supplier )
 		{
-		return () -> Mono.justOrEmpty( supplier.get() );
+		return () ->fromSupplier( supplier::get );
+		
 		}
 		
 		
