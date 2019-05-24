@@ -1,8 +1,8 @@
-package life.expert.value.unit;
+package life.expert.value.numeric.unit;
 //@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.value.unit
+//                          himalaya  life.expert.value.numeric.unit
 //                           wilmer 2019/05/02
 //
 //--------------------------------------------------------------------------------
@@ -16,12 +16,11 @@ package life.expert.value.unit;
 
 
 import com.google.common.collect.ComparisonChain;
-import life.expert.value.context.PieceContext;
+import life.expert.value.numeric.context.PieceContext;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 

@@ -150,7 +150,7 @@ public final class FileWrappers
 			}
 		catch( IOException exception )
 			{
-			throw new RuntimeException( "Please set correct path for file with filename. For example file  \"$buildDir/architecture/classdiagram.dot\" " , exception );
+			throw new RuntimeException( "Please set correct path for file with filename. For example file  buildDir/architecture/classdiagram.dot " , exception );
 			}
 		return path.toFile();
 		}

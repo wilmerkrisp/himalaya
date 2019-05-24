@@ -1,8 +1,8 @@
-package life.expert.value.amount;
+package life.expert.value.numeric.amount;
 //@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.value.amount
+//                          himalaya  life.expert.value.numeric.amount
 //                           wilmer 2019/04/30
 //
 //--------------------------------------------------------------------------------
@@ -15,12 +15,12 @@ package life.expert.value.amount;
 
 
 
-import life.expert.value.context.Context;
-import life.expert.value.utils.ValueException;
-import life.expert.value.context.PieceContext;
-import life.expert.value.operators.Operator;
-import life.expert.value.unit.Unit;
-import life.expert.value.utils.NumberValue;
+import life.expert.value.numeric.context.Context;
+import life.expert.value.numeric.utils.ValueException;
+import life.expert.value.numeric.context.PieceContext;
+import life.expert.value.numeric.operators.Operator;
+import life.expert.value.numeric.unit.Unit;
+import life.expert.value.numeric.utils.NumberValue;
 
 
 

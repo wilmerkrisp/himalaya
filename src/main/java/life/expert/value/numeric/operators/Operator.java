@@ -1,8 +1,8 @@
-package life.expert.value.operators;
+package life.expert.value.numeric.operators;
 //@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.value.operators
+//                          himalaya  life.expert.value.numeric.operators
 //                           wilmer 2019/05/02
 //
 //--------------------------------------------------------------------------------
@@ -15,7 +15,7 @@ package life.expert.value.operators;
 
 
 
-import life.expert.value.amount.Quantity;
+import life.expert.value.numeric.amount.Quantity;
 
 import java.util.function.UnaryOperator;
 

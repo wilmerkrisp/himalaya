@@ -1,8 +1,8 @@
-package life.expert.value.utils;
+package life.expert.value.numeric.utils;
 //@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.value.utils
+//                          himalaya  life.expert.value.numeric.utils
 //                           wilmer 2019/05/02
 //
 //--------------------------------------------------------------------------------

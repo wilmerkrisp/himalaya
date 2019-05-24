@@ -1,8 +1,8 @@
-package life.expert.value.utils;
+package life.expert.value.numeric.utils;
 //@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.value.utils
+//                          himalaya  life.expert.value.numeric.utils
 //                           wilmer 2019/05/02
 //
 //--------------------------------------------------------------------------------
@@ -15,9 +15,9 @@ package life.expert.value.utils;
 
 
 
-import life.expert.value.amount.Quantity;
-import life.expert.value.context.AmountContext;
-import life.expert.value.unit.Unit;
+import life.expert.value.numeric.amount.Quantity;
+import life.expert.value.numeric.context.AmountContext;
+import life.expert.value.numeric.unit.Unit;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,12 +36,12 @@ import java.util.Optional;
 
 
 /**
- * This utility class simplifies implementing {@link life.expert.value.amount.Amount},
+ * This utility class simplifies implementing {@link life.expert.value.numeric.amount.Amount},
  * by providing the common functionality. The different explicitly typed methods
  * are all reduced to methods using {@link java.math.BigDecimal} as input, hereby
  * performing any conversion to {@link java.math.BigDecimal} as needed. Obviously this
  * takes some time, so implementors that want to avoid this overhead should
- * implement {@link life.expert.value.amount.Amount} directly.
+ * implement {@link life.expert.value.numeric.amount.Amount} directly.
  *
  * @author Anatole Tresch
  */
@@ -128,16 +128,12 @@ public class NumberUtils
 		BigDecimal bd = getBigDecimal( num );
 		if( Objects.nonNull( amountContext ) )
 			{
-			var mc = getMathContext( amountContext ,
-			                         RoundingMode.HALF_EVEN );
-			bd = new BigDecimal( bd.toString() ,
-			                     mc );
+			var mc = getMathContext( amountContext , RoundingMode.HALF_EVEN );
+			bd = new BigDecimal( bd.toString() , mc );
 			if( amountContext.getMaxScale() > 0 )
 				{
-				logger_.trace( "Got Max Scale {}" ,
-				               amountContext.getMaxScale() );
-				bd = bd.setScale( amountContext.getMaxScale() ,
-				                  mc.getRoundingMode() );
+				logger_.trace( "Got Max Scale {}" , amountContext.getMaxScale() );
+				bd = bd.setScale( amountContext.getMaxScale() , mc.getRoundingMode() );
 				}
 			}
 		return bd;
@@ -169,8 +165,7 @@ public class NumberUtils
 			roundingMode = Optional.ofNullable( defaultMode )
 			                       .orElse( RoundingMode.HALF_EVEN );
 			}
-		return new MathContext( amountContext.getPrecision() ,
-		                        roundingMode );
+		return new MathContext( amountContext.getPrecision() , roundingMode );
 		}
 	
 	
@@ -189,8 +184,7 @@ public class NumberUtils
 	public static void checkAmountParameter( Quantity amount ,
 	                                         Unit unit )
 		{
-		Objects.requireNonNull( amount ,
-		                        "Amount must not be null." );
+		Objects.requireNonNull( amount , "Amount must not be null." );
 		final Unit unit_of_amount = amount.getUnit();
 		if( !( unit.getCode()
 		           .equals( unit_of_amount.getCode() ) ) )
@@ -212,8 +206,7 @@ public class NumberUtils
 	 */
 	public static void checkNumberParameter( Number number )
 		{
-		Objects.requireNonNull( number ,
-		                        "Number is required." );
+		Objects.requireNonNull( number , "Number is required." );
 		}
 	
 	

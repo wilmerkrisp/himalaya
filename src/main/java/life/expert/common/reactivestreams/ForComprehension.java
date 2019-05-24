@@ -1,4 +1,4 @@
-package life.expert.common.function;
+package life.expert.common.reactivestreams;
 
 
 
@@ -59,7 +59,7 @@ import static reactor.core.publisher.Mono.*;
  */
 @UtilityClass
 @Slf4j
-public final class ExtensionMethods
+public final class ForComprehension
 	{
 	
 	

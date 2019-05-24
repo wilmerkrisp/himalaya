@@ -1,8 +1,8 @@
-package life.expert.value.amount;
+package life.expert.value.numeric.amount;
 //@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.value.amount
+//                          himalaya  life.expert.value.numeric.amount
 //                           wilmer 2019/04/29
 //
 //--------------------------------------------------------------------------------
@@ -16,16 +16,16 @@ package life.expert.value.amount;
 
 
 import life.expert.common.async.LogUtils;
-import life.expert.value.context.AmountContext;
-import life.expert.value.utils.AmountParseException;
-import life.expert.value.utils.ValueException;
-import life.expert.value.operators.Operator;
-import life.expert.value.unit.Piece;
-import life.expert.value.utils.DefaultNumberValue;
-import life.expert.value.utils.NumberUtils;
-import life.expert.value.unit.Unit;
+import life.expert.value.numeric.context.AmountContext;
+import life.expert.value.numeric.utils.AmountParseException;
+import life.expert.value.numeric.utils.ValueException;
+import life.expert.value.numeric.operators.Operator;
+import life.expert.value.numeric.unit.Piece;
+import life.expert.value.numeric.utils.DefaultNumberValue;
+import life.expert.value.numeric.utils.NumberUtils;
+import life.expert.value.numeric.unit.Unit;
 
-import life.expert.value.utils.NumberValue;
+import life.expert.value.numeric.utils.NumberValue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -635,7 +635,7 @@ public final class Amount
 	 *
 	 * @throws NumberFormatException
 	 * 	if the amount is not a number
-	 * @throws life.expert.value.utils.UnknownUnitException
+	 * @throws life.expert.value.numeric.utils.UnknownUnitException
 	 * 	if the unit cannot be resolved
 	 */
 	public static Amount parse( CharSequence text )

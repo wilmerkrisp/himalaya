@@ -1546,7 +1546,7 @@ public final class Preconditions
 	
 	
 	/**
-	 * helper method: quantity of found object in collection
+	 * helper method: numeric of found object in collection
 	 * Method checks every element in collection with Predicate (usual test for nullable or empty elements)
 	 *
 	 * You can use the method in log methods.
@@ -1561,7 +1561,7 @@ public final class Preconditions
 	 * @param filter
 	 * 	condition for find the desired object
 	 *
-	 * @return quantity of found objects in collection 	return 0 if collection or predicate is null, or collection is empty
+	 * @return numeric of found objects in collection 	return 0 if collection or predicate is null, or collection is empty
 	 */
 	@NotNull
 	public static < E > long getCountOfObjectsInCollection( @Nullable Collection< E > collection ,
@@ -1583,7 +1583,7 @@ public final class Preconditions
 	
 	
 	/**
-	 * helper method: quantity of found object in map
+	 * helper method: numeric of found object in map
 	 * Method checks every element in map with Predicate (usual test for nullable or empty entries values)
 	 *
 	 * You can use the method in log methods.
@@ -1600,7 +1600,7 @@ public final class Preconditions
 	 * @param filterValues
 	 * 	condition for find the desired object
 	 *
-	 * @return quantity of found objects in map (using filter by values) 	return 0 if map or predicate is null, or map is empty
+	 * @return numeric of found objects in map (using filter by values) 	return 0 if map or predicate is null, or map is empty
 	 */
 	@NotNull
 	public static < TKey, TValue > long getCountOfObjectsInMap( @Nullable Map< TKey, TValue > map ,

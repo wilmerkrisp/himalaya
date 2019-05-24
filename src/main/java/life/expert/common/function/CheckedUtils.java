@@ -8,6 +8,7 @@ package life.expert.common.function;
 
 
 
+import com.google.common.base.Throwables;
 import cyclops.function.checked.CheckedBiConsumer;
 import cyclops.function.checked.CheckedBiFunction;
 import cyclops.function.checked.CheckedBiPredicate;
@@ -28,6 +29,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.function.*;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -73,14 +75,14 @@ import static reactor.core.publisher.Mono.never;
  * <pre>{@code
  *               CheckedUtils.compute();
  *               var s=CheckedUtils.MY_CONSTANT;
- * }********************</pre>
+ * }**********************</pre>
  */
 @UtilityClass
 @Slf4j
 public final class CheckedUtils
 	{
 	
-	
+
 	
 	//<editor-fold desc="consumer->bool">
 	
@@ -1084,59 +1086,7 @@ public final class CheckedUtils
 	
 	
 	
-	//<editor-fold desc="reactor parallel flows">
 	
-	
-	
-	/**
-	 * Alias for {@link CheckedConsumer#unchecked}
-	 *
-	 * @param <T>
-	 * 	return type
-	 * @param <R>
-	 * 	the type parameter
-	 * @param function
-	 * 	the function
-	 * @param scheduler
-	 * 	the scheduler
-	 *
-	 * @return An unchecked wrapper of supplied {@link CheckedFunction0}
-	 */
-	public static <T, R> Function<T,Mono<R>> functionToMonoParallel( CheckedFunction1<T,R> function ,
-	                                                                 Scheduler scheduler )
-		{
-		return t -> Mono.fromSupplier( () -> uncheckedFunction( function ).apply( t ) )
-		                .subscribeOn( scheduler );
-		}
-	
-	
-	
-	/**
-	 * Function to mono parallel log error function.
-	 *
-	 * @param <T>
-	 * 	the type parameter
-	 * @param <R>
-	 * 	the type parameter
-	 * @param function
-	 * 	the function
-	 * @param scheduler
-	 * 	the scheduler
-	 * @param message
-	 * 	the message
-	 *
-	 * @return the function
-	 */
-	public static <T, R> Function<T,Mono<R>> functionToMonoParallelLogError( CheckedFunction1<T,R> function ,
-	                                                                         Scheduler scheduler ,
-	                                                                         String message )
-		{
-		return t -> Mono.fromSupplier( () -> uncheckedFunction( function ).apply( t ) )
-		                .subscribeOn( scheduler )
-		                .onErrorResume( logAtErrorFunction( message , never() ) ); //logAtErrorFunction
-		}
-	
-	//</editor-fold>
 	
 	
 	
@@ -1465,6 +1415,7 @@ public final class CheckedUtils
 			}
 		catch( Throwable throwable )
 			{
+			Throwables.throwIfUnchecked( throwable );
 			throw new RuntimeException( throwable );
 			}
 		};
@@ -1494,6 +1445,7 @@ public final class CheckedUtils
 			}
 		catch( Throwable throwable )
 			{
+			Throwables.throwIfUnchecked( throwable );
 			throw new RuntimeException( throwable );
 			}
 		};
@@ -2165,6 +2117,7 @@ public final class CheckedUtils
 			}
 		catch( Throwable throwable )
 			{
+			Throwables.throwIfUnchecked( throwable );
 			throw new RuntimeException( throwable );
 			}
 		};
@@ -2197,6 +2150,7 @@ public final class CheckedUtils
 			}
 		catch( Throwable throwable )
 			{
+			Throwables.throwIfUnchecked( throwable );
 			throw new RuntimeException( throwable );
 			}
 		};
@@ -2562,6 +2516,220 @@ public final class CheckedUtils
 			throw new RuntimeException( errorMessage + ": " + t1 + "," + t2 + ", " + t3 + ", " + t4 + ", " + t5 + ", " + t6 + ", " + t7 + ", " + t8 , throwable );
 			}
 		};
+		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//<editor-fold desc="exception utils">
+	
+	/**
+	 * Null pointer exception function.
+	 *
+	 * @param description
+	 * 	the description
+	 *
+	 * @return the function
+	 */
+	public static Function<? super Throwable,NullPointerException> nullPointerException( String description )
+		{
+		Objects.requireNonNull( description , "description is null" );
+		return ( err ) -> new NullPointerException( description );
+		}
+	
+	
+	
+	/**
+	 * Illegal argument exception function.
+	 *
+	 * @param description
+	 * 	the description
+	 *
+	 * @return the function
+	 */
+	public static Function<? super Throwable,IllegalArgumentException> illegalArgumentException( String description )
+		{
+		Objects.requireNonNull( description , "description is null" );
+		return ( err ) -> new IllegalArgumentException( description , err );
+		}
+	
+	
+	
+	/**
+	 * Illegal state exception function.
+	 *
+	 * @param description
+	 * 	the description
+	 *
+	 * @return the function
+	 */
+	public static Function<? super Throwable,IllegalStateException> illegalStateException( String description )
+		{
+		Objects.requireNonNull( description , "description is null" );
+		return ( err ) -> new IllegalStateException( description , err );
+		}
+	
+	//</editor-fold>
+	
+	//<editor-fold desc="try utils">
+	
+	/**
+	 * Alias for  Try.failure(new NullPointerException())
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Try}.
+	 *
+	 * @return A new {@link Try.Failure}.
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static <T> Try.Failure<T> nullPointerFailure()
+		{
+		return (Try.Failure<T>) Try.failure( new NullPointerException() );
+		}
+	
+	
+	
+	/**
+	 * Alias for  Try.failure(new NullPointerException(description))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Try}.
+	 * @param description
+	 * 	the description
+	 *
+	 * @return A new {@link Try.Failure}.
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static <T> Try.Failure<T> nullPointerFailure( String description )
+		{
+		return (Try.Failure<T>) Try.failure( new NullPointerException( description ) );
+		}
+	
+	
+	
+	/**
+	 * Alias for  Try.failure(new IllegalArgumentException())
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Try}.
+	 *
+	 * @return A new {@link Try.Failure}.
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static <T> Try.Failure<T> illegalArgumentFailure()
+		{
+		return (Try.Failure<T>) Try.failure( new IllegalArgumentException() );
+		}
+	
+	
+	
+	/**
+	 * Alias for  Try.failure(new IllegalArgumentException(description))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Try}.
+	 * @param description
+	 * 	the description
+	 *
+	 * @return A new {@link Try.Failure}.
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static <T> Try.Failure<T> illegalArgumentFailure( String description )
+		{
+		return (Try.Failure<T>) Try.failure( new IllegalArgumentException( description ) );
+		}
+	
+	
+	
+	/**
+	 * Alias for  Try.failure(new IllegalArgumentException(description,cause))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Try}.
+	 * @param description
+	 * 	the description
+	 * @param cause
+	 * 	the cause
+	 *
+	 * @return A new {@link Try.Failure}.
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static <T> Try.Failure<T> illegalArgumentFailure( String description ,
+	                                                         Throwable cause )
+		{
+		return (Try.Failure<T>) Try.failure( new IllegalArgumentException( description , cause ) );
+		}
+	
+	
+	
+	/**
+	 * Alias for  Try.failure(new IllegalStateException())
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Try}.
+	 *
+	 * @return A new {@link Try.Failure}.
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static <T> Try.Failure<T> illegalStateFailure()
+		{
+		return (Try.Failure<T>) Try.failure( new IllegalStateException() );
+		}
+	
+	
+	
+	/**
+	 * Alias for  Try.failure(new IllegalStateException(description))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Try}.
+	 * @param description
+	 * 	the description
+	 *
+	 * @return A new {@link Try.Failure}.
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static <T> Try.Failure<T> illegalStateFailure( String description )
+		{
+		return (Try.Failure<T>) Try.failure( new IllegalStateException( description ) );
+		}
+	
+	
+	
+	/**
+	 * Alias for  Try.failure(new IllegalStateException(description,cause))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Try}.
+	 * @param description
+	 * 	the description
+	 * @param cause
+	 * 	the cause
+	 *
+	 * @return A new {@link Try.Failure}.
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static <T> Try.Failure<T> illegalStateFailure( String description ,
+	                                                      Throwable cause )
+		{
+		return (Try.Failure<T>) Try.failure( new IllegalStateException( description , cause ) );
 		}
 	
 	

@@ -8,51 +8,30 @@ package life.expert.common.reactivestreams;
 
 
 
+import io.vavr.CheckedConsumer;
+import io.vavr.CheckedFunction1;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 
 
-import lombok.NonNull;//@NOTNULL
+import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static java.text.MessageFormat.format;           //format string
-
-import java.util.ResourceBundle;
-
-import static com.google.common.base.Preconditions.*;   //checkArgument
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
-import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
 
-import org.apache.commons.lang3.StringUtils;            //isNotBlank
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
 
 import java.util.function.*;                            //producer supplier
 
-import static java.util.stream.Collectors.*;            //toList streamAPI
-import static java.util.function.Predicate.*;           //isEqual streamAPI
-
-import java.util.Optional;
-
 
 
 import static reactor.core.publisher.Mono.*;
-import static reactor.core.scheduler.Schedulers.*;
 import static life.expert.common.async.LogUtils.*;        //logAtInfo
-import static life.expert.common.function.NullableUtils.*;//.map(nullableFunction)
 import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
-import static life.expert.common.function.Patterns.*;    //for-comprehension
-import static life.expert.common.base.Objects.*;          //deepCopyOfObject
 
-import static io.vavr.API.*;                              //switch
-import static io.vavr.Predicates.*;                       //switch - case
-import static io.vavr.Patterns.*;                         //switch - case - success/failure
-import static cyclops.control.Trampoline.more;
-import static cyclops.control.Trampoline.done;
-
-
+import static  life.expert.common.reactivestreams.ForComprehension.*;
 
 //import java.util.List;                                  //usual list
 //import io.vavr.collection.List;                         //immutable List
@@ -67,18 +46,6 @@ import static cyclops.control.Trampoline.done;
 //--------------------------------------------------------------------------------
 
 
-
-//<editor-fold desc=".">
-/*
-
-- private конструктор уже включен аннотацией @UtilityClass
-
-- сервисные методы делать статик методами на классе с private конструктором а не на интерфейсе тк методы обработки могут содержать состояние и кеши
-- интрфейсы использовать только для задания типа
-
-
-*/
-//</editor-fold>
 
 
 
@@ -101,60 +68,197 @@ import static cyclops.control.Trampoline.done;
 public final class Preconditions
 	{
 	
+	//<editor-fold desc="check functions">
 	
 	
-	private static final ResourceBundle bundle_        = ResourceBundle.getBundle( "messages" );
-	
-	
-	
-	private static final String         HELLO_MESSAGE_ = bundle_.getString( "hello" );
 	
 	
 	
 	/**
-	 * some constant
+	 * Check argument mono.
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param argument
+	 * 	the argument
+	 * @param predicate
+	 * 	the predicate
+	 * @param message
+	 * 	the message
+	 *
+	 * @return the mono
 	 */
-	public static final String MY_CONSTANT = new String( "Test string." );
-	
-	
-	
-	private static void compute_()
+	public static <T> Mono<T> checkArgument( T argument ,
+	                                         Predicate<T> predicate ,
+	                                         String message )
 		{
-		return;
+		//		Function<T,Mono<T>> check_argument = ( s ) -> just( s ).filter( predicate == null ? x -> false : predicate )
+		//		                                                       .single()
+		//		                                                       .onErrorMap( illegalArgumentException( message == null ? "Condition should evaluate to true" : message ) );
+		
+		//return checkNotNull( argument ).flatMap( check_argument );
+		
+		/*
+		Function<Mono<T>,Mono<T>> check_argument = s -> s.filter( predicate.or( x -> false ) )
+		                                                 .single()
+		                                                 .onErrorMap( illegalArgumentException( message.orElse( "Condition should evaluate to true")));
+		
+		 
+		
+	 
+		return checkNotNull( predicate , "Predicate should not be null" ).then( checkNotNull( argument ) ).For( check_argument );
+		
+		 */
+		 
+		
+		Function<Mono<T>,Mono<T>> check_argument = s -> s.filter( predicate.or( x -> false ) )
+		                                                 .single()
+		                                                 .onErrorMap( illegalArgumentException( "f"));
+		
+		
+		
+		
+		return For(checkNotNull( predicate , "Predicate should not be null" ).then( checkNotNull( argument ) ), check_argument );
 		}
 	
 	
 	
 	/**
-	 * static public method
+	 * Check argument mono.
 	 *
-	 * <pre>{@code
-	 *           Preconditions.compute();
-	 * }</pre>
+	 * @param <T>
+	 * 	the type parameter
+	 * @param argument
+	 * 	the argument
+	 * @param predicate
+	 * 	the predicate
+	 *
+	 * @return the mono
 	 */
-	public static void compute()
+	public static <T> Mono<T> checkArgument( T argument ,
+	                                         Predicate<T> predicate )
 		{
-		return;
+		return checkArgument( argument , predicate , "Condition should evaluate to true" );
 		}
 	
 	
 	
 	/**
-	 * static generic method
+	 * Check true mono.
 	 *
-	 * <pre>{@code
-	 *           Preconditions.myCompute("stroka");
-	 *           Preconditions.myCompute(12);
-	 * }</pre>
+	 * @param <T>
+	 * 	the type parameter
+	 * @param condition
+	 * 	the condition
 	 *
-	 * @throws NullPointerException
-	 * 	if argument nullable
+	 * @return the mono
 	 */
-	public static <E   /* extends super VC_ & VI_ */ /* extends super VCG_<?> & VIG_<?> */ /* extends super VCG_< E > & VIG_< E > */ /* extends super VCG_<String> & VIG_<String> */> void myCompute( @NonNull final E object )
+	public static <T> Mono<T> checkTrue( boolean condition )
 		{
-		return;
+		return checkTrue( condition , "Condition should be true" );
 		}
+	
+	
+	
+	/**
+	 * Check true mono.
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param condition
+	 * 	the condition
+	 * @param message
+	 * 	the message
+	 *
+	 * @return the mono
+	 */
+	public static <T> Mono<T> checkTrue( boolean condition ,
+	                                     String message )
+		{
 		
 		
-		
+		return condition ? empty() : error( new IllegalArgumentException( message == null ? "Condition should be true" : message ) );
+		}
+	
+	
+	
+	/**
+	 * Check false mono.
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param condition
+	 * 	the condition
+	 *
+	 * @return the mono
+	 */
+	public static <T> Mono<T> checkFalse( boolean condition )
+		{
+		return checkFalse( !condition , "Condition should be false" );
+		}
+	
+	
+	
+	/**
+	 * Chec false mono.
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param condition
+	 * 	the condition
+	 * @param message
+	 * 	the message
+	 *
+	 * @return the mono
+	 */
+	public static <T> Mono<T> checkFalse( boolean condition ,
+	                                      String message )
+		{
+		return !condition ? empty() : error( new IllegalArgumentException( message == null ? "Condition should be false" : message ) );
+		}
+	
+	
+	
+	/**
+	 * Check not null mono.
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param argument
+	 * 	the argument
+	 * @param message
+	 * 	the message
+	 *
+	 * @return the mono
+	 */
+	public static <T> Mono<T> checkNotNull( T argument ,
+	                                        String message )
+		{
+		return justOrEmpty( argument ).single()
+		                              .onErrorMap( nullPointerException( message == null ? "Argument should not be null" : message ) );
+		}
+	
+	
+	
+	/**
+	 * Check not null mono.
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param argument
+	 * 	the argument
+	 *
+	 * @return the mono
+	 */
+	public static <T> Mono<T> checkNotNull( T argument )
+		{
+		return checkNotNull( argument , "Argument should not be null" );
+		}
+	//</editor-fold>
+	
+	
+	
+	
+	
+	
 	}

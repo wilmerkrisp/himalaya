@@ -13,18 +13,18 @@ import static life.expert.common.async.LogUtils.printRunnable;
 import static life.expert.common.function.CheckedUtils.*;
 import static reactor.core.publisher.Mono.justOrEmpty;
 
-import io.vavr.control.Option;
 import io.vavr.control.Try;
 
 
 import life.expert.common.async.ThreadUtils;
+import life.expert.common.reactivestreams.Patterns;
+import life.expert.common.reactivestreams.Preconditions;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Optional;
 
 
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
@@ -32,7 +32,6 @@ import java.util.Optional;
 
 import static reactor.core.scheduler.Schedulers.*;
 import static life.expert.common.async.LogUtils.*;
-
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 
 
@@ -157,7 +156,7 @@ class CheckedUtilsTest
 		//		StepVerifier.create( b1 )
 		//		            .expectError()
 		//		            .verify();
-		System.out.println( "RESULT:" );
+		//System.out.println( "RESULT:" );
 		}
 	
 	
@@ -186,7 +185,7 @@ class CheckedUtilsTest
 		            .expectComplete()
 		            .verify();
 		
-		System.out.println( "RESULT:" );
+		//System.out.println( "RESULT:" );
 		
 		//ThreadUtils.delay( 20 );
 		}
@@ -218,11 +217,11 @@ class CheckedUtilsTest
 		*/
 		
 		
-		var b = o.flatMap( functionToMonoParallelLogError( x ->
+		var b = o.flatMap( Patterns.functionToMonoParallelLogError( x ->
 		                                                   {
 		                                                   //return x;
 		                                                   throw new IOException();
-		                                                   } , elastic(),"vovan" ) );
+		                                                   } , elastic(), "vovan" ) );
 		//  .onErrorContinue !НЕ РАБОТАЕТ ТК применимо только к ограниченному набору операторов
 		
 		

@@ -1,4 +1,4 @@
-package life.expert.value.context;
+package life.expert.value.numeric.context;
 
 
 
@@ -8,46 +8,17 @@ package life.expert.value.context;
 
 
 
-import life.expert.value.amount.Amount;
-import life.expert.value.amount.Quantity;
-import lombok.AllArgsConstructor;
+import life.expert.value.numeric.amount.Quantity;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import lombok.Singular;
 import lombok.Value;
-import lombok.extern.slf4j.Slf4j;
 import lombok.NonNull;
 
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.Comparator;
-
-import com.google.common.collect.ComparisonChain;
-
-import java.util.List;
 
 
-import lombok.NonNull;//@NOTNULL
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static java.text.MessageFormat.format;           //format string
-
-import java.util.Map;
-import java.util.ResourceBundle;
-
-import static com.google.common.base.Preconditions.*;   //checkArgument
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
-import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
-import static life.expert.common.base.Objects.*;        //deepCopyOfObject
-
-import java.util.function.*;                            //producer supplier
-
-import static java.util.stream.Collectors.*;            //toList streamAPI
-import static java.util.function.Predicate.*;           //isEqual streamAPI
-
-import java.util.Optional;
 
 
 
@@ -191,7 +162,7 @@ public final class AmountContext
 	 * Of amount context.
 	 *
 	 * @param quantityType
-	 * 	the quantity type
+	 * 	the numeric type
 	 * @param precision
 	 * 	the precision
 	 * @param fixedScale

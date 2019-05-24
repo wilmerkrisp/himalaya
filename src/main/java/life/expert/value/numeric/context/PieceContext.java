@@ -1,8 +1,8 @@
-package life.expert.value.context;
+package life.expert.value.numeric.context;
 //@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.value.unit
+//                          himalaya  life.expert.value.numeric.unit
 //                           wilmer 2019/04/29
 //
 //--------------------------------------------------------------------------------
@@ -15,7 +15,6 @@ package life.expert.value.context;
 
 
 
-import life.expert.value.context.Context;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;
@@ -51,7 +50,7 @@ public class PieceContext
 	 * @return traits
 	 *
 	 * -- GETTER --
-	 @return  map  with additional information about quantity amount.
+	 @return  map  with additional information about numeric amount.
 	 */
 	@NonNull
 	@Singular

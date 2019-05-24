@@ -1,8 +1,8 @@
-package life.expert.value.amount;
+package life.expert.value.numeric.amount;
 //@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.value.amount
+//                          himalaya  life.expert.value.numeric.amount
 //                           wilmer 2019/04/30
 //
 //--------------------------------------------------------------------------------
@@ -16,9 +16,9 @@ package life.expert.value.amount;
 
 
 import com.google.common.collect.ForwardingObject;
-import life.expert.value.context.Context;
-import life.expert.value.unit.Unit;
-import life.expert.value.utils.NumberValue;
+import life.expert.value.numeric.context.Context;
+import life.expert.value.numeric.unit.Unit;
+import life.expert.value.numeric.utils.NumberValue;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * The type Forwarding quantity.
+ * The type Forwarding numeric.
  */
 public abstract class ForwardingQuantity
 	extends ForwardingObject

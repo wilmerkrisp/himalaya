@@ -1,8 +1,8 @@
-package life.expert.value.utils;
+package life.expert.value.numeric.utils;
 //@Header@
 //--------------------------------------------------------------------------------
 //
-//                          himalaya  life.expert.value.utils
+//                          himalaya  life.expert.value.numeric.utils
 //                           wilmer 2019/05/02
 //
 //--------------------------------------------------------------------------------
@@ -15,7 +15,7 @@ package life.expert.value.utils;
 
 
 
-import life.expert.value.unit.Piece;
+import life.expert.value.numeric.unit.Piece;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -29,7 +29,7 @@ import java.util.Objects;
 
 
 /**
- * Exception thrown when a unit code cannot be resolved into a {@link life.expert.value.unit.Unit}.
+ * Exception thrown when a unit code cannot be resolved into a {@link life.expert.value.numeric.unit.Unit}.
  */
 public class UnknownUnitException
 	extends ValueException
@@ -52,7 +52,7 @@ public class UnknownUnitException
 	
 	
 	/**
-	 * Creates a new exception instance when a {@link  life.expert.value.unit.Unit} could not be evaluated given a
+	 * Creates a new exception instance when a {@link  life.expert.value.numeric.unit.Unit} could not be evaluated given a
 	 * unit code.
 	 *
 	 * @param code
@@ -70,11 +70,11 @@ public class UnknownUnitException
 	
 	
 	/**
-	 * Creates a new exception instance when a {@link life.expert.value.unit.Unit} could not be evaluated given a
+	 * Creates a new exception instance when a {@link life.expert.value.numeric.unit.Unit} could not be evaluated given a
 	 * (country) {@link Locale}.
 	 *
 	 * @param locale
-	 * 	The unknown {@link Locale}, for which a {@link life.expert.value.unit.Unit} was queried (the 	message is constructed automatically), not null.
+	 * 	The unknown {@link Locale}, for which a {@link life.expert.value.numeric.unit.Unit} was queried (the 	message is constructed automatically), not null.
 	 *
 	 * @see Piece#getCode() Piece#getCode()
 	 */
