@@ -12,7 +12,7 @@
 
 
 
-module life.expert.himalaya {
+module life.expert {
 
 exports life.expert.common.async;
 exports life.expert.common.base;
