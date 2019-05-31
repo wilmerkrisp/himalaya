@@ -80,9 +80,9 @@ public final class Objects
 	 * @throws NullPointerException
 	 * 	if argument nullable
 	 */
-	@NotNull
-	public static <E> E deepCopyOfObject( @NotNull E copied ,
-	                                      @NotNull Class<?> classOfObject )
+	 
+	public static <E> E deepCopyOfObject(  E copied ,
+	                                        Class<?> classOfObject )
 		{
 		checkNotNull( copied ,
 		              "Сopied object should not be null." );

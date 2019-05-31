@@ -5,9 +5,6 @@ package life.expert.common.async;
 
 
 
-
-
-
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.oath.cyclops.internal.stream.spliterators.push.Operator;
@@ -168,7 +165,7 @@ public final class ThreadUtils
 	 *
 	 * @return the executor
 	 */
-	@NotNull
+	 
 	public static Executor executorDaemon( String name ,
 	                                       int size ,
 	                                       int waitTimeRatio )
@@ -193,7 +190,7 @@ public final class ThreadUtils
 	 *
 	 * @return the executor
 	 */
-	@NotNull
+	 
 	public static Executor executorDaemon( int size ,
 	                                       int waitTimeRatio )
 		{
@@ -210,7 +207,7 @@ public final class ThreadUtils
 	 *
 	 * @return the executor
 	 */
-	@NotNull
+	 
 	public static Executor executorForWaitingTasks( int size )
 		{
 		return executorDaemon( size , WAIT_TIME_RATIO_FOR_WAITING_TASKS );
@@ -228,7 +225,7 @@ public final class ThreadUtils
 	 *
 	 * @return the executor
 	 */
-	@NotNull
+	 
 	public static Executor executorCustom( String name ,
 	                                       int size )
 		{
@@ -253,7 +250,7 @@ public final class ThreadUtils
 	 * @param operation
 	 * 	the operation
 	 */
-	public static void interruptedWrapper( @NotNull RunnableInterrupted operation )
+	public static void interruptedWrapper(  RunnableInterrupted operation )
 		{
 		if( operation == null )
 			{
@@ -282,7 +279,7 @@ public final class ThreadUtils
 	 *
 	 * @return the e
 	 */
-	public static <E> E interruptedWrapper( @NotNull SupplierInterrupted<E> operation )
+	public static <E> E interruptedWrapper(   SupplierInterrupted<E> operation )
 		{
 		if( operation == null )
 			{
@@ -311,7 +308,7 @@ public final class ThreadUtils
 	 *
 	 * @return the optional
 	 */
-	public static <E> Optional<E> interruptedOptional( @Nullable SupplierInterrupted<E> operation )
+	public static <E> Optional<E> interruptedOptional(  SupplierInterrupted<E> operation )
 		{
 		if( operation == null )
 			{
@@ -339,8 +336,8 @@ public final class ThreadUtils
 	 * @param operation
 	 * 	the operation
 	 */
-	public static <E> void interruptedWrapper( @Nullable E input ,
-	                                           @NotNull ConsumerInterrupted<E> operation )
+	public static <E> void interruptedWrapper(  E input ,
+	                                            ConsumerInterrupted<E> operation )
 		{
 		if( operation == null )
 			{
