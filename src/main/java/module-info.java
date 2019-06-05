@@ -48,22 +48,22 @@ requires static lombok;
 
 ///requires org.jetbrains.annotations;
 //requires error.prone.annotations;
-requires org.reactivestreams;
-requires reactor.core;
-requires reactor.extra;
+requires transitive org.reactivestreams;
+requires transitive reactor.core;
+requires transitive reactor.extra;
 
 
 requires org.slf4j;
-requires org.jetbrains.annotations;
+requires transitive org.jetbrains.annotations;
 
 requires com.google.common;
 requires org.apache.commons.lang3;
 
-requires io.vavr;
+requires transitive io.vavr;
 requires io.vavr.match;
 
 requires gson;
-requires cyclops;
+requires transitive cyclops;
 requires error.prone.annotations;
 
 

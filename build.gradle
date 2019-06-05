@@ -24,16 +24,17 @@ plugins {
     id 'java'
     id 'base'
     id 'java-library'
+    //id 'distribution'
     //id 'application'
     id 'idea'
     // id 'com.ewerk.gradle.plugins.auto-value' version '1.0.8'
-    id 'com.dorongold.task-tree' version '1.3.1' /* ./gradlew -q build taskTree */
+    id 'com.dorongold.task-tree' version '1.4' /* ./gradlew -q build taskTree */
     id 'com.github.ben-manes.versions' version '0.21.0' /* ./gradlew -q dependencyUpdates */
 
     id 'com.bmuschko.nexus' version '2.3.1'
     id 'io.codearte.nexus-staging' version '0.21.0'
 
-    id "io.freefair.lombok" version "3.6.4"
+    id "io.freefair.lombok" version "3.6.6"
     id "io.spring.dependency-management" version "1.0.7.RELEASE"
 
     //id "com.dua3.gradle.jpms" version "0.8.3"
@@ -98,7 +99,7 @@ dependencies {
 
 
     //@NotNull annotations exposed in library public api
-    implementation 'org.jetbrains:annotations:17.0.0'                  //API
+    api 'org.jetbrains:annotations:17.0.0'                  //API
 
 
     // implementation 'com.google.flogger:flogger:0.4'
@@ -124,8 +125,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
 
-    implementation 'com.oath.cyclops:cyclops:10.3.0'                    //API
-    implementation 'io.vavr:vavr:0.10.0'                                //API
+    api 'com.oath.cyclops:cyclops:10.3.0'                    //API
+    api 'io.vavr:vavr:0.10.0'                                //API
     compileOnly 'io.vavr:vavr-match:0.10.0'
     annotationProcessor 'io.vavr:vavr-match-processor:0.10.0'
     //implementation 'com.github.ben-manes.caffeine:caffeine:2.6.2'
@@ -147,10 +148,10 @@ dependencies {
 //    testAnnotationProcessor  'systems.manifold:manifold-ext:2019.1.0-gw'
 
 
-    implementation "io.projectreactor:reactor-core"                      //API
+    api "io.projectreactor:reactor-core"                      //API
     testImplementation "io.projectreactor:reactor-test"
-    implementation "io.projectreactor.addons:reactor-extra"
-    ////runtimeOnly "io.projectreactor.addons:reactor-logback"  //// для супербыстрого записи в лог
+    api "io.projectreactor.addons:reactor-extra"
+    ////runtimeOnly "io.projectreactor.addons:reactor-logback"  //// superlog with ring buffer
 
 
 }
