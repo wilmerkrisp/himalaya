@@ -21,6 +21,8 @@ import org.apache.commons.lang3.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,6 +31,7 @@ import java.util.stream.BaseStream;
 
 import static life.expert.common.async.LogUtils.logAtDebugUnaryOperator;
 import static life.expert.common.function.CheckedUtils.consumerToBoolean;
+import static life.expert.common.function.CheckedUtils.uncheckedFunction;
 import static life.expert.common.function.NullableUtils.nullableFunction;
 import static reactor.core.publisher.Mono.*;
 import static reactor.core.publisher.Mono.justOrEmpty;
@@ -43,6 +46,17 @@ import static reactor.core.publisher.Mono.justOrEmpty;
 
 /**
  * The type File utils.
+ *
+ *
+ * <pre>{@code
+ * var new_file_name = String.format( "%d.dot" , Instant.now().toEpochMilli() );
+ * 		var new_file_flux = FileUtils.deleteFileToMono( "src/main/graphviz" )
+ * 		                             .map( p -> p.resolve( new_file_name ) )
+ * 		                             .log( "debug", Level.FINE, SignalType.ON_NEXT )
+ * 		                             .flatMap( FileUtils::createFileToMono )
+ * 		                             .flatMap( FileUtils::writerFromPath );
+ * 		new_file_flux.subscribe( w->w.write( dot ) , logAtErrorConsumer("ERROR") , logAtInfoRunnable("COMPLETE") );
+ * }</pre>
  */
 @Slf4j
 @UtilityClass
@@ -99,6 +113,59 @@ public class FileUtils
 	//</editor-fold>
 	
 	
+	
+	/**
+	 * Write to path flux.
+	 *
+	 * <pre>{@code writeToPath( file ).subscribe( w->w.write( "dot" ) ); }</pre>
+	 *
+	 * @param file
+	 * 	the file
+	 *
+	 * @return the flux
+	 */
+	//<editor-fold desc="write file">
+	public static Mono<PrintWriter> writerFromPath( File file )
+		{
+		return using( () -> new PrintWriter( file ) , Mono::just , PrintWriter::close );
+		}
+	
+	
+	
+	/**
+	 * Write to path flux.
+	 *
+	 * <pre>{@code writeToPath( file ).subscribe( w->w.write( "dot" ) ); }</pre>
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the flux
+	 */
+	public static Mono<PrintWriter> writerFromPath( Path path )
+		{
+		return writerFromPath( path.toFile() );
+		}
+	
+	
+	
+	/**
+	 * Write to path flux.
+	 *
+	 * <pre>{@code writeToPath( file ).subscribe( w->w.write( "dot" ) ); }</pre>
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the flux
+	 */
+	public static Mono<PrintWriter> writerFromPath( String path )
+		{
+		return writerFromPath( Paths.get( path ) );
+		}
+	
+	//</editor-fold>
+	
 	//<editor-fold desc="create file">
 	
 	
@@ -119,6 +186,21 @@ public class FileUtils
 	
 	
 	/**
+	 * Create file to mono mono.
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Path> createFileToMono( Path path )
+		{
+		return createFileToMono( justOrEmpty( path ) );
+		}
+	
+	
+	
+	/**
 	 * Create file mono.
 	 *
 	 * @param path
@@ -129,6 +211,21 @@ public class FileUtils
 	public static Mono<Boolean> createFile( String path )
 		{
 		return createFile( Paths.get( path ) );
+		}
+	
+	
+	
+	/**
+	 * Create file to mono mono.
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Path> createFileToMono( String path )
+		{
+		return createFileToMono( Paths.get( path ) );
 		}
 	
 	
@@ -150,7 +247,26 @@ public class FileUtils
 	
 	
 	/**
-	 * Create file mono.
+	 * Create file to mono mono.
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Path> createFileToMono( Mono<Path> path )
+		{
+		return path.map( uncheckedFunction( p ->
+		                                    {
+		                                    org.apache.commons.io.FileUtils.touch( p.toFile() );
+		                                    return p;
+		                                    } ) );
+		}
+	
+	
+	
+	/**
+	 * Gets path for new file.
 	 *
 	 * @param path
 	 * 	the path
@@ -159,13 +275,12 @@ public class FileUtils
 	 * @param defaultFileName
 	 * 	the default file name
 	 *
-	 * @return the mono
+	 * @return the path for new file
 	 */
-	public static Mono<Boolean> createFile( String path ,
-	                                        String defaultParentDirectory ,
-	                                        String defaultFileName )
+	public static Mono<Path> getPathForNewFile( String path ,
+	                                            String defaultParentDirectory ,
+	                                            String defaultFileName )
 		{
-		
 		var path_ = Flux.from( justOrEmpty( path ) )
 		                .takeWhile( StringUtils::isNotBlank )
 		                .map( p -> Paths.get( p ) );
@@ -190,18 +305,154 @@ public class FileUtils
 		var name_root = Flux.concat( root , name )
 		                    .reduce( Path::resolve );
 		
-		return createFile( name_root.single() );
+		return name_root.single();
 		}
 	
 	
- 
+	
+	/**
+	 * Create file mono.
+	 *
+	 * @param path
+	 * 	the path
+	 * @param defaultParentDirectory
+	 * 	the default parent directory
+	 * @param defaultFileName
+	 * 	the default file name
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Boolean> createFile( String path ,
+	                                        String defaultParentDirectory ,
+	                                        String defaultFileName )
+		{
+		return createFile( getPathForNewFile( path , defaultParentDirectory , defaultFileName ) );
+		}
 	
 	
 	
-	
-	
+	/**
+	 * Create file to mono mono.
+	 *
+	 * @param path
+	 * 	the path
+	 * @param defaultParentDirectory
+	 * 	the default parent directory
+	 * @param defaultFileName
+	 * 	the default file name
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Path> createFileToMono( String path ,
+	                                           String defaultParentDirectory ,
+	                                           String defaultFileName )
+		{
+		return createFileToMono( getPathForNewFile( path , defaultParentDirectory , defaultFileName ) );
+		}
 	//</editor-fold>
 	
 	
 	
+	//<editor-fold desc="delete file or directory recursively">
+	
+	
+	
+	/**
+	 * delete file or directory recursively
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Boolean> deleteFile( Path path )
+		{
+		return deleteFile( justOrEmpty( path ) );
+		}
+	
+	
+	
+	/**
+	 * Delete file to mono mono.
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Path> deleteFileToMono( Path path )
+		{
+		return deleteFileToMono( justOrEmpty( path ) );
+		}
+	
+	
+	
+	/**
+	 * delete file or directory recursively
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Boolean> deleteFile( String path )
+		{
+		return deleteFile( Paths.get( path ) );
+		}
+	
+	
+	
+	/**
+	 * Delete file to mono mono.
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Path> deleteFileToMono( String path )
+		{
+		return deleteFileToMono( Paths.get( path ) );
+		}
+	
+	
+	
+	/**
+	 * delete file or directory recursively
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Boolean> deleteFile( Mono<Path> path )
+		{
+		return path.map( Path::toFile )
+		           .map( consumerToBoolean( org.apache.commons.io.FileUtils::deleteQuietly ) );
+		}
+	
+	
+	
+	/**
+	 * Delete file to mono mono.
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono
+	 */
+	public static Mono<Path> deleteFileToMono( Mono<Path> path )
+		{
+		return path.map( uncheckedFunction( p ->
+		                                    {
+		                                    org.apache.commons.io.FileUtils.deleteQuietly( p.toFile() );
+		                                    return p;
+		                                    } ) );
+		
+		
+		//</editor-fold>
+		
+		
+		
+		}
 	}
