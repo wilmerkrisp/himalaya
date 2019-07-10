@@ -10,21 +10,17 @@ package life.expert.common.graph;
 
 import com.google.common.graph.EndpointPair;
 import com.google.common.graph.Graph;
+import com.google.common.graph.Network;
+import com.google.common.graph.ValueGraph;
 import life.expert.common.io.FileUtils;
-import lombok.Builder;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.ResourceBundle;
 
 import static life.expert.common.async.LogUtils.*;
 import static life.expert.common.async.LogUtils.logAtInfoRunnable;
@@ -62,30 +58,30 @@ import static reactor.core.publisher.Mono.just;
  * - not for inheritance
  *
  * <pre>{@code
-	 * MutableGraph<String> g = GraphBuilder.undirected()
-	 * .build();
-	 * g.putEdge( "A" , "B" );
-	 * g.putEdge( "A" , "C" );
-	 * g.putEdge( "B" , "C" );
-	 * g.addNode( "D" );
-	 *
-	 *
-	 * RenderGraph.graph( g )
-	 * .log()
-	 * .markNode( "B" , "fillcolor=red" )
-	 * .markEdge( "B" , "C" , "color=red width=5" )
-	 * .renderToFile(false);
- * }***</pre>
+ * MutableGraph<String> g = GraphBuilder.undirected()
+ * .build();
+ * g.putEdge( "A" , "B" );
+ * g.putEdge( "A" , "C" );
+ * g.putEdge( "B" , "C" );
+ * g.addNode( "D" );
+ *
+ *
+ * RenderGraph.graph( g )
+ * .log()
+ * .markNode( "B" , "fillcolor=red" )
+ * .markEdge( "B" , "C" , "color=red width=5" )
+ * .renderToFile(false);
+ * }****</pre>
  *
  *
  * Every constructor/fabric can raise the exceptions:
  * throws NullPointerException if argument nullable
  * throws IllegalArgumentException if argument empty
  *
- * @param <E>
+ * @param <N>
  * 	the type parameter
  */
-public final class RenderGraph<E>
+public final class RenderGraph<N>
 	{
 	
 	
@@ -98,19 +94,19 @@ public final class RenderGraph<E>
 	
 	
 	
-	private @NonNull Graph<E> graph;
+	private @NonNull RenderGraphStrategy graph;
 	
 	
 	
-	private Map<E,String> markNodes = new HashMap<>();
+	private Map<N,String> markNodes = new HashMap<>();
 	
 	
 	
-	private Map<EndpointPair<E>,String> markEdges = new HashMap<>();
+	private Map<EndpointPair<N>,String> markEdges = new HashMap<>();
 	
 	
 	
-	private RenderGraph( @NotNull Graph<E> graph )
+	private RenderGraph( @NotNull RenderGraphStrategy graph )
 		{
 		this.graph = graph;
 		}
@@ -129,7 +125,45 @@ public final class RenderGraph<E>
 	 */
 	public static <V> RenderGraph<V> graph( @NonNull Graph<V> graph )
 		{
-		return new RenderGraph<V>( graph );
+		return new RenderGraph<V>( RenderGraphDefaultStrategy.of( graph ) );
+		}
+	
+	
+	
+	/**
+	 * Graph render graph.
+	 *
+	 * @param <V>
+	 * 	the type parameter
+	 * @param <E>
+	 * 	the type parameter
+	 * @param graph
+	 * 	the graph
+	 *
+	 * @return the render graph
+	 */
+	public static <V, E> RenderGraph<V> graph( @NonNull Network<V,E> graph )
+		{
+		return new RenderGraph<V>( RenderGraphNetworkStrategy.of( graph ) );
+		}
+	
+	
+	
+	/**
+	 * Graph render graph.
+	 *
+	 * @param <V>
+	 * 	the type parameter
+	 * @param <I>
+	 * 	the type parameter
+	 * @param graph
+	 * 	the graph
+	 *
+	 * @return the render graph
+	 */
+	public static <V, I> RenderGraph<V> graph( @NonNull ValueGraph<V,I> graph )
+		{
+		return new RenderGraph<V>( RenderGraphValueStrategy.of( graph ) );
 		}
 	
 	
@@ -156,7 +190,7 @@ public final class RenderGraph<E>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<E> markNode( @NonNull E node ,
+	public RenderGraph<N> markNode( @NonNull N node ,
 	                                @NonNull String property )
 		{
 		markNodes.put( node , property );
@@ -174,7 +208,7 @@ public final class RenderGraph<E>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<E> markNodes( @NonNull Map<E,String> markNodes )
+	public RenderGraph<N> markNodes( @NonNull Map<N,String> markNodes )
 		{
 		markNodes.putAll( markNodes );
 		
@@ -188,7 +222,7 @@ public final class RenderGraph<E>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<E> clearMarkNodes()
+	public RenderGraph<N> clearMarkNodes()
 		{
 		markNodes.clear();
 		
@@ -207,7 +241,7 @@ public final class RenderGraph<E>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<E> markEdge( @NonNull EndpointPair<E> edge ,
+	public RenderGraph<N> markEdge( @NonNull EndpointPair<N> edge ,
 	                                @NonNull String property )
 		{
 		markEdges.put( edge , property );
@@ -229,8 +263,8 @@ public final class RenderGraph<E>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<E> markEdge( @NonNull E nodeU ,
-	                                @NonNull E nodeV ,
+	public RenderGraph<N> markEdge( @NonNull N nodeU ,
+	                                @NonNull N nodeV ,
 	                                @NonNull String property )
 		{
 		var edge = graph.isDirected() ? EndpointPair.ordered( nodeU , nodeV ) : EndpointPair.unordered( nodeU , nodeV );
@@ -250,7 +284,7 @@ public final class RenderGraph<E>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<E> markEdges( @NonNull Map<EndpointPair<E>,String> markEdges )
+	public RenderGraph<N> markEdges( @NonNull Map<EndpointPair<N>,String> markEdges )
 		{
 		markEdges.putAll( markEdges );
 		
@@ -264,7 +298,7 @@ public final class RenderGraph<E>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<E> clearMarkEdges()
+	public RenderGraph<N> clearMarkEdges()
 		{
 		markEdges.clear();
 		
@@ -278,7 +312,7 @@ public final class RenderGraph<E>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<E> log()
+	public RenderGraph<N> log()
 		{
 		log_( renderToString() );
 		return this;
@@ -293,24 +327,7 @@ public final class RenderGraph<E>
 	 */
 	public String renderToString()
 		{
-		StringBuilder dot = new StringBuilder();
-		dot.append( graph.isDirected() ? "digraph G{\n\tratio = fill; node [shape = circle]; \n" : "graph G{\n\tratio = fill; node [shape = circle]; edge [dir=none];\n" );
-		
-		
-		for( E n : graph.nodes() )
-			{
-			var description = markNodes.getOrDefault( n , "style=filled fillcolor=gray" );
-			dot.append( String.format( "\t%s [%s];\n" , n , description ) );
-			}
-		
-		for( EndpointPair<E> e : graph.edges() )
-			{
-			var description = markEdges.getOrDefault( e , String.format( "label = \"%s\"" , e ) );
-			dot.append( String.format( "\t%s %s %s [%s];\n" , e.nodeU() , graph.isDirected() ? "->" : "--" , e.nodeV() , description ) );
-			}
-		dot.append( "}\n" );
-		
-		return dot.toString();
+		return graph.renderToString( markNodes , markEdges );
 		}
 	
 	
@@ -323,7 +340,7 @@ public final class RenderGraph<E>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<E> renderToFile( String fileName )
+	public RenderGraph<N> renderToFile( String fileName )
 		{
 		var dot = renderToString();
 		
@@ -343,7 +360,7 @@ public final class RenderGraph<E>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<E> renderToFile()
+	public RenderGraph<N> renderToFile()
 		{
 		
 		var filename_with_datetime = String.format( "%d.dot" , Instant.now()
