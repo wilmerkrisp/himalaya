@@ -9,12 +9,12 @@
 //                           wilmer 2019/05/25
 //
 //--------------------------------------------------------------------------------
-/**
+/**<pre>
  * - This library module does not contain the executable file and the main method.
  *
  * - pure SL4J methods are used for logging, this way the logger implementation of the client using the library will be picked up automatically
  *      logback used only for testing library
- */
+ </pre> */
 
 
 module life.expert {

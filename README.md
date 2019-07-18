@@ -6,5 +6,5 @@ https://mvnrepository.com/artifact/life.expert/himalaya
 
 Add library in Gradle:
 dependencies {
-    implementation 'life.expert:himalaya:1.0.1'
+    implementation 'life.expert:himalaya:1.0.40'
 }

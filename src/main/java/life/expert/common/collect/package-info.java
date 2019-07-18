@@ -1,6 +1,6 @@
-/**
+/**<pre>
  * auxiliary classes for working with collections
- */
+ </pre>*/
 
 
 
