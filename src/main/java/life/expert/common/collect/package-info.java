@@ -1,5 +1,5 @@
 /**
- *
+ * auxiliary classes for working with collections
  */
 
 

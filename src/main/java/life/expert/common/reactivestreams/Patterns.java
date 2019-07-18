@@ -91,12 +91,11 @@ import static cyclops.control.Trampoline.done;
 
 
 /**
- * service (static class)
+ * auxiliary static functions with arguments - several Mono
  *
- * <pre>{@code
- *               Patterns.compute();
- *               var s=Patterns.MY_CONSTANT;
- * }********</pre>
+ * - functional for-comprehension pattern for reactive flows
+ * - required to convert a null value returned by a function to an empty flow event
+ * - at the first null value returned, the chain of nested calls stops
  */
 @UtilityClass
 @Slf4j
@@ -106,10 +105,7 @@ public final class Patterns
 	
 	
 	
-	
 	//<editor-fold desc="reactor parallel flows">
-	
-	
 	
 	
 	
@@ -163,8 +159,6 @@ public final class Patterns
 	
 	
 	//</editor-fold>
-	
-	
 	
 	
 	
@@ -244,8 +238,6 @@ public final class Patterns
 		}
 	
 	
-	
-
 	
 	/**
 	 * Creates a {@code For}-comprehension of three Monos.

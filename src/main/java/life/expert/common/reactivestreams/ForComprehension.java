@@ -50,21 +50,16 @@ import static reactor.core.publisher.Mono.*;
 
 
 /**
- * service (static class)
+ * auxiliary static functions with arguments - several Function
  *
- * <pre>{@code
- *               ExtensionMethods.compute();
- *               var s=ExtensionMethods.MY_CONSTANT;
- * }*</pre>
+ * - functional for-comprehension pattern for reactive flows
+ * - required to convert a null value returned by a function to an empty flow event
+ * - at the first null value returned, the chain of nested calls stops
  */
 @UtilityClass
 @Slf4j
 public final class ForComprehension
 	{
-	
-	
-	
-	
 	
 	
 	
@@ -85,7 +80,7 @@ public final class ForComprehension
 	public static <T1, T2> Publisher<T2> For( Flux<T1> ts1 ,
 	                                          Function<? super Flux<T1>,? extends Publisher<T2>> ts2 )
 		{
-	 
+		
 		
 		
 		return ts1.flatMap( t1 -> justOrEmpty( t1 ).flux()

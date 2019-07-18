@@ -36,12 +36,12 @@ import static life.expert.common.async.LogUtils.log_;
 
 
 /**
- * The type Render collection.
+ * allows you to mark elements of a collection (for example, mark one of the elements with an asterisk) and output such a collection as a string
  *
  * <pre>{@code RenderCollection.collection( sorted_list )
  * 	            .markElement( c , "*" )
  * 	            .markRange( a , b , "()" )
- * 	            .log(); }*</pre>
+ * 	            .log(); }**</pre>
  *
  * @param <T>
  * 	the type parameter

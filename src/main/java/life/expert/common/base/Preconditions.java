@@ -27,13 +27,7 @@ import com.google.common.collect.*;
 //--------------------------------------------------------------------------------
 //                              life.expert.testfiles
 //--------------------------------------------------------------------------------
-//  norm3
-//
-//  Copyright 2018 Wilmer Krisp
-//  Licensed under the Apache License, Version 2.0
-//
-//  Author: wilmer
-//  Created: 2018/12/06
+
 //
 
 
@@ -45,7 +39,10 @@ import com.google.common.collect.*;
 
 
 /**
- * The type Preconditions.
+ * - methods for checking strings and collections (the presence of an element in the collection, the emptiness of elements, etc.)
+ * as well as advanced logging methods display indices of empty elements, etc.
+ *
+ * - contain categories of side effects: assert (raise assertion),checkArgument (raise illegal argument exception),checkState (raise illegal state exception)
  */
 public final class Preconditions
 	{
@@ -114,42 +111,42 @@ public final class Preconditions
 	/**
 	 * The constant goodString.
 	 */
-	public static final Predicate< String > goodString = s -> s != null && !s.isEmpty() && !s.isBlank();
+	public static final Predicate<String> goodString = s -> s != null && !s.isEmpty() && !s.isBlank();
 	
 	
 	
 	/**
 	 * The constant badString.
 	 */
-	public static final Predicate< String > badString = s -> s == null || s.isEmpty() || s.isBlank();
+	public static final Predicate<String> badString = s -> s == null || s.isEmpty() || s.isBlank();
 	
 	
 	
 	/**
 	 * The constant goodCollection.
 	 */
-	public static final Predicate< ? extends Collection< ? > > goodCollection = c -> c != null && !c.isEmpty();
+	public static final Predicate<? extends Collection<?>> goodCollection = c -> c != null && !c.isEmpty();
 	
 	
 	
 	/**
 	 * The constant badCollection.
 	 */
-	public static final Predicate< ? extends Collection< ? > > badCollection = c -> c == null || c.isEmpty();
+	public static final Predicate<? extends Collection<?>> badCollection = c -> c == null || c.isEmpty();
 	
 	
 	
 	/**
 	 * The constant goodMap.
 	 */
-	public static final Predicate< ? extends Map< ?, ? > > goodMap = m -> m != null && !m.isEmpty();
+	public static final Predicate<? extends Map<?,?>> goodMap = m -> m != null && !m.isEmpty();
 	
 	
 	
 	/**
 	 * The constant badMap.
 	 */
-	public static final Predicate< ? extends Map< ?, ? > > badMap = m -> m == null || m.isEmpty();
+	public static final Predicate<? extends Map<?,?>> badMap = m -> m == null || m.isEmpty();
 	
 	
 	
@@ -164,7 +161,7 @@ public final class Preconditions
 	 * @return the predicate
 	 */
 	@NotNull
-	public static final < E > Predicate< ? super Collection< E > > anyMatchInCollection( @Nullable Predicate< E > p )
+	public static final <E> Predicate<? super Collection<E>> anyMatchInCollection( @Nullable Predicate<E> p )
 		{
 		return c -> c.stream()
 		             .anyMatch( p == null ? Objects::isNull : p );
@@ -185,7 +182,7 @@ public final class Preconditions
 	 * @return the predicate
 	 */
 	@NotNull
-	public static final < EKey, EValue > Predicate< ? super Map< EKey, EValue > > anyMatchInMap( @Nullable Predicate< EValue > p )
+	public static final <EKey, EValue> Predicate<? super Map<EKey,EValue>> anyMatchInMap( @Nullable Predicate<EValue> p )
 		{
 		return m -> m.entrySet()
 		             .stream()
@@ -206,7 +203,7 @@ public final class Preconditions
 	 * @return the predicate
 	 */
 	@NotNull
-	public static final < E > Predicate< ? super Collection< E > > noneMatchInCollection( @Nullable Predicate< E > p )
+	public static final <E> Predicate<? super Collection<E>> noneMatchInCollection( @Nullable Predicate<E> p )
 		{
 		return anyMatchInCollection( p ).negate();
 		}
@@ -226,16 +223,16 @@ public final class Preconditions
 	 * @return the predicate
 	 */
 	@NotNull
-	public static final < EKey, EValue > Predicate< ? super Map< EKey, EValue > > noneMatchInMap( @Nullable Predicate< EValue > p )
+	public static final <EKey, EValue> Predicate<? super Map<EKey,EValue>> noneMatchInMap( @Nullable Predicate<EValue> p )
 		{
-		return ( (Predicate< ? super Map< EKey, EValue > >) anyMatchInMap( p ) ).negate();
+		return ( (Predicate<? super Map<EKey,EValue>>) anyMatchInMap( p ) ).negate();
 		}
 	
 	
 	
 	@NotNull
-	private static final < E > Supplier< String > wrongCollectionMessage( @NotNull Collection< E > collection ,
-	                                                                      @NotNull Predicate< E > invalidElement )
+	private static final <E> Supplier<String> wrongCollectionMessage( @NotNull Collection<E> collection ,
+	                                                                  @NotNull Predicate<E> invalidElement )
 		{
 		return () -> String.format( MESSAGE_WRONG_COLLECTION , getCountOfObjectsInCollection( collection , invalidElement ) , getIndexesOfObjectsInCollectionForLog( collection , invalidElement ) , collection.getClass() );
 		}
@@ -243,8 +240,8 @@ public final class Preconditions
 	
 	
 	@NotNull
-	private static < EKey, EValue > Supplier< String > wrongMapMessage( @NotNull Map< EKey, EValue > map ,
-	                                                                    @NotNull Predicate< EValue > invalidValue )
+	private static <EKey, EValue> Supplier<String> wrongMapMessage( @NotNull Map<EKey,EValue> map ,
+	                                                                @NotNull Predicate<EValue> invalidValue )
 		
 		{
 		return () -> String.format( MESSAGE_WRONG_MAP , getCountOfObjectsInMap( map , invalidValue ) , getKeysOfObjectsInMapForLog( map , invalidValue ) , map.getClass() );
@@ -268,8 +265,8 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	public static < E > boolean isCheckArgument(   E argument ,
-	                                             @Nullable Predicate< E > wrong )
+	public static <E> boolean isCheckArgument( E argument ,
+	                                           @Nullable Predicate<E> wrong )
 		{
 		wrong = wrong == null ? Objects::isNull : wrong;
 		return wrong.test( argument );
@@ -291,9 +288,9 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	public static < E > E checkArgument(  E argument ,
-	                                     @Nullable Predicate< E > wrong ,
-	                                     @Nullable String errorMessage )
+	public static <E> E checkArgument( E argument ,
+	                                   @Nullable Predicate<E> wrong ,
+	                                   @Nullable String errorMessage )
 		{
 		if( isCheckArgument( argument , wrong ) )
 			{
@@ -318,10 +315,9 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	
-	public static < E > E checkArgument(  E argument ,
-	                                     @Nullable Predicate< E > wrong ,
-	                                     @Nullable Supplier< String > errorMessage )
+	public static <E> E checkArgument( E argument ,
+	                                   @Nullable Predicate<E> wrong ,
+	                                   @Nullable Supplier<String> errorMessage )
 		{
 		if( isCheckArgument( argument , wrong ) )
 			{
@@ -346,10 +342,9 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	
-	public static < E > E checkState(  E argument ,
-	                                  @Nullable Predicate< E > wrong ,
-	                                  @Nullable String errorMessage )
+	public static <E> E checkState( E argument ,
+	                                @Nullable Predicate<E> wrong ,
+	                                @Nullable String errorMessage )
 		{
 		if( isCheckArgument( argument , wrong ) )
 			{
@@ -374,10 +369,9 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	
-	public static < E > E checkState(   E argument ,
-	                                  @Nullable Predicate< E > wrong ,
-	                                  @Nullable Supplier< String > errorMessage )
+	public static <E> E checkState( E argument ,
+	                                @Nullable Predicate<E> wrong ,
+	                                @Nullable Supplier<String> errorMessage )
 		{
 		if( isCheckArgument( argument , wrong ) )
 			{
@@ -402,10 +396,9 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	
-	public static < E > E assertArgument(  E argument ,
-	                                      @Nullable Predicate< E > wrong ,
-	                                      @Nullable String errorMessage )
+	public static <E> E assertArgument( E argument ,
+	                                    @Nullable Predicate<E> wrong ,
+	                                    @Nullable String errorMessage )
 		{
 		assert !isCheckArgument( argument , wrong ) :
 			errorMessage == null ? "" : errorMessage;
@@ -429,10 +422,9 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	
-	public static < E > E assertArgument(  E argument ,
-	                                      @Nullable Predicate< E > wrong ,
-	                                      @Nullable Supplier< String > errorMessage )
+	public static <E> E assertArgument( E argument ,
+	                                    @Nullable Predicate<E> wrong ,
+	                                    @Nullable Supplier<String> errorMessage )
 		{
 		assert !isCheckArgument( argument , wrong ) :
 			errorMessage == null ? "" : errorMessage.get();
@@ -451,7 +443,7 @@ public final class Preconditions
 	 * 	the error message
 	 */
 	public static void checkArgument( boolean expression ,
-	                                  @Nullable Supplier< String > errorMessage )
+	                                  @Nullable Supplier<String> errorMessage )
 		{
 		if( !expression )
 			{
@@ -470,7 +462,7 @@ public final class Preconditions
 	 * 	the error message
 	 */
 	public static void checkState( boolean expression ,
-	                               @Nullable Supplier< String > errorMessage )
+	                               @Nullable Supplier<String> errorMessage )
 		{
 		if( !expression )
 			{
@@ -489,7 +481,7 @@ public final class Preconditions
 	 * 	the error message
 	 */
 	public static void assertArgument( boolean expression ,
-	                                   @Nullable Supplier< String > errorMessage )
+	                                   @Nullable Supplier<String> errorMessage )
 		{
 		assert expression :
 			errorMessage == null ? "" : errorMessage.get();
@@ -516,9 +508,8 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	
-	public static < E > E checkArgumentNotNull(  E argument ,
-	                                            @Nullable Supplier< String > errorMessage )
+	public static <E> E checkArgumentNotNull( E argument ,
+	                                          @Nullable Supplier<String> errorMessage )
 		{
 		checkArgument( argument , Objects::isNull , errorMessage );
 		return argument;
@@ -538,8 +529,8 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	public static < E > E checkStateNotNull(   E argument ,
-	                                         @Nullable Supplier< String > errorMessage )
+	public static <E> E checkStateNotNull( E argument ,
+	                                       @Nullable Supplier<String> errorMessage )
 		{
 		checkState( argument , Objects::isNull , errorMessage );
 		return argument;
@@ -559,9 +550,8 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	
-	public static < E > E assertArgumentNotNull(  E argument ,
-	                                             @Nullable Supplier< String > errorMessage )
+	public static <E> E assertArgumentNotNull( E argument ,
+	                                           @Nullable Supplier<String> errorMessage )
 		{
 		assertArgument( argument , Objects::isNull , errorMessage );
 		return argument;
@@ -584,10 +574,10 @@ public final class Preconditions
 	 * For example, you can use the method (which raise IllegalArgumentException)
 	 * - inside constructors of immutable objects
 	 * - inside methods for testing inputs arguments
-	 *  <pre>{@code
+	 * <pre>{@code
 	 *      checkCollection(c,String::isBlank);
 	 *      checkCollection(c,Objects::isNull);
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <E>
 	 * 	the type parameter
@@ -603,9 +593,8 @@ public final class Preconditions
 	 * @throws IllegalArgumentException
 	 * 	if argument empty (or if one collection's element is empty)
 	 */
-	
-	public static < E > Collection< E > checkArgument(  Collection< E > collection ,
-	                                                   @Nullable Predicate< E > invalidElement )
+	public static <E> Collection<E> checkArgument( Collection<E> collection ,
+	                                               @Nullable Predicate<E> invalidElement )
 		{
 		checkArgument( collection );
 		
@@ -624,10 +613,10 @@ public final class Preconditions
 	 * For example, you can use the method (which raise IllegalArgumentException)
 	 * - inside constructors of immutable objects
 	 * - inside methods for testing inputs arguments
-	 *  <pre>{@code
+	 * <pre>{@code
 	 *      checkMap(m,String::isBlank);
 	 *      checkMap(m,Objects::isNull);
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <EKey>
 	 * 	the type parameter
@@ -645,9 +634,8 @@ public final class Preconditions
 	 * @throws IllegalArgumentException
 	 * 	if argument empty (or if one map's element is empty)
 	 */
-	
-	public static < EKey, EValue > Map< EKey, EValue > checkArgument(  Map< EKey, EValue > map ,
-	                                                                  @Nullable Predicate< EValue > invalidValue )
+	public static <EKey, EValue> Map<EKey,EValue> checkArgument( Map<EKey,EValue> map ,
+	                                                             @Nullable Predicate<EValue> invalidValue )
 		{
 		checkArgument( map );
 		
@@ -665,14 +653,14 @@ public final class Preconditions
 	 * For example, you can use the method (if you need return optional in your method instead raise exception)
 	 * - inside methods for testing inputs arguments
 	 * - inside methods of mutable objects for checking object's state before execution
-	 *  <pre>{@code
+	 * <pre>{@code
 	 *      if ( checkCollectionIsEmpty(c,String::isBlank) )
 	 *              return Optional.empty();
 	 *
 	 *
 	 *      if ( checkCollectionIsEmpty(c,Objects::isNull) )
 	 *              return Optional.empty();
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <E>
 	 * 	the type parameter
@@ -686,12 +674,12 @@ public final class Preconditions
 	 * @throws NullPointerException
 	 * 	if argument nullable
 	 */
-	public static < E > boolean isCheckArgument(  Collection< E > collection ,
-	                                             @Nullable Predicate< E > invalidElement )
+	public static <E> boolean isCheckArgument( Collection<E> collection ,
+	                                           @Nullable Predicate<E> invalidElement )
 		{
 		//return !( (Predicate< Collection< E > >) goodCollection ).and( noneMatchInCollection( invalidElement ) ).test( collection );
-		return ( (Predicate< Collection< E > >) badCollection ).or( anyMatchInCollection( invalidElement ) )
-		                                                       .test( collection );
+		return ( (Predicate<Collection<E>>) badCollection ).or( anyMatchInCollection( invalidElement ) )
+		                                                   .test( collection );
 		}
 	
 	
@@ -704,14 +692,14 @@ public final class Preconditions
 	 * For example, you can use the method (if you need return optional in your method instead raise exception)
 	 * - inside methods for testing inputs arguments
 	 * - inside methods of mutable objects for checking object's state before execution
-	 *  <pre>{@code
+	 * <pre>{@code
 	 *      if ( checkMapIsEmpty(m,String::isBlank) )
 	 *              return Optional.empty();
 	 *
 	 *
 	 *      if ( checkMapIsEmpty(m,Objects::isNull) )
 	 *              return Optional.empty();
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <TKey>
 	 * 	the type parameter
@@ -727,13 +715,12 @@ public final class Preconditions
 	 * @throws NullPointerException
 	 * 	if argument nullable
 	 */
-	
-	public static < TKey, TValue > boolean isCheckArgument(  Map< TKey, TValue > map ,
-	                                                        @Nullable Predicate< TValue > invalidValue )
+	public static <TKey, TValue> boolean isCheckArgument( Map<TKey,TValue> map ,
+	                                                      @Nullable Predicate<TValue> invalidValue )
 		{
 		//return !( (Predicate< Map< TKey, TValue > >) goodMap ).and( noneMatchInMap( invalidValue ) ).test( map );
-		return ( (Predicate< Map< TKey, TValue > >) badMap ).or( anyMatchInMap( invalidValue ) )
-		                                                    .test( map );
+		return ( (Predicate<Map<TKey,TValue>>) badMap ).or( anyMatchInMap( invalidValue ) )
+		                                               .test( map );
 		}
 	
 	
@@ -745,10 +732,10 @@ public final class Preconditions
 	 *
 	 * For example, you can use the method (which raise IllegalStateException)
 	 * - inside methods of mutable objects for checking object's state before execution
-	 *  <pre>{@code
+	 * <pre>{@code
 	 *      checkCollectionRaiseIllegalStateException(c,String::isBlank);
 	 *      checkCollectionRaiseIllegalStateException(c,Objects::isNull);
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <T>
 	 * 	the type parameter
@@ -766,9 +753,8 @@ public final class Preconditions
 	 * @throws IllegalStateException
 	 * 	if argument empty (or if one collection's element is empty)
 	 */
-	
-	public static < T extends Collection< E >, E > T checkState(  T collection ,
-	                                                             @Nullable Predicate< E > invalidElement )
+	public static <T extends Collection<E>, E> T checkState( T collection ,
+	                                                         @Nullable Predicate<E> invalidElement )
 		{
 		checkState( collection );
 		
@@ -785,10 +771,10 @@ public final class Preconditions
 	 *
 	 * For example, you can use the method (which raise IllegalStateException)
 	 * - inside methods of mutable objects for checking object's state before execution
-	 *  <pre>{@code
+	 * <pre>{@code
 	 *      checkMapRaiseIllegalStateException(c,String::isBlank);
 	 *      checkMapRaiseIllegalStateException(c,Objects::isNull);
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <TKey>
 	 * 	the type parameter
@@ -806,9 +792,8 @@ public final class Preconditions
 	 * @throws IllegalStateException
 	 * 	if argument empty (or if one map's element is empty)
 	 */
-	
-	public static < TKey, TValue > Map< TKey, TValue > checkState(  Map< TKey, TValue > map ,
-	                                                               @Nullable Predicate< TValue > invalidValue )
+	public static <TKey, TValue> Map<TKey,TValue> checkState( Map<TKey,TValue> map ,
+	                                                          @Nullable Predicate<TValue> invalidValue )
 		{
 		checkState( map );
 		
@@ -823,10 +808,10 @@ public final class Preconditions
 	 * Checking every element in collection with Predicate (usual test for nullable or empty elements)
 	 *
 	 * Usually this method for check input args in private methods for raise assertion instead exception.
-	 *  <pre>{@code
+	 * <pre>{@code
 	 *      checkCollectionRaiseAssertion(c,String::isBlank);
 	 *      checkCollectionRaiseAssertion(c,Objects::isNull);
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <T>
 	 * 	the type parameter
@@ -842,9 +827,8 @@ public final class Preconditions
 	 * @throws AssertionError
 	 * 	if any match
 	 */
-	
-	public static < T extends Collection< E >, E > T assertArgument(  T collection ,
-	                                                                 @Nullable Predicate< E > invalidElement )
+	public static <T extends Collection<E>, E> T assertArgument( T collection ,
+	                                                             @Nullable Predicate<E> invalidElement )
 		{
 		assertArgument( collection );
 		
@@ -859,10 +843,10 @@ public final class Preconditions
 	 * Checking every element in map with Predicate (usual test for nullable or empty entries values)
 	 *
 	 * Usually this method for check input args in private methods for raise assertion instead exception.
-	 *  <pre>{@code
+	 * <pre>{@code
 	 *      checkMapRaiseAssertion(c,String::isBlank);
 	 *      checkMapRaiseAssertion(c,Objects::isNull);
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <TKey>
 	 * 	the type parameter
@@ -878,9 +862,8 @@ public final class Preconditions
 	 * @throws AssertionError
 	 * 	if any match
 	 */
-	
-	public static < TKey, TValue > Map< TKey, TValue > assertArgument(  Map< TKey, TValue > map ,
-	                                                                   @Nullable Predicate< TValue > invalidValue )
+	public static <TKey, TValue> Map<TKey,TValue> assertArgument( Map<TKey,TValue> map ,
+	                                                              @Nullable Predicate<TValue> invalidValue )
 		{
 		assertArgument( map );
 		
@@ -906,8 +889,7 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	
-	public static < E extends Collection< ? > > E checkArgument(  E collection )
+	public static <E extends Collection<?>> E checkArgument( E collection )
 		{
 		checkArgument( collection , Objects::isNull , MESSAGE_WRONG_COLLECTION_NULL );
 		checkArgument( collection , Collection::isEmpty , MESSAGE_WRONG_COLLECTION_EMPTY );
@@ -924,9 +906,9 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	public static boolean isCheckArgument(  Collection< ? > collection )
+	public static boolean isCheckArgument( Collection<?> collection )
 		{
-		return ( (Predicate< Collection< ? > >) badCollection ).test( collection );
+		return ( (Predicate<Collection<?>>) badCollection ).test( collection );
 		}
 	
 	
@@ -941,8 +923,7 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	
-	public static < E extends Collection< ? > > E checkState(  E collection )
+	public static <E extends Collection<?>> E checkState( E collection )
 		{
 		checkState( collection , Objects::isNull , MESSAGE_WRONG_COLLECTION_NULL );
 		checkState( collection , Collection::isEmpty , MESSAGE_WRONG_COLLECTION_EMPTY );
@@ -961,8 +942,7 @@ public final class Preconditions
 	 *
 	 * @return the string
 	 */
-	
-	public static < E extends Collection< ? > > E assertArgument(  E collection )
+	public static <E extends Collection<?>> E assertArgument( E collection )
 		{
 		assertArgument( collection , Objects::isNull , MESSAGE_WRONG_COLLECTION_NULL );
 		assertArgument( collection , Collection::isEmpty , MESSAGE_WRONG_COLLECTION_EMPTY );
@@ -983,8 +963,7 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	
-	public static < TKey, TValue > Map< TKey, TValue > checkArgument(  Map< TKey, TValue > map )
+	public static <TKey, TValue> Map<TKey,TValue> checkArgument( Map<TKey,TValue> map )
 		{
 		checkArgument( map , Objects::isNull , MESSAGE_WRONG_MAP_NULL );
 		checkArgument( map , Map::isEmpty , MESSAGE_WRONG_MAP_EMPTY );
@@ -1001,11 +980,10 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	
 	//public static < TKey, TValue > boolean isCheckArgument(  Map< TKey, TValue > map )
-	public static boolean isCheckArgument( Map< ?, ? > map )
+	public static boolean isCheckArgument( Map<?,?> map )
 		{
-		return ( (Predicate< Map< ?, ? > >) badMap ).test( map );
+		return ( (Predicate<Map<?,?>>) badMap ).test( map );
 		}
 	
 	
@@ -1022,8 +1000,7 @@ public final class Preconditions
 	 *
 	 * @return the e
 	 */
-	
-	public static < TKey, TValue > Map< TKey, TValue > checkState(  Map< TKey, TValue > map )
+	public static <TKey, TValue> Map<TKey,TValue> checkState( Map<TKey,TValue> map )
 		{
 		checkState( map , Objects::isNull , MESSAGE_WRONG_MAP_NULL );
 		checkState( map , Map::isEmpty , MESSAGE_WRONG_MAP_EMPTY );
@@ -1044,8 +1021,7 @@ public final class Preconditions
 	 *
 	 * @return the string
 	 */
-	
-	public static < TKey, TValue > Map< TKey, TValue > assertArgument(  Map< TKey, TValue > map )
+	public static <TKey, TValue> Map<TKey,TValue> assertArgument( Map<TKey,TValue> map )
 		{
 		assertArgument( map , Objects::isNull , MESSAGE_WRONG_MAP_NULL );
 		assertArgument( map , Map::isEmpty , MESSAGE_WRONG_MAP_EMPTY );
@@ -1069,8 +1045,7 @@ public final class Preconditions
 	 *
 	 * @return the string
 	 */
-	
-	public static String checkArgument(  String string )
+	public static String checkArgument( String string )
 		{
 		checkArgument( string , Objects::isNull , MESSAGE_WRONG_STRING_NULL );
 		checkArgument( string , String::isEmpty , MESSAGE_WRONG_STRING_EMPTY );
@@ -1088,7 +1063,7 @@ public final class Preconditions
 	 *
 	 * @return the string
 	 */
-	public static boolean isCheckArgument(  String string )
+	public static boolean isCheckArgument( String string )
 		{
 		return badString.test( string );
 		}
@@ -1103,8 +1078,7 @@ public final class Preconditions
 	 *
 	 * @return the string
 	 */
-	
-	public static String checkState(  String string )
+	public static String checkState( String string )
 		{
 		checkState( string , Objects::isNull , MESSAGE_WRONG_STRING_NULL );
 		checkState( string , String::isEmpty , MESSAGE_WRONG_STRING_EMPTY );
@@ -1122,8 +1096,7 @@ public final class Preconditions
 	 *
 	 * @return the string
 	 */
-	
-	public static String assertArgument(  String string )
+	public static String assertArgument( String string )
 		{
 		assertArgument( string , Objects::isNull , MESSAGE_WRONG_STRING_NULL );
 		assertArgument( string , String::isEmpty , MESSAGE_WRONG_STRING_EMPTY );
@@ -1197,7 +1170,7 @@ public final class Preconditions
 	 */
 	public static long checkArgument( long argument ,
 	                                  @Nullable LongPredicate wrong ,
-	                                  @Nullable Supplier< String > errorMessage )
+	                                  @Nullable Supplier<String> errorMessage )
 		{
 		if( isCheckArgument( argument , wrong ) )
 			{
@@ -1247,7 +1220,7 @@ public final class Preconditions
 	 */
 	public static long checkState( long argument ,
 	                               @Nullable LongPredicate wrong ,
-	                               @Nullable Supplier< String > errorMessage )
+	                               @Nullable Supplier<String> errorMessage )
 		{
 		if( isCheckArgument( argument , wrong ) )
 			{
@@ -1296,7 +1269,7 @@ public final class Preconditions
 	 */
 	public static long assertArgument( long argument ,
 	                                   @Nullable LongPredicate wrong ,
-	                                   @Nullable Supplier< String > errorMessage )
+	                                   @Nullable Supplier<String> errorMessage )
 		{
 		
 		assert !isCheckArgument( argument , wrong ) :
@@ -1386,12 +1359,12 @@ public final class Preconditions
 	 * Method checks every element in collection with Predicate (usual test for nullable or empty elements)
 	 *
 	 * You can use the method in log methods (and also in checkCollection, checkCollectionRaiseIllegalStateException, checkCollectionRaiseAssertion).
-	 *  <pre>{@code
+	 * <pre>{@code
 	 * throw new IllegalArgumentException( String.format( "Every element of collection should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
 	 * 			                                                   collection ,
 	 * 			                                                   getIndexesOfObjectsInCollection( collection ,
 	 * 			                                                                                    filter ) ) );
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <E>
 	 * 	the type of desired object
@@ -1403,8 +1376,8 @@ public final class Preconditions
 	 * @return comma separated string with indexes of found object in collection 	return "" if collection or predicate is null, or collection is empty
 	 */
 	@NotNull
-	public static < E > String getIndexesOfObjectsInCollection( @Nullable Collection< E > collection ,
-	                                                            @Nullable Predicate< E > filter )
+	public static <E> String getIndexesOfObjectsInCollection( @Nullable Collection<E> collection ,
+	                                                          @Nullable Predicate<E> filter )
 		{
 		if( collection == null || filter == null || collection.isEmpty() )
 			{
@@ -1425,12 +1398,12 @@ public final class Preconditions
 	 * Method checks every element in collection with Predicate (usual test for nullable or empty elements)
 	 *
 	 * You can use the method in log methods (and also in checkCollection, checkCollectionRaiseIllegalStateException, checkCollectionRaiseAssertion).
-	 *  <pre>{@code
+	 * <pre>{@code
 	 * throw new IllegalArgumentException( String.format( "Every element of collection should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
 	 * 			                                                   collection ,
 	 * 			                                                   getIndexesOfObjectsInCollection( collection ,
 	 * 			                                                                                    filter ) ) );
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <E>
 	 * 	the type of desired object
@@ -1442,8 +1415,8 @@ public final class Preconditions
 	 * @return comma separated string with indexes of found object in collection 	return "" if collection or predicate is null, or collection is empty
 	 */
 	@NotNull
-	public static < E > String getIndexesOfObjectsInCollectionForLog( @Nullable Collection< E > collection ,
-	                                                                  @Nullable Predicate< E > filter )
+	public static <E> String getIndexesOfObjectsInCollectionForLog( @Nullable Collection<E> collection ,
+	                                                                @Nullable Predicate<E> filter )
 		{
 		if( collection == null || filter == null || collection.isEmpty() )
 			{
@@ -1465,12 +1438,12 @@ public final class Preconditions
 	 * Method checks every element in map with Predicate (usual test for nullable or empty entries values)
 	 *
 	 * You can use the method in log methods (and also in checkMap, checkMapRaiseIllegalStateException, checkMapRaiseAssertion).
-	 *  <pre>{@code
+	 * <pre>{@code
 	 *  throw new IllegalArgumentException( String.format( "Every element of map should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
 	 * 			                                                   map ,
 	 * 			                                                   getKeysOfObjectsInMap( map ,
 	 * 			                                                                             filter ) ) );
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <TKey>
 	 * 	the type of keys in map
@@ -1484,8 +1457,8 @@ public final class Preconditions
 	 * @return comma separated string with keys of found entrie's values in map 	return "" if map or predicate is null, or map is empty
 	 */
 	@NotNull
-	public static < TKey, TValue > String getKeysOfObjectsInMap( @Nullable Map< TKey, TValue > map ,
-	                                                             @Nullable Predicate< TValue > filterValues )
+	public static <TKey, TValue> String getKeysOfObjectsInMap( @Nullable Map<TKey,TValue> map ,
+	                                                           @Nullable Predicate<TValue> filterValues )
 		{
 		if( map == null || filterValues == null || map.isEmpty() )
 			{
@@ -1508,12 +1481,12 @@ public final class Preconditions
 	 * Method checks every element in map with Predicate (usual test for nullable or empty entries values)
 	 *
 	 * You can use the method in log methods (and also in checkMap, checkMapRaiseIllegalStateException, checkMapRaiseAssertion).
-	 *  <pre>{@code
+	 * <pre>{@code
 	 *  throw new IllegalArgumentException( String.format( "Every element of map should not be null or empty: %s \n  Indexes of wrong elements: %s " ,
 	 * 			                                                   map ,
 	 * 			                                                   getKeysOfObjectsInMap( map ,
 	 * 			                                                                             filter ) ) );
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <TKey>
 	 * 	the type of keys in map
@@ -1527,8 +1500,8 @@ public final class Preconditions
 	 * @return comma separated string with keys of found entrie's values in map 	return "" if map or predicate is null, or map is empty
 	 */
 	@NotNull
-	public static < TKey, TValue > String getKeysOfObjectsInMapForLog( @Nullable Map< TKey, TValue > map ,
-	                                                                   @Nullable Predicate< TValue > filterValues )
+	public static <TKey, TValue> String getKeysOfObjectsInMapForLog( @Nullable Map<TKey,TValue> map ,
+	                                                                 @Nullable Predicate<TValue> filterValues )
 		{
 		if( map == null || filterValues == null || map.isEmpty() )
 			{
@@ -1550,9 +1523,9 @@ public final class Preconditions
 	 * Method checks every element in collection with Predicate (usual test for nullable or empty elements)
 	 *
 	 * You can use the method in log methods.
-	 *  <pre>{@code
+	 * <pre>{@code
 	 *
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <E>
 	 * 	the type of desired object
@@ -1564,8 +1537,8 @@ public final class Preconditions
 	 * @return numeric of found objects in collection 	return 0 if collection or predicate is null, or collection is empty
 	 */
 	@NotNull
-	public static < E > long getCountOfObjectsInCollection( @Nullable Collection< E > collection ,
-	                                                        @Nullable Predicate< E > filter )
+	public static <E> long getCountOfObjectsInCollection( @Nullable Collection<E> collection ,
+	                                                      @Nullable Predicate<E> filter )
 		{
 		
 		if( collection == null || filter == null || collection.isEmpty() )
@@ -1587,9 +1560,9 @@ public final class Preconditions
 	 * Method checks every element in map with Predicate (usual test for nullable or empty entries values)
 	 *
 	 * You can use the method in log methods.
-	 *  <pre>{@code
+	 * <pre>{@code
 	 *
-	 * }***********************</pre>
+	 * }************************</pre>
 	 *
 	 * @param <TKey>
 	 * 	the type of keys in map
@@ -1603,8 +1576,8 @@ public final class Preconditions
 	 * @return numeric of found objects in map (using filter by values) 	return 0 if map or predicate is null, or map is empty
 	 */
 	@NotNull
-	public static < TKey, TValue > long getCountOfObjectsInMap( @Nullable Map< TKey, TValue > map ,
-	                                                            @Nullable Predicate< TValue > filterValues )
+	public static <TKey, TValue> long getCountOfObjectsInMap( @Nullable Map<TKey,TValue> map ,
+	                                                          @Nullable Predicate<TValue> filterValues )
 		{
 		if( map == null || filterValues == null || map.isEmpty() )
 			{

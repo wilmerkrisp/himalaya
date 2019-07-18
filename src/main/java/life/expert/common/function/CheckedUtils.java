@@ -70,19 +70,17 @@ import static reactor.core.publisher.Mono.never;
 
 
 /**
- * service (static class)
- *
- * <pre>{@code
- *               CheckedUtils.compute();
- *               var s=CheckedUtils.MY_CONSTANT;
- * }**********************</pre>
+ * - contains methods that wrap lambdas with checked exceptions inside
+ * 1) wrap to bool
+ * 2) wrap to unchecked exception
+ * 3) wrap to unchecked exception and log
  */
 @UtilityClass
 @Slf4j
 public final class CheckedUtils
 	{
 	
-
+	
 	
 	//<editor-fold desc="consumer->bool">
 	
@@ -1083,10 +1081,6 @@ public final class CheckedUtils
 	
 	
 	//</editor-fold>
-	
-	
-	
-	
 	
 	
 	
@@ -2520,25 +2514,9 @@ public final class CheckedUtils
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	//<editor-fold desc="exception utils">
+	
+	
 	
 	/**
 	 * Null pointer exception function.
@@ -2589,6 +2567,8 @@ public final class CheckedUtils
 	//</editor-fold>
 	
 	//<editor-fold desc="try utils">
+	
+	
 	
 	/**
 	 * Alias for  Try.failure(new NullPointerException())

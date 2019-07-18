@@ -81,12 +81,7 @@ import static cyclops.control.Trampoline.done;
 
 
 /**
- * service (static class)
- *
- * <pre>{@code
- *               NullableUtils.compute();
- *               var s=NullableUtils.MY_CONSTANT;
- * }***</pre>
+ * wraps the null value returned by the function into an empty flow event
  */
 @UtilityClass
 @Slf4j
@@ -110,7 +105,7 @@ public final class NullableUtils
 	public static <T, R> Function<T,Mono<R>> nullableFunction( Function<T,R> function )
 		{
 		//return t -> Mono.fromSupplier( () -> function.apply( t ) );
-		return t -> fromSupplier( () ->  function.apply( t ) );
+		return t -> fromSupplier( () -> function.apply( t ) );
 		}
 	
 	
@@ -316,7 +311,7 @@ public final class NullableUtils
 	 */
 	public static <R> Supplier<Mono<R>> nullableSupplier( Supplier<R> supplier )
 		{
-		return () ->fromSupplier( supplier::get );
+		return () -> fromSupplier( supplier::get );
 		
 		}
 		

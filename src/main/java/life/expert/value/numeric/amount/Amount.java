@@ -56,7 +56,7 @@ import java.util.Objects;
  * x = x.subtract(DefaultAmount.of(232323, "BOTTLES"));
  * x = x.multiply(3.4);
  * x = x.divide(5.456);
- * }</pre>
+ * }*</pre>
  */
 public final class Amount
 	implements Quantity,
@@ -556,9 +556,9 @@ public final class Amount
 	 * 	when the unit is null
 	 * @throws IllegalArgumentException
 	 * 	when {@link Unit#getDefaultFractionDigits()} is lesser than zero.
-	 * @see Unit#getDefaultFractionDigits() Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()
+	 * @see Unit#getDefaultFractionDigits() Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()
 	 * @see Amount#ofMinor(Unit , long , int) Amount#ofMinor(Unit , long , int)Amount#ofMinor(Unit , long , int)Amount#ofMinor(Unit , long , int)Amount#ofMinor(Unit , long , int)Amount#ofMinor(Unit , long , int)Amount#ofMinor(Unit , long , int)Amount#ofMinor(Unit , long , int)Amount#ofMinor(Unit , long , int)Amount#ofMinor(Unit , long , int)Amount#ofMinor(Unit , long , int)Amount#ofMinor(Unit , long ,
-	 * 	int)
+	 * 	int)Amount#ofMinor(Unit , long , 	int)
 	 */
 	public static Amount ofMinor( Unit unit ,
 	                              long amountMinor )
@@ -587,7 +587,7 @@ public final class Amount
 	 * 	when the unit is null
 	 * @throws IllegalArgumentException
 	 * 	when the factionDigits is negative
-	 * @see Unit#getDefaultFractionDigits() Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()
+	 * @see Unit#getDefaultFractionDigits() Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()Unit#getDefaultFractionDigits()
 	 */
 	public static Amount ofMinor( Unit unit ,
 	                              long amountMinor ,

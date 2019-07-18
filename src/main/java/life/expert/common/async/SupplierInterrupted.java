@@ -28,6 +28,7 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * The interface Supplier interrupted.
+ * in order to be able to put the code that calls checked exceptions in lambda
  *
  * @param <T>
  * 	the type parameter

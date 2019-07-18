@@ -68,20 +68,6 @@ import static cyclops.control.Trampoline.done;
 
 
 
-//<editor-fold desc=".">
-/*
-
-- private конструктор уже включен аннотацией @UtilityClass
-
-- сервисные методы делать статик методами на классе с private конструктором а не на интерфейсе тк методы обработки могут содержать состояние и кеши
-- интрфейсы использовать только для задания типа
-
-
-*/
-//</editor-fold>
-
-
-
 
 
 
@@ -89,12 +75,7 @@ import static cyclops.control.Trampoline.done;
 
 
 /**
- * service (static class)
- *
- * <pre>{@code
- *               ApplicationUtils.compute();
- *               var s=ApplicationUtils.MY_CONSTANT;
- * }</pre>
+ * helper methods for the main cycle of the application
  */
 @UtilityClass
 @Slf4j
@@ -103,56 +84,39 @@ public final class ApplicationUtils
 	
 	
 	
-	private static final ResourceBundle bundle_        = ResourceBundle.getBundle( "messages" );
-	
-	
-	
-	private static final String         HELLO_MESSAGE_ = bundle_.getString( "hello" );
-	
-	
-	
 	/**
 	 * some constant
 	 */
-	public static final String MY_CONSTANT = new String( "Test string." );
-	
-	
-	
-	private static void compute_()
-		{
-		return;
-		}
+	public static final String FATAL_MESSAGE = "The program has encountered a problem and should close. We apologize for any inconvenience.";
 	
 	
 	
 	/**
-	 * static public method
+	 * general info:
+	 * handler for unprocessed situations
+	 *
+	 * side effects:
+	 * - print and log messages
+	 * - close JVM
 	 *
 	 * <pre>{@code
-	 *           ApplicationUtils.compute();
-	 * }</pre>
-	 */
-	public static void compute()
-		{
-		return;
-		}
-	
-	
-	
-	/**
-	 * static generic method
+	 *           try{
+	 *                   //some code
+	 *           } catch (TheCheckedException e) {
+	 *           e.printStackTrace(); // Oh well, we lose.
+	 *           fatalError();
+	 *           }
+	 * }**</pre>
 	 *
-	 * <pre>{@code
-	 *           ApplicationUtils.myCompute("stroka");
-	 *           ApplicationUtils.myCompute(12);
-	 * }</pre>
-	 *
-	 * @throws NullPointerException
-	 * 	if argument nullable
+	 * @param throwable
+	 * 	the throwable
 	 */
-	public static <E   /* extends super VC_ & VI_ */ /* extends super VCG_<?> & VIG_<?> */ /* extends super VCG_< E > & VIG_< E > */ /* extends super VCG_<String> & VIG_<String> */> void myCompute( @NonNull final E object )
+	public static void fatalError( Throwable throwable )
 		{
-		return;
+		throwable.printStackTrace();
+		System.err.println( FATAL_MESSAGE );
+		logger_.error( FATAL_MESSAGE , throwable );
+		System.exit( 1 );
 		}
 		
 		

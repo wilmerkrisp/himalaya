@@ -70,86 +70,15 @@ import static cyclops.control.Trampoline.done;
 
 
 /**
- * enum simple
- * !CHANGE_ME_DESCRIPTION!
- *
- *
- *
- *
- * 1) you can use extensible interface for enums  (for example pettern operation codes/opcodes)
- * then use generic restrictions for variables of such interface type:   <T extends Enum<T> & Operation>
- *
- *
- *
- * <pre>{@code
- *
- *
- * example 1
- *
- * 	        NodeVisitState v_enum = NodeVisitState.ONE;
- * 	        v_enum.c_test = "newvalue";
- *           NodeVisitState.TWO.c_test = "newvalue";
- * 	        v_enum.f_test();
- *
- *
- * example 5
- *               import static life.expert.common.graph.NodeVisitState.*;
- *               NodeVisitState v_enum =  ONE;                  //using withowt NodeVisitState.ONE
- *
- *
- * example 2
- *
- * 		    switch( v_enum )
- *                       {
- *                       case ONE:
- *                               log_.debug( "NodeVisitState main switch 1: " );
- *                               break;
- *                       case TWO:
- *                               log_.debug( "NodeVisitState main switch 2: " );
- *                               break;
- *                       case THREE:
- *                               log_.debug( "NodeVisitState main switch 3: " );
- *                               break;
- *                       case FOUR:
- *                               log_.debug( "NodeVisitState main switch 4: " );
- *                               break;
- *                       default:
- *                               log_.debug( "NodeVisitState main DEFAULT: " );
- *                       }
- *
- *
- *
- * example 3
- *
- *               for( NodeVisitState v_i : NodeVisitState.values( ) )
- *                       {
- *                       log_.debug( "NodeVisitState main for: " + v_i +" "+v_i.c_test );
- *                       }
- *
- *
- *
- *
- * example 4
- *
- *               v_enum == v_enum.TWO
- * v_enum.equals(v_enum.TWO)
- * v_enum.compareTo(v_enum.TWO)
- *
- *
- *
- * }</pre>
+ * An enum representing the state of a node during DFS. {@code PENDING} means that the node is on
+ * the stack of the DFS, while {@code COMPLETE} means that the node and all its successors have
+ * been already explored. Any node that has not been explored has  {@code NONE} or has not state element in Map .
  */
+
 public enum NodeVisitState
 	
 	{
-		
-		
-		ONE,
-		TWO,
-		THREE,
-		FOUR,
-		FIVE;
-		
-		
-		
+		NONE,
+		PENDING,
+		COMPLETE
 	}

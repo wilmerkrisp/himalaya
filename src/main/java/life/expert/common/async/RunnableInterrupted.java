@@ -28,6 +28,7 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * The interface Runnable interrupted.
+ * in order to be able to put the code that calls checked exceptions in lambda
  */
 @FunctionalInterface
 public interface RunnableInterrupted

@@ -1,5 +1,5 @@
 /**
- *
+ * contains subpackages for various features
  */
 
 

@@ -52,7 +52,7 @@ import static reactor.core.publisher.Mono.just;
 
 
 /**
- * generic immutable class: 1 1 1
+ * the class allows you to mark some vertices or edges of the graph when outputting to a .dot file
  *
  * - pattern new-call
  * - not for inheritance

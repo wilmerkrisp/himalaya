@@ -5,6 +5,9 @@ package life.expert.common.async;
 
 
 
+
+
+
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.oath.cyclops.internal.stream.spliterators.push.Operator;
@@ -66,27 +69,14 @@ import java.util.Optional;
 
 
 /**
- * interface static
- * !CHANGE_ME_DESCRIPTION!
+ * - contains methods that wrap (as an optional type) lambdas with checked exceptions
  *
- * - сервисные методы делать статик методами на классе с private конструктором а не на интерфейсе тк методы обработки могут содержать состояние и кеши
- * - интрфейсы использовать только для задания типа
+ * - contains the methods of custom configured Executors
+ * for passing them to the Flux input
  *
- *
- *  <pre>{@code
+ * - and some general purpose thread delay method
  *
  *
- *
- *
- * example 2
- *
- *               ThreadUtils.fs_service();
- *               v_1=ThreadUtils.s_const;
- *
- *
- *
- *
- * }**********</pre>
  */
 public final class ThreadUtils
 	{
@@ -95,9 +85,6 @@ public final class ThreadUtils
 	
 	// constant
 	private static final int WAIT_TIME_RATIO_FOR_WAITING_TASKS = 100;
-	
-	
- 
 	
 	
 	
@@ -109,9 +96,6 @@ public final class ThreadUtils
 		throw new UnsupportedOperationException( "Dont use this PRIVATE constructor.Please use constructor with parameters." );
 		}
 	
-	
-	
-
 	
 	
 	//<editor-fold desc="utils">
@@ -133,6 +117,7 @@ public final class ThreadUtils
 	//		{
 	//		return Schedulers.from( ThreadUtils.executorCustom( name , size ) );
 	//		}
+	
 	
 	
 	/**
@@ -165,7 +150,6 @@ public final class ThreadUtils
 	 *
 	 * @return the executor
 	 */
-	 
 	public static Executor executorDaemon( String name ,
 	                                       int size ,
 	                                       int waitTimeRatio )
@@ -190,7 +174,6 @@ public final class ThreadUtils
 	 *
 	 * @return the executor
 	 */
-	 
 	public static Executor executorDaemon( int size ,
 	                                       int waitTimeRatio )
 		{
@@ -207,7 +190,6 @@ public final class ThreadUtils
 	 *
 	 * @return the executor
 	 */
-	 
 	public static Executor executorForWaitingTasks( int size )
 		{
 		return executorDaemon( size , WAIT_TIME_RATIO_FOR_WAITING_TASKS );
@@ -225,7 +207,6 @@ public final class ThreadUtils
 	 *
 	 * @return the executor
 	 */
-	 
 	public static Executor executorCustom( String name ,
 	                                       int size )
 		{
@@ -250,7 +231,7 @@ public final class ThreadUtils
 	 * @param operation
 	 * 	the operation
 	 */
-	public static void interruptedWrapper(  RunnableInterrupted operation )
+	public static void interruptedWrapper( RunnableInterrupted operation )
 		{
 		if( operation == null )
 			{
@@ -279,7 +260,7 @@ public final class ThreadUtils
 	 *
 	 * @return the e
 	 */
-	public static <E> E interruptedWrapper(   SupplierInterrupted<E> operation )
+	public static <E> E interruptedWrapper( SupplierInterrupted<E> operation )
 		{
 		if( operation == null )
 			{
@@ -308,7 +289,7 @@ public final class ThreadUtils
 	 *
 	 * @return the optional
 	 */
-	public static <E> Optional<E> interruptedOptional(  SupplierInterrupted<E> operation )
+	public static <E> Optional<E> interruptedOptional( SupplierInterrupted<E> operation )
 		{
 		if( operation == null )
 			{
@@ -336,8 +317,8 @@ public final class ThreadUtils
 	 * @param operation
 	 * 	the operation
 	 */
-	public static <E> void interruptedWrapper(  E input ,
-	                                            ConsumerInterrupted<E> operation )
+	public static <E> void interruptedWrapper( E input ,
+	                                           ConsumerInterrupted<E> operation )
 		{
 		if( operation == null )
 			{

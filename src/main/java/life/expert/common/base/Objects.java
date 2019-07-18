@@ -33,13 +33,7 @@ import com.google.gson.Gson;
 //--------------------------------------------------------------------------------
 //                              life.expert.testfiles
 //--------------------------------------------------------------------------------
-//  norm3
-//
-//  Copyright 2018 Wilmer Krisp
-//  Licensed under the Apache License, Version 2.0
-//
-//  Author: wilmer
-//  Created: 2018/12/06
+
 //
 
 
@@ -51,7 +45,7 @@ import com.google.gson.Gson;
 
 
 /**
- * Objects
+ * helper methods for working with java objects
  */
 public final class Objects
 	{
