@@ -1,7 +1,7 @@
-/**<pre>
+/**
+ * <pre>
  * auxiliary functions for Spring reactive flows
- </pre>*/
-
-
+ * </pre>
+ */
 
 package life.expert.common.reactivestreams;

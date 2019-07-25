@@ -2,14 +2,7 @@ package life.expert.common.base;
 
 
 
-
-
-
-
-
-
 import org.jetbrains.annotations.*;
-
 
 import static java.util.stream.Collectors.*;        //toList
 
@@ -18,10 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.*;
 
-
 import com.google.common.collect.*;
-
-
 
 //@Header@
 //--------------------------------------------------------------------------------
@@ -29,14 +19,6 @@ import com.google.common.collect.*;
 //--------------------------------------------------------------------------------
 
 //
-
-
-
-
-
-
-
-
 
 /**
  * - methods for checking strings and collections (the presence of an element in the collection, the emptiness of elements, etc.)
@@ -47,108 +29,68 @@ import com.google.common.collect.*;
 public final class Preconditions
 	{
 	
-	
-	
 	// width of debug info window
 	private static final int DEBUG_WINDOW_NUM_COL = 80;
 	
-	
-	
 	private static final String MESSAGE_WRONG_NUMBER = "Number argument should'not be less than zero.";
-	
-	
 	
 	private static final String MESSAGE_WRONG_STRING_NULL = "String argument should'not be null.";
 	
-	
-	
 	private static final String MESSAGE_WRONG_STRING_EMPTY = "String argument should'not \"\" be empty (not null but length=0).";
-	
-	
 	
 	private static final String MESSAGE_WRONG_STRING_BLANK = "String argument should'not be \" \" blank (not empty but some spaces here).";
 	
-	
-	
 	private static final String MESSAGE_WRONG_COLLECTION = "%d wrong elements in collection \n Indexes of wrong elements: %s \n Collection: %s ";
-	
-	
 	
 	private static final String MESSAGE_WRONG_COLLECTION_NULL = "Argument(collection) should'not be null.";
 	
-	
-	
 	private static final String MESSAGE_WRONG_COLLECTION_EMPTY = "Argument(Collection) should'not be empty (not null but length=0):";
-	
-	
 	
 	private static final String MESSAGE_WRONG_MAP = "%d wrong entries in map \n Keys of wrong entries: %s \n Map: %s ";
 	
-	
-	
 	private static final String MESSAGE_WRONG_MAP_NULL = "Argument(map) should'not be null.";
 	
-	
-	
 	private static final String MESSAGE_WRONG_MAP_EMPTY = "Argument(map) should'not be empty (not null but length=0):";
-	
-	
 	
 	/**
 	 * The constant goodLong.
 	 */
 	public static final LongPredicate goodLong = l -> l > 0;
 	
-	
-	
 	/**
 	 * The constant badLong.
 	 */
 	public static final LongPredicate badLong = l -> l <= 0;
-	
-	
 	
 	/**
 	 * The constant goodString.
 	 */
 	public static final Predicate<String> goodString = s -> s != null && !s.isEmpty() && !s.isBlank();
 	
-	
-	
 	/**
 	 * The constant badString.
 	 */
 	public static final Predicate<String> badString = s -> s == null || s.isEmpty() || s.isBlank();
-	
-	
 	
 	/**
 	 * The constant goodCollection.
 	 */
 	public static final Predicate<? extends Collection<?>> goodCollection = c -> c != null && !c.isEmpty();
 	
-	
-	
 	/**
 	 * The constant badCollection.
 	 */
 	public static final Predicate<? extends Collection<?>> badCollection = c -> c == null || c.isEmpty();
-	
-	
 	
 	/**
 	 * The constant goodMap.
 	 */
 	public static final Predicate<? extends Map<?,?>> goodMap = m -> m != null && !m.isEmpty();
 	
-	
-	
 	/**
 	 * The constant badMap.
 	 */
 	public static final Predicate<? extends Map<?,?>> badMap = m -> m == null || m.isEmpty();
-	
-	
 	
 	/**
 	 * None match in collection predicate.
@@ -166,8 +108,6 @@ public final class Preconditions
 		return c -> c.stream()
 		             .anyMatch( p == null ? Objects::isNull : p );
 		}
-	
-	
 	
 	/**
 	 * None match in map predicate.
@@ -190,8 +130,6 @@ public final class Preconditions
 		             .anyMatch( p == null ? Objects::isNull : p );
 		}
 	
-	
-	
 	/**
 	 * None match in collection predicate.
 	 *
@@ -207,8 +145,6 @@ public final class Preconditions
 		{
 		return anyMatchInCollection( p ).negate();
 		}
-	
-	
 	
 	/**
 	 * None match in map predicate.
@@ -228,16 +164,12 @@ public final class Preconditions
 		return ( (Predicate<? super Map<EKey,EValue>>) anyMatchInMap( p ) ).negate();
 		}
 	
-	
-	
 	@NotNull
 	private static final <E> Supplier<String> wrongCollectionMessage( @NotNull Collection<E> collection ,
 	                                                                  @NotNull Predicate<E> invalidElement )
 		{
 		return () -> String.format( MESSAGE_WRONG_COLLECTION , getCountOfObjectsInCollection( collection , invalidElement ) , getIndexesOfObjectsInCollectionForLog( collection , invalidElement ) , collection.getClass() );
 		}
-	
-	
 	
 	@NotNull
 	private static <EKey, EValue> Supplier<String> wrongMapMessage( @NotNull Map<EKey,EValue> map ,
@@ -247,11 +179,7 @@ public final class Preconditions
 		return () -> String.format( MESSAGE_WRONG_MAP , getCountOfObjectsInMap( map , invalidValue ) , getKeysOfObjectsInMapForLog( map , invalidValue ) , map.getClass() );
 		}
 	
-	
-	
 	//<editor-fold desc="Megabase functions">
-	
-	
 	
 	/**
 	 * Check argument,  message.
@@ -271,8 +199,6 @@ public final class Preconditions
 		wrong = wrong == null ? Objects::isNull : wrong;
 		return wrong.test( argument );
 		}
-	
-	
 	
 	/**
 	 * Check argument,  message.
@@ -299,8 +225,6 @@ public final class Preconditions
 		return argument;
 		}
 	
-	
-	
 	/**
 	 * Check argument, lazy message.
 	 *
@@ -325,8 +249,6 @@ public final class Preconditions
 			}
 		return argument;
 		}
-	
-	
 	
 	/**
 	 * Check argument,  message.
@@ -353,8 +275,6 @@ public final class Preconditions
 		return argument;
 		}
 	
-	
-	
 	/**
 	 * Check argument, lazy message.
 	 *
@@ -380,8 +300,6 @@ public final class Preconditions
 		return argument;
 		}
 	
-	
-	
 	/**
 	 * Check argument,  message.
 	 *
@@ -405,8 +323,6 @@ public final class Preconditions
 		
 		return argument;
 		}
-	
-	
 	
 	/**
 	 * Check argument, lazy message.
@@ -432,8 +348,6 @@ public final class Preconditions
 		return argument;
 		}
 	
-	
-	
 	/**
 	 * Check argument, lazy message.
 	 *
@@ -450,8 +364,6 @@ public final class Preconditions
 			throw new IllegalArgumentException( errorMessage == null ? "" : errorMessage.get() );
 			}
 		}
-	
-	
 	
 	/**
 	 * Check state, lazy message.
@@ -470,8 +382,6 @@ public final class Preconditions
 			}
 		}
 	
-	
-	
 	/**
 	 * Check argument
 	 *
@@ -487,14 +397,9 @@ public final class Preconditions
 			errorMessage == null ? "" : errorMessage.get();
 		}
 	
-	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="Generic checks">
-	
-	
 	
 	/**
 	 * Check argument not null e.
@@ -515,8 +420,6 @@ public final class Preconditions
 		return argument;
 		}
 	
-	
-	
 	/**
 	 * Check state not null e.
 	 *
@@ -535,8 +438,6 @@ public final class Preconditions
 		checkState( argument , Objects::isNull , errorMessage );
 		return argument;
 		}
-	
-	
 	
 	/**
 	 * Check argument not null e.
@@ -557,12 +458,9 @@ public final class Preconditions
 		return argument;
 		}
 	
-	
 	//</editor-fold>
 	
 	//<editor-fold desc="Check collections and maps">
-	
-	
 	
 	/**
 	 * Helper method for checking input args of collection type or constructor in immutable colls
@@ -601,8 +499,6 @@ public final class Preconditions
 		checkArgument( collection , anyMatchInCollection( invalidElement ) , wrongCollectionMessage( collection , invalidElement ) );
 		return collection;
 		}
-	
-	
 	
 	/**
 	 * Helper method for checking input args of map type or constructor in immutable colls
@@ -643,8 +539,6 @@ public final class Preconditions
 		return map;
 		}
 	
-	
-	
 	/**
 	 * Helper method for strategy "return Optional instead Exception"
 	 * Check argument of type Collection
@@ -682,8 +576,6 @@ public final class Preconditions
 		return ( (Predicate<Collection<E>>) badCollection ).or( anyMatchInCollection( invalidElement ) )
 		                                                   .test( collection );
 		}
-	
-	
 	
 	/**
 	 * Helper method for strategy "return Optional instead Exception"
@@ -724,8 +616,6 @@ public final class Preconditions
 		                                               .test( map );
 		}
 	
-	
-	
 	/**
 	 * Helper method for use in mutable objects if you want to check some object property before method work
 	 * Check argument of type Collection
@@ -762,8 +652,6 @@ public final class Preconditions
 		checkState( collection , anyMatchInCollection( invalidElement ) , wrongCollectionMessage( collection , invalidElement ) );
 		return collection;
 		}
-	
-	
 	
 	/**
 	 * Helper method for use in mutable objects if you want to check some object property before method work
@@ -802,8 +690,6 @@ public final class Preconditions
 		return map;
 		}
 	
-	
-	
 	/**
 	 * Check argument of type Collection
 	 * Checking every element in collection with Predicate (usual test for nullable or empty elements)
@@ -836,8 +722,6 @@ public final class Preconditions
 		assertArgument( collection , anyMatchInCollection( invalidElement ) , wrongCollectionMessage( collection , invalidElement ) );
 		return collection;
 		}
-	
-	
 	
 	/**
 	 * Check argument of type Map
@@ -872,13 +756,9 @@ public final class Preconditions
 		return map;
 		}
 	
-	
-	
 	//</editor-fold>
 	
 	//<editor-fold desc="Check collection and maps (subfunctions)">
-	
-	
 	
 	/**
 	 * Check argument, lazy message.
@@ -897,8 +777,6 @@ public final class Preconditions
 		return collection;
 		}
 	
-	
-	
 	/**
 	 * Check argument, lazy message.
 	 *
@@ -911,8 +789,6 @@ public final class Preconditions
 		{
 		return ( (Predicate<Collection<?>>) badCollection ).test( collection );
 		}
-	
-	
 	
 	/**
 	 * Check state, lazy message.
@@ -931,8 +807,6 @@ public final class Preconditions
 		return collection;
 		}
 	
-	
-	
 	/**
 	 * Check argument, lazy message.
 	 *
@@ -949,8 +823,6 @@ public final class Preconditions
 		assertArgument( collection , Collection::isEmpty , MESSAGE_WRONG_COLLECTION_EMPTY );
 		return collection;
 		}
-	
-	
 	
 	/**
 	 * Check argument, lazy message.
@@ -971,8 +843,6 @@ public final class Preconditions
 		return map;
 		}
 	
-	
-	
 	/**
 	 * Check argument, lazy message.
 	 *
@@ -986,8 +856,6 @@ public final class Preconditions
 		{
 		return ( (Predicate<Map<?,?>>) badMap ).test( map );
 		}
-	
-	
 	
 	/**
 	 * Check state, lazy message.
@@ -1008,8 +876,6 @@ public final class Preconditions
 		return map;
 		}
 	
-	
-	
 	/**
 	 * Check argument, lazy message.
 	 *
@@ -1029,14 +895,9 @@ public final class Preconditions
 		return map;
 		}
 	
-	
-	
 	//</editor-fold>
 	
-	
 	//<editor-fold desc="Check strings">
-	
-	
 	
 	/**
 	 * Check argument, lazy message.
@@ -1054,8 +915,6 @@ public final class Preconditions
 		return string;
 		}
 	
-	
-	
 	/**
 	 * Check argument, lazy message.
 	 *
@@ -1068,8 +927,6 @@ public final class Preconditions
 		{
 		return badString.test( string );
 		}
-	
-	
 	
 	/**
 	 * Check state, lazy message.
@@ -1086,8 +943,6 @@ public final class Preconditions
 		checkState( string , String::isBlank , MESSAGE_WRONG_STRING_BLANK );
 		return string;
 		}
-	
-	
 	
 	/**
 	 * Check argument, lazy message.
@@ -1107,11 +962,7 @@ public final class Preconditions
 	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="Check numbers (megabase)  ">
-	
-	
 	
 	/**
 	 * Check argument,  message.
@@ -1129,8 +980,6 @@ public final class Preconditions
 		wrong = wrong == null ? l -> l == 0 : wrong;
 		return wrong.test( argument );
 		}
-	
-	
 	
 	/**
 	 * Check argument,  message.
@@ -1155,8 +1004,6 @@ public final class Preconditions
 		return argument;
 		}
 	
-	
-	
 	/**
 	 * Check argument, lazy message.
 	 *
@@ -1179,8 +1026,6 @@ public final class Preconditions
 			}
 		return argument;
 		}
-	
-	
 	
 	/**
 	 * Check argument,  message.
@@ -1205,8 +1050,6 @@ public final class Preconditions
 		return argument;
 		}
 	
-	
-	
 	/**
 	 * Check argument, lazy message.
 	 *
@@ -1230,8 +1073,6 @@ public final class Preconditions
 		return argument;
 		}
 	
-	
-	
 	/**
 	 * Check argument,  message.
 	 *
@@ -1253,8 +1094,6 @@ public final class Preconditions
 			errorMessage == null ? "" : errorMessage;
 		return argument;
 		}
-	
-	
 	
 	/**
 	 * Check argument, lazy message.
@@ -1278,13 +1117,9 @@ public final class Preconditions
 		return argument;
 		}
 	
-	
-	
 	//</editor-fold>
 	
 	//<editor-fold desc="Check numbers ">
-	
-	
 	
 	/**
 	 * Check argument, lazy message.
@@ -1300,8 +1135,6 @@ public final class Preconditions
 		return number;
 		}
 	
-	
-	
 	/**
 	 * Check argument, lazy message.
 	 *
@@ -1314,8 +1147,6 @@ public final class Preconditions
 		{
 		return badLong.test( number );
 		}
-	
-	
 	
 	/**
 	 * Check state, lazy message.
@@ -1330,8 +1161,6 @@ public final class Preconditions
 		checkState( number , badLong , MESSAGE_WRONG_NUMBER );
 		return number;
 		}
-	
-	
 	
 	/**
 	 * Check argument, lazy message.
@@ -1349,11 +1178,7 @@ public final class Preconditions
 	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="Log functions">
-	
-	
 	
 	/**
 	 * helper method: get comma separated string with indexes of found objects in collection
@@ -1385,14 +1210,11 @@ public final class Preconditions
 			return "";
 			}
 		
-		
 		return Streams.mapWithIndex( collection.stream() , ( o , i ) -> Map.entry( "" + i , o ) )
 		              .filter( e -> filter.test( e.getValue() ) )
 		              .map( Map.Entry::getKey )
 		              .collect( joining( ", " ) );
 		}
-	
-	
 	
 	/**
 	 * helper method: get comma separated string with FIRST 80 indexes of found objects in collection
@@ -1431,8 +1253,6 @@ public final class Preconditions
 		              .collect( joining( ", " ) );
 		}
 	
-	
-	
 	/**
 	 * helper method: get comma separated string with indexes of found objects in collection
 	 * Name analogicaly getIndexesOfObjectsInCollection
@@ -1466,15 +1286,12 @@ public final class Preconditions
 			return "";
 			}
 		
-		
 		return map.entrySet()
 		          .stream()
 		          .filter( e -> filterValues.test( e.getValue() ) )
 		          .map( e -> "" + e.getKey() )
 		          .collect( joining( ", " ) );
 		}
-	
-	
 	
 	/**
 	 * helper method: get comma separated string with FIRST 80 indexes of found objects in collection
@@ -1517,8 +1334,6 @@ public final class Preconditions
 		          .collect( joining( ", " ) );
 		}
 	
-	
-	
 	/**
 	 * helper method: numeric of found object in collection
 	 * Method checks every element in collection with Predicate (usual test for nullable or empty elements)
@@ -1547,14 +1362,11 @@ public final class Preconditions
 			return 0;
 			}
 		
-		
 		return Streams.mapWithIndex( collection.stream() , ( o , i ) -> Map.entry( "" + i , o ) )
 		              .filter( e -> filter.test( e.getValue() ) )
 		              .map( Map.Entry::getKey )
 		              .count();
 		}
-	
-	
 	
 	/**
 	 * helper method: numeric of found object in map
@@ -1585,7 +1397,6 @@ public final class Preconditions
 			return 0;
 			}
 		
-		
 		return map.entrySet()
 		          .stream()
 		          .map( Map.Entry::getValue )
@@ -1594,7 +1405,5 @@ public final class Preconditions
 		}
 	
 	//</editor-fold>
-	
-	
 	
 	}

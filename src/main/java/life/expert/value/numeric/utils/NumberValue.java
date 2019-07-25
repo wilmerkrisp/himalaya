@@ -7,26 +7,10 @@ package life.expert.value.numeric.utils;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import life.expert.value.numeric.amount.Quantity;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-
-
-
-
-
-
-
-
 
 /**
  * Instances of this class allow to externalize the numeric value of a {@link Quantity}. The classs extends
@@ -46,16 +30,12 @@ public abstract class NumberValue
 	implements Comparable<NumberValue>
 	{
 	
-	
-	
 	/**
 	 * Get the numeric implementation type, that is the base of this number.
 	 *
 	 * @return the numeric implementation type, not {@code null}.
 	 */
 	public abstract Class<?> getNumberType();
-	
-	
 	
 	/**
 	 * Returns the <i>precision</i> of this {@code Quantity}. (The precision is the number of
@@ -68,8 +48,6 @@ public abstract class NumberValue
 	 */
 	public abstract int getPrecision();
 	
-	
-	
 	/**
 	 * Returns the <i>scale</i> of this {@code Quantity}. If zero or positive, the scale is
 	 * the number of digits to the right of the decimal point. If negative, the unscaled value of
@@ -79,8 +57,6 @@ public abstract class NumberValue
 	 * @return the scale of this {@code Quantity}.
 	 */
 	public abstract int getScale();
-	
-	
 	
 	/**
 	 * Access the numeric value as {@code int}. Hereby no truncation will be performed to fit the
@@ -93,8 +69,6 @@ public abstract class NumberValue
 	 */
 	public abstract int intValueExact();
 	
-	
-	
 	/**
 	 * Access the numeric value as {@code long}. Hereby no truncation will be performed to fit the
 	 * value into the target data type.
@@ -106,8 +80,6 @@ public abstract class NumberValue
 	 */
 	public abstract long longValueExact();
 	
-	
-	
 	/**
 	 * Access the numeric value as {@code double}. Hereby no truncation will be performed to fit the
 	 * value into the target data type.
@@ -118,8 +90,6 @@ public abstract class NumberValue
 	 * 	If the value must be truncated to fit the target datatype.
 	 */
 	public abstract double doubleValueExact();
-	
-	
 	
 	/**
 	 * Access the numeric value as {@code Number}. Hereby truncation may be performed as needed to
@@ -135,8 +105,6 @@ public abstract class NumberValue
 	 */
 	public abstract <T extends Number> T numberValue( Class<T> numberType );
 	
-	
-	
 	/**
 	 * Access the current NumberValue rounded using the given {@link java.math.MathContext}.
 	 *
@@ -148,8 +116,6 @@ public abstract class NumberValue
 	 * @see java.math.BigDecimal#round(java.math.MathContext) java.math.BigDecimal#round(java.math.MathContext)java.math.BigDecimal#round(java.math.MathContext)
 	 */
 	public abstract NumberValue round( MathContext mathContext );
-	
-	
 	
 	/**
 	 * Access the numeric value as {@code Number}. Hereby no truncation will be performed to fit the
@@ -168,11 +134,9 @@ public abstract class NumberValue
 	 */
 	public abstract <T extends Number> T numberValueExact( Class<T> numberType );
 	
-	
-	
 	/**
 	 * This method allows to extract the numerator part of the current fraction, hereby given
-	 *  <pre>{@code  *
+	 * <pre>{@code  *
 	 * w = longValue()
 	 * n = getFractionNominator()
 	 * d = getFractionDenominator() }*</pre>
@@ -181,7 +145,7 @@ public abstract class NumberValue
 	 * the following must be always true:
 	 *
 	 *
-	 *  <pre>{@code  * !(w<0 && n>0)  and
+	 * <pre>{@code  * !(w<0 && n>0)  and
 	 * !(w>0 && n<0)  and
 	 * d>0            and
 	 * |n| < d        // || = absolute value }</pre>
@@ -190,11 +154,9 @@ public abstract class NumberValue
 	 */
 	public abstract long getAmountFractionNumerator();
 	
-	
-	
 	/**
 	 * This method allows to extract the denominator part of the current fraction, hereby given
-	 *  <pre>{@code
+	 * <pre>{@code
 	 * w = longValue()
 	 * n = getFractionNominator()
 	 * d = getFractionDenominator()
@@ -202,7 +164,7 @@ public abstract class NumberValue
 	 *
 	 * the following must be always true:
 	 *
-	 *  <pre>{@code
+	 * <pre>{@code
 	 * !(w<0 && n>0)  and
 	 * !(w>0 && n<0)  and
 	 * d>0            and
@@ -212,8 +174,6 @@ public abstract class NumberValue
 	 * @return the amount's fraction denominator.
 	 */
 	public abstract long getAmountFractionDenominator();
-	
-	
 	
 	@Override
 	public int compareTo( NumberValue o )

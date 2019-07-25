@@ -7,14 +7,6 @@ package life.expert.common.async;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +18,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-
 //import io.reactivex.Scheduler;
 //import io.reactivex.functions.Action;
 //import io.reactivex.functions.Consumer;
@@ -36,14 +27,6 @@ import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 //import io.reactivestreams.functions.Consumer;
 
-
-
-
-
-
-
-
-
 /**
  * The type Log utils.
  *
@@ -52,11 +35,7 @@ import org.slf4j.helpers.MessageFormatter;
 public class LogUtils
 	{
 	
-	
-	
 	private static final Logger logger_ = LoggerFactory.getLogger( LogUtils.class );
-	
-	
 	
 	/**
 	 * Log.
@@ -71,8 +50,6 @@ public class LogUtils
 		{
 		logger_.info( format , arguments );
 		}
-	
-	
 	
 	/**
 	 * Print.
@@ -95,8 +72,6 @@ public class LogUtils
 			
 		}
 	
-	
-	
 	/**
 	 * Log at warning.
 	 *
@@ -110,8 +85,6 @@ public class LogUtils
 		{
 		logger_.warn( format , arguments );
 		}
-	
-	
 	
 	/**
 	 * Log at error.
@@ -127,8 +100,6 @@ public class LogUtils
 		logger_.error( format , arguments );
 		}
 	
-	
-	
 	/**
 	 * Log at debug.
 	 *
@@ -143,63 +114,33 @@ public class LogUtils
 		logger_.debug( format , arguments );
 		}
 	
-	
-	
 	private static final long DEFAULT_DELAY_ = 1;
-	
-	
 	
 	private static final String FORMAT_ = "{}   {}";
 	
-	
-	
 	private static final String FORMAT_DELAY_ = "{}   {} delay({})";
-	
-	
 	
 	private static final String FORMAT_IN_ = "{}   {} in({})";
 	
-	
-	
 	private static final String FORMAT_IN2_ = "{}   {} in({}) in({})";
-	
-	
 	
 	private static final String FORMAT_IN_DELAY_ = "{}   {} in({}) delay({})";
 	
-	
-	
 	private static final String FORMAT_IN2_DELAY_ = "{}   {} in({}) in({}) delay({})";
-	
-	
 	
 	private static final String FORMAT_OUT_ = "{}   {} out({})";
 	
-	
-	
 	private static final String FORMAT_OUT_DELAY_ = "{}   {} out({}) delay({})";
-	
-	
 	
 	private static final String FORMAT_INOUT_ = "{}   {} in({}) out({})";
 	
-	
-	
 	private static final String FORMAT_IN2OUT_ = "{}   {} in({}) in({}) out({})";
-	
-	
 	
 	private static final String FORMAT_INOUT_DELAY_ = "{}   {} in({}) out({}) delay({})";
 	
-	
-	
 	private static final String FORMAT_IN2OUT_DELAY_ = "{}   {} in({}) in({}) out({}) delay({})";
 	
-	
-	
 	//<editor-fold desc="print">
-	
-	
 	
 	/**
 	 * Log at info consumer consumer.
@@ -219,8 +160,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info consumer consumer.
 	 *
@@ -233,8 +172,6 @@ public class LogUtils
 		{
 		return printConsumer( null );
 		}
-	
-	
 	
 	/**
 	 * Log at info consumer consumer.
@@ -256,8 +193,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info consumer consumer.
 	 *
@@ -272,8 +207,6 @@ public class LogUtils
 		{
 		return printBiConsumer( null );
 		}
-	
-	
 	
 	/**
 	 * Log at info function function.
@@ -299,8 +232,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info function function.
 	 *
@@ -317,8 +248,6 @@ public class LogUtils
 		{
 		return printFunction( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at info function function.
@@ -346,8 +275,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info function function.
 	 *
@@ -366,8 +293,6 @@ public class LogUtils
 		{
 		return printBiFunction( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at info unary operator function.
@@ -388,8 +313,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info unary operator function.
 	 *
@@ -402,8 +325,6 @@ public class LogUtils
 		{
 		return printUnaryOperator( null );
 		}
-	
-	
 	
 	/**
 	 * Log at info supplier callable.
@@ -427,8 +348,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info supplier callable.
 	 *
@@ -443,8 +362,6 @@ public class LogUtils
 		{
 		return printSupplier( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at info runnable action.
@@ -464,8 +381,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info runnable action.
 	 *
@@ -479,11 +394,7 @@ public class LogUtils
 		return printRunnable( null );
 		}
 	
-	
-	
 	//</editor-fold>
-	
-	
 	
 	//<editor-fold desc="print decorator">
 	/**
@@ -497,7 +408,6 @@ public class LogUtils
 	 * @return the consumer
 	 */
 	
-	
 	/**
 	 * Log at info.
 	 *
@@ -509,8 +419,6 @@ public class LogUtils
 		print( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "print" : message );
 		}
 	
-	
-	
 	/**
 	 * Log at info.
 	 */
@@ -518,8 +426,6 @@ public class LogUtils
 		{
 		print( "" );
 		}
-	
-	
 	
 	/**
 	 * Log at info consumer.
@@ -539,8 +445,6 @@ public class LogUtils
 		consumer.accept( o );
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at info consumer.
@@ -563,8 +467,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info function proxy function.
 	 *
@@ -585,8 +487,6 @@ public class LogUtils
 		return function.apply( o );
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at info function proxy function.
@@ -611,7 +511,6 @@ public class LogUtils
 		};
 		}
 	
-	
 	//  /**
 	//   * Log at info unary operator proxy function.
 	//   *
@@ -634,8 +533,6 @@ public class LogUtils
 	//    };
 	//    }
 	
-	
-	
 	/**
 	 * Log at info supplier proxy callable.
 	 *
@@ -654,8 +551,6 @@ public class LogUtils
 		return supplier.get();
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at info runnable proxy action.
@@ -678,11 +573,7 @@ public class LogUtils
 	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="logAtInfo">
-	
-	
 	
 	/**
 	 * Log at info consumer consumer.
@@ -702,8 +593,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info consumer consumer.
 	 *
@@ -716,8 +605,6 @@ public class LogUtils
 		{
 		return logAtInfoConsumer( null );
 		}
-	
-	
 	
 	/**
 	 * Log at info consumer consumer.
@@ -739,8 +626,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info consumer consumer.
 	 *
@@ -755,8 +640,6 @@ public class LogUtils
 		{
 		return logAtInfoBiConsumer( null );
 		}
-	
-	
 	
 	/**
 	 * Log at info function function.
@@ -782,8 +665,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info function function.
 	 *
@@ -800,8 +681,6 @@ public class LogUtils
 		{
 		return logAtInfoFunction( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at info function function.
@@ -829,8 +708,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info function function.
 	 *
@@ -849,8 +726,6 @@ public class LogUtils
 		{
 		return logAtInfoBiFunction( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at info unary operator function.
@@ -871,8 +746,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info unary operator function.
 	 *
@@ -885,8 +758,6 @@ public class LogUtils
 		{
 		return logAtInfoUnaryOperator( null );
 		}
-	
-	
 	
 	/**
 	 * Log at info supplier callable.
@@ -910,8 +781,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info supplier callable.
 	 *
@@ -926,8 +795,6 @@ public class LogUtils
 		{
 		return logAtInfoSupplier( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at info runnable action.
@@ -947,8 +814,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info runnable action.
 	 *
@@ -962,11 +827,7 @@ public class LogUtils
 		return logAtInfoRunnable( null );
 		}
 	
-	
-	
 	//</editor-fold>
-	
-	
 	
 	//<editor-fold desc="logAtInfo decorator">
 	/**
@@ -980,7 +841,6 @@ public class LogUtils
 	 * @return the consumer
 	 */
 	
-	
 	/**
 	 * Log at info.
 	 *
@@ -992,8 +852,6 @@ public class LogUtils
 		log( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtInfo" : message );
 		}
 	
-	
-	
 	/**
 	 * Log at info.
 	 */
@@ -1001,8 +859,6 @@ public class LogUtils
 		{
 		logAtInfo( "" );
 		}
-	
-	
 	
 	/**
 	 * Log at info consumer.
@@ -1022,8 +878,6 @@ public class LogUtils
 		consumer.accept( o );
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at info consumer.
@@ -1046,8 +900,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at info function proxy function.
 	 *
@@ -1068,8 +920,6 @@ public class LogUtils
 		return function.apply( o );
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at info function proxy function.
@@ -1094,7 +944,6 @@ public class LogUtils
 		};
 		}
 	
-	
 	//	/**
 	//	 * Log at info unary operator proxy function.
 	//	 *
@@ -1117,8 +966,6 @@ public class LogUtils
 	//		};
 	//		}
 	
-	
-	
 	/**
 	 * Log at info supplier proxy callable.
 	 *
@@ -1137,8 +984,6 @@ public class LogUtils
 		return supplier.get();
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at info runnable proxy action.
@@ -1161,11 +1006,7 @@ public class LogUtils
 	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="logAtError">
-	
-	
 	
 	/**
 	 * Log at error consumer consumer.
@@ -1185,8 +1026,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at error consumer consumer.
 	 *
@@ -1199,8 +1038,6 @@ public class LogUtils
 		{
 		return logAtErrorConsumer( null );
 		}
-	
-	
 	
 	/**
 	 * Log at error consumer consumer.
@@ -1222,8 +1059,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at error consumer consumer.
 	 *
@@ -1238,8 +1073,6 @@ public class LogUtils
 		{
 		return logAtErrorBiConsumer( null );
 		}
-	
-	
 	
 	/**
 	 * Log at error function function.
@@ -1265,8 +1098,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at error function function.
 	 *
@@ -1283,8 +1114,6 @@ public class LogUtils
 		{
 		return logAtErrorFunction( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at error function function.
@@ -1312,8 +1141,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at error function function.
 	 *
@@ -1332,8 +1159,6 @@ public class LogUtils
 		{
 		return logAtErrorBiFunction( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at error unary operator function.
@@ -1354,8 +1179,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at error unary operator function.
 	 *
@@ -1368,8 +1191,6 @@ public class LogUtils
 		{
 		return logAtErrorUnaryOperator( null );
 		}
-	
-	
 	
 	/**
 	 * Log at error supplier callable.
@@ -1393,8 +1214,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at error supplier callable.
 	 *
@@ -1409,8 +1228,6 @@ public class LogUtils
 		{
 		return logAtErrorSupplier( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at error runnable action.
@@ -1430,8 +1247,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at error runnable action.
 	 *
@@ -1445,10 +1260,7 @@ public class LogUtils
 		return logAtErrorRunnable( null );
 		}
 	
-	
-	
 	//</editor-fold>
-	
 	
 	//<editor-fold desc="logAtError decorator">
 	/**
@@ -1462,7 +1274,6 @@ public class LogUtils
 	 * @return the consumer
 	 */
 	
-	
 	/**
 	 * Log at error.
 	 *
@@ -1474,8 +1285,6 @@ public class LogUtils
 		logAtError( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtError" : message );
 		}
 	
-	
-	
 	/**
 	 * Log at error.
 	 */
@@ -1483,8 +1292,6 @@ public class LogUtils
 		{
 		logAtError( "" );
 		}
-	
-	
 	
 	/**
 	 * Log at error consumer.
@@ -1504,8 +1311,6 @@ public class LogUtils
 		consumer.accept( o );
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at error consumer.
@@ -1528,8 +1333,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at error function proxy function.
 	 *
@@ -1550,8 +1353,6 @@ public class LogUtils
 		return function.apply( o );
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at error function proxy function.
@@ -1576,7 +1377,6 @@ public class LogUtils
 		};
 		}
 	
-	
 	//	/**
 	//	 * Log at error unary operator proxy function.
 	//	 *
@@ -1599,8 +1399,6 @@ public class LogUtils
 	//		};
 	//		}
 	
-	
-	
 	/**
 	 * Log at error supplier proxy callable.
 	 *
@@ -1619,8 +1417,6 @@ public class LogUtils
 		return supplier.get();
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at error runnable proxy action.
@@ -1643,10 +1439,7 @@ public class LogUtils
 	
 	//</editor-fold>
 	
-	
 	//<editor-fold desc="logAtWarning">
-	
-	
 	
 	/**
 	 * Log at warning consumer consumer.
@@ -1666,8 +1459,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at warning consumer consumer.
 	 *
@@ -1680,8 +1471,6 @@ public class LogUtils
 		{
 		return logAtWarningConsumer( null );
 		}
-	
-	
 	
 	/**
 	 * Log at warning consumer consumer.
@@ -1703,8 +1492,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at warning consumer consumer.
 	 *
@@ -1719,8 +1506,6 @@ public class LogUtils
 		{
 		return logAtWarningBiConsumer( null );
 		}
-	
-	
 	
 	/**
 	 * Log at warning function function.
@@ -1746,8 +1531,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at warning function function.
 	 *
@@ -1764,8 +1547,6 @@ public class LogUtils
 		{
 		return logAtWarningFunction( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at warning function function.
@@ -1793,8 +1574,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at warning function function.
 	 *
@@ -1813,8 +1592,6 @@ public class LogUtils
 		{
 		return logAtWarningBiFunction( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at warning unary operator function.
@@ -1835,8 +1612,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at warning unary operator function.
 	 *
@@ -1849,8 +1624,6 @@ public class LogUtils
 		{
 		return logAtWarningUnaryOperator( null );
 		}
-	
-	
 	
 	/**
 	 * Log at warning supplier callable.
@@ -1874,8 +1647,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at warning supplier callable.
 	 *
@@ -1890,8 +1661,6 @@ public class LogUtils
 		{
 		return logAtWarningSupplier( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at warning runnable action.
@@ -1911,8 +1680,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at warning runnable action.
 	 *
@@ -1926,10 +1693,7 @@ public class LogUtils
 		return logAtWarningRunnable( null );
 		}
 	
-	
-	
 	//</editor-fold>
-	
 	
 	//<editor-fold desc="logAtWarning decorator">
 	/**
@@ -1943,7 +1707,6 @@ public class LogUtils
 	 * @return the consumer
 	 */
 	
-	
 	/**
 	 * Log at warning.
 	 *
@@ -1955,8 +1718,6 @@ public class LogUtils
 		logAtWarning( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtWarning" : message );
 		}
 	
-	
-	
 	/**
 	 * Log at warning.
 	 */
@@ -1964,8 +1725,6 @@ public class LogUtils
 		{
 		logAtWarning( "" );
 		}
-	
-	
 	
 	/**
 	 * Log at warning consumer.
@@ -1985,8 +1744,6 @@ public class LogUtils
 		consumer.accept( o );
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at warning consumer.
@@ -2009,8 +1766,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at warning function proxy function.
 	 *
@@ -2031,8 +1786,6 @@ public class LogUtils
 		return function.apply( o );
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at warning function proxy function.
@@ -2057,7 +1810,6 @@ public class LogUtils
 		};
 		}
 	
-	
 	//	/**
 	//	 * Log at warning unary operator proxy function.
 	//	 *
@@ -2080,8 +1832,6 @@ public class LogUtils
 	//		};
 	//		}
 	
-	
-	
 	/**
 	 * Log at warning supplier proxy callable.
 	 *
@@ -2100,8 +1850,6 @@ public class LogUtils
 		return supplier.get();
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at warning runnable proxy action.
@@ -2126,8 +1874,6 @@ public class LogUtils
 	
 	//<editor-fold desc="logAtDebug">
 	
-	
-	
 	/**
 	 * Log at debug consumer consumer.
 	 *
@@ -2146,8 +1892,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at debug consumer consumer.
 	 *
@@ -2160,8 +1904,6 @@ public class LogUtils
 		{
 		return logAtDebugConsumer( null );
 		}
-	
-	
 	
 	/**
 	 * Log at debug consumer consumer.
@@ -2183,8 +1925,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at debug consumer consumer.
 	 *
@@ -2199,8 +1939,6 @@ public class LogUtils
 		{
 		return logAtDebugBiConsumer( null );
 		}
-	
-	
 	
 	/**
 	 * Log at debug function function.
@@ -2226,8 +1964,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at debug function function.
 	 *
@@ -2244,8 +1980,6 @@ public class LogUtils
 		{
 		return logAtDebugFunction( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at debug function function.
@@ -2273,8 +2007,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at debug function function.
 	 *
@@ -2293,8 +2025,6 @@ public class LogUtils
 		{
 		return logAtDebugBiFunction( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at debug unary operator function.
@@ -2315,8 +2045,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at debug unary operator function.
 	 *
@@ -2329,8 +2057,6 @@ public class LogUtils
 		{
 		return logAtDebugUnaryOperator( null );
 		}
-	
-	
 	
 	/**
 	 * Log at debug supplier callable.
@@ -2354,8 +2080,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at debug supplier callable.
 	 *
@@ -2370,8 +2094,6 @@ public class LogUtils
 		{
 		return logAtDebugSupplier( null , returnObject );
 		}
-	
-	
 	
 	/**
 	 * Log at debug runnable action.
@@ -2391,8 +2113,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at debug runnable action.
 	 *
@@ -2406,10 +2126,7 @@ public class LogUtils
 		return logAtDebugRunnable( null );
 		}
 	
-	
-	
 	//</editor-fold>
-	
 	
 	//<editor-fold desc="logAtDebug decorator">
 	/**
@@ -2423,7 +2140,6 @@ public class LogUtils
 	 * @return the consumer
 	 */
 	
-	
 	/**
 	 * Log at debug.
 	 *
@@ -2435,8 +2151,6 @@ public class LogUtils
 		logAtDebug_( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtDebug" : message );
 		}
 	
-	
-	
 	/**
 	 * Log at debug.
 	 */
@@ -2444,8 +2158,6 @@ public class LogUtils
 		{
 		logAtDebug( "" );
 		}
-	
-	
 	
 	/**
 	 * Log at debug consumer.
@@ -2465,8 +2177,6 @@ public class LogUtils
 		consumer.accept( o );
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at debug consumer.
@@ -2489,8 +2199,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Log at debug function proxy function.
 	 *
@@ -2511,8 +2219,6 @@ public class LogUtils
 		return function.apply( o );
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at debug function proxy function.
@@ -2537,7 +2243,6 @@ public class LogUtils
 		};
 		}
 	
-	
 	//	/**
 	//	 * Log at debug unary operator proxy function.
 	//	 *
@@ -2560,8 +2265,6 @@ public class LogUtils
 	//		};
 	//		}
 	
-	
-	
 	/**
 	 * Log at debug supplier proxy callable.
 	 *
@@ -2580,8 +2283,6 @@ public class LogUtils
 		return supplier.get();
 		};
 		}
-	
-	
 	
 	/**
 	 * Log at debug runnable proxy action.
@@ -2604,10 +2305,7 @@ public class LogUtils
 	
 	//</editor-fold>
 	
-	
 	//<editor-fold desc="log+delay">
-	
-	
 	
 	/**
 	 * Delay function e.
@@ -2632,8 +2330,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Delay unary operator function.
 	 *
@@ -2648,8 +2344,6 @@ public class LogUtils
 		{
 		return delayUnaryOperator( null , second );
 		}
-	
-	
 	
 	/**
 	 * Delay function function.
@@ -2679,8 +2373,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Delay function function.
 	 *
@@ -2700,8 +2392,6 @@ public class LogUtils
 		{
 		return delayFunction( null , returnObject , second );
 		}
-	
-	
 	
 	/**
 	 * Delay function function.
@@ -2733,8 +2423,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Delay function function.
 	 *
@@ -2756,8 +2444,6 @@ public class LogUtils
 		{
 		return delayBiFunction( null , returnObject , second );
 		}
-	
-	
 	
 	/**
 	 * Delay second consumer consumer.
@@ -2781,8 +2467,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Delay consumer consumer.
 	 *
@@ -2797,8 +2481,6 @@ public class LogUtils
 		{
 		return delayConsumer( null , second );
 		}
-	
-	
 	
 	/**
 	 * Delay second consumer consumer.
@@ -2824,8 +2506,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Delay consumer consumer.
 	 *
@@ -2842,8 +2522,6 @@ public class LogUtils
 		{
 		return delayBiConsumer( null , second );
 		}
-	
-	
 	
 	/**
 	 * Delay second supplier consumer.
@@ -2871,8 +2549,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Delay supplier supplier.
 	 *
@@ -2890,8 +2566,6 @@ public class LogUtils
 		{
 		return delaySupplier( null , passThought , second );
 		}
-	
-	
 	
 	/**
 	 * Delay runnable action.
@@ -2915,8 +2589,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Delay runnable action.
 	 *
@@ -2934,10 +2606,7 @@ public class LogUtils
 	
 	//</editor-fold>
 	
-	
 	//<editor-fold desc="log+delay+error">
-	
-	
 	
 	/**
 	 * Delay supplier with error supplier.
@@ -2973,8 +2642,6 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Delay function e.
 	 *
@@ -3004,8 +2671,6 @@ public class LogUtils
 		return x;
 		};
 		}
-	
-	
 	
 	/**
 	 * Delay function function.
@@ -3042,15 +2707,9 @@ public class LogUtils
 		};
 		}
 	
-	
-	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="log+delay+default">
-	
-	
 	
 	/**
 	 * Delay function e.
@@ -3069,8 +2728,6 @@ public class LogUtils
 		return object;
 		}
 	
-	
-	
 	/**
 	 * Delay second consumer consumer.
 	 *
@@ -3085,8 +2742,6 @@ public class LogUtils
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		
 		}
-	
-	
 	
 	/**
 	 * Delay second consumer consumer.
@@ -3108,8 +2763,6 @@ public class LogUtils
 		
 		}
 	
-	
-	
 	/**
 	 * Delay runnable action.
 	 *
@@ -3122,9 +2775,6 @@ public class LogUtils
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		}
 	
-	
 	//</editor-fold>
-	
-	
 	
 	}

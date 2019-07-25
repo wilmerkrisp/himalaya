@@ -7,14 +7,6 @@ package life.expert.value.numeric.amount;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import life.expert.value.numeric.context.AmountContext;
 import life.expert.value.numeric.operators.Operator;
 import life.expert.value.numeric.unit.Piece;
@@ -32,14 +24,6 @@ import java.math.RoundingMode;
 import java.util.Objects;
 import java.util.Optional;
 
-
-
-
-
-
-
-
-
 /**
  * Default immutable implementation of {@link Quantity} based on
  * {@link java.math.BigDecimal} for the numeric representation.
@@ -52,49 +36,32 @@ public final class RoundedAmount
 	           Comparable<Quantity>
 	{
 	
-	
-	
 	/**
 	 * The constant DEFAULT_CONTEXT.
 	 */
-	public static final AmountContext DEFAULT_CONTEXT = AmountContext.of( RoundedAmount.class ,
-	                                                                      256 ,
-	                                                                      false ,
-	                                                                      63 ,
-	                                                                      RoundingMode.HALF_EVEN );
-	
-	
+	public static final AmountContext DEFAULT_CONTEXT = AmountContext.of( RoundedAmount.class , 256 , false , 63 , RoundingMode.HALF_EVEN );
 	
 	/**
 	 * The unit of this amount.
 	 */
 	private final Unit unit;
 	
-	
-	
 	/**
 	 * the {@link AmountContext} used by this instance, e.g. on division.
 	 */
 	private final AmountContext amountContext;
-	
-	
 	
 	/**
 	 * The numeric part of this amount.
 	 */
 	private final BigDecimal number;
 	
-	
-	
 	/**
 	 * The rounding to be done.
 	 */
 	private final Operator rounding;
 	
-	
 	//<editor-fold desc="helpers">
-	
-	
 	
 	/**
 	 * Ulp rounded unit.
@@ -103,12 +70,8 @@ public final class RoundedAmount
 	 */
 	public RoundedAmount ulp()
 		{
-		return new RoundedAmount( number.ulp() ,
-		                          unit ,
-		                          rounding );
+		return new RoundedAmount( number.ulp() , unit , rounding );
 		}
-	
-	
 	
 	/**
 	 * Pow rounded unit.
@@ -120,14 +83,9 @@ public final class RoundedAmount
 	 */
 	public RoundedAmount pow( int n )
 		{
-		return new RoundedAmount( number.pow( n ,
-		                                      Optional.ofNullable( amountContext.getMathContext() )
-		                                              .orElse( MathContext.DECIMAL64 ) ) ,
-		                          unit ,
-		                          rounding ).with( rounding );
+		return new RoundedAmount( number.pow( n , Optional.ofNullable( amountContext.getMathContext() )
+		                                                  .orElse( MathContext.DECIMAL64 ) ) , unit , rounding ).with( rounding );
 		}
-	
-	
 	
 	/**
 	 * With rounded unit.
@@ -140,12 +98,8 @@ public final class RoundedAmount
 	public RoundedAmount with( Number amount )
 		{
 		checkNumber( amount );
-		return new RoundedAmount( NumberUtils.getBigDecimal( amount ) ,
-		                          unit ,
-		                          rounding );
+		return new RoundedAmount( NumberUtils.getBigDecimal( amount ) , unit , rounding );
 		}
-	
-	
 	
 	/**
 	 * Creates a new Amount instance, by just replacing the {@link Unit}.
@@ -157,14 +111,9 @@ public final class RoundedAmount
 	 */
 	public RoundedAmount with( Unit unit )
 		{
-		Objects.requireNonNull( unit ,
-		                        "unit required" );
-		return new RoundedAmount( asType( BigDecimal.class ) ,
-		                          unit ,
-		                          rounding );
+		Objects.requireNonNull( unit , "unit required" );
+		return new RoundedAmount( asType( BigDecimal.class ) , unit , rounding );
 		}
-	
-	
 	
 	/**
 	 * With rounded unit.
@@ -184,12 +133,8 @@ public final class RoundedAmount
 	                           Number amount )
 		{
 		checkNumber( amount );
-		return new RoundedAmount( NumberUtils.getBigDecimal( amount ) ,
-		                          unit ,
-		                          rounding );
+		return new RoundedAmount( NumberUtils.getBigDecimal( amount ) , unit , rounding );
 		}
-	
-	
 	
 	/**
 	 * Gets scale.
@@ -201,8 +146,6 @@ public final class RoundedAmount
 		return number.scale();
 		}
 	
-	
-	
 	/**
 	 * Gets precision.
 	 *
@@ -212,8 +155,6 @@ public final class RoundedAmount
 		{
 		return number.precision();
 		}
-	
-	
 	
 	/**
 	 * As type t.
@@ -268,8 +209,6 @@ public final class RoundedAmount
 		throw new IllegalArgumentException( "Unsupported representation type: " + type );
 		}
 	
-	
-	
 	/**
 	 * As type t.
 	 *
@@ -290,8 +229,6 @@ public final class RoundedAmount
 		return amount.asType( type );
 		}
 	
-	
-	
 	/**
 	 * Method that returns BigDecimal.ZERO, if {@link #isZero()}, and #number
 	 * {@link #stripTrailingZeros()} in all other cases.
@@ -307,8 +244,6 @@ public final class RoundedAmount
 		return number.stripTrailingZeros();
 		}
 	
-	
-	
 	/**
 	 * Internal method to check for correct number parameter.
 	 *
@@ -320,11 +255,8 @@ public final class RoundedAmount
 	 */
 	private void checkNumber( Number number )
 		{
-		Objects.requireNonNull( number ,
-		                        "Number is required." );
+		Objects.requireNonNull( number , "Number is required." );
 		}
-	
-	
 	
 	private boolean isOne( Number number )
 		{
@@ -341,15 +273,9 @@ public final class RoundedAmount
 			}
 		}
 	
-	
-	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="constructors and fabriks">
-	
-	
 	
 	/**
 	 * Creates a new instance os {@link RoundedAmount}.
@@ -363,15 +289,9 @@ public final class RoundedAmount
 	                      Unit unit )
 		{
 		
+		this( number , unit , null , null );
 		
-		this( number ,
-		      unit ,
-		      null ,
-		      null );
-			
 		}
-	
-	
 	
 	/**
 	 * Instantiates a new Rounded unit.
@@ -388,17 +308,12 @@ public final class RoundedAmount
 	                      Unit unit ,
 	                      MathContext mathContext )
 		{
-		this( number ,
-		      unit ,
-		      DEFAULT_CONTEXT.toBuilder()
-		                     .roundingMode( mathContext.getRoundingMode() )
-		                     .mathContext( mathContext )
-		                     .build() ,
-		      null );
+		this( number , unit , DEFAULT_CONTEXT.toBuilder()
+		                                     .roundingMode( mathContext.getRoundingMode() )
+		                                     .mathContext( mathContext )
+		                                     .build() , null );
 			
 		}
-	
-	
 	
 	/**
 	 * Instantiates a new Rounded amount.
@@ -414,13 +329,8 @@ public final class RoundedAmount
 	                      Unit unit ,
 	                      AmountContext mathContext )
 		{
-		this( number ,
-		      unit ,
-		      mathContext ,
-		      null );
+		this( number , unit , mathContext , null );
 		}
-	
-	
 	
 	/**
 	 * Creates a new instance os {@link RoundedAmount}.
@@ -436,13 +346,8 @@ public final class RoundedAmount
 	                      Unit unit ,
 	                      Operator rounding )
 		{
-		this( number ,
-		      unit ,
-		      null ,
-		      rounding );
+		this( number , unit , null , rounding );
 		}
-	
-	
 	
 	/**
 	 * Instantiates a new Rounded unit.
@@ -462,28 +367,19 @@ public final class RoundedAmount
 	                      AmountContext context ,
 	                      Operator rounding )
 		{
-		Objects.requireNonNull( unit ,
-		                        "Currency is required." );
+		Objects.requireNonNull( unit , "Currency is required." );
 		this.unit = unit;
 		
 		//nullable
 		this.rounding = rounding;
 		
-		
-		
-		Objects.requireNonNull( number ,
-		                        "Number is required." );
+		Objects.requireNonNull( number , "Number is required." );
 		checkNumber( number );
-		
-		
 		
 		this.amountContext = ( context == null ) ? DEFAULT_CONTEXT : AmountContext.builder()
 		                                                                          .build();
-		this.number = NumberUtils.getBigDecimal( number ,
-		                                         amountContext );
+		this.number = NumberUtils.getBigDecimal( number , amountContext );
 		}
-	
-	
 	
 	/**
 	 * Translates a {@code BigDecimal} value and a {@code Unit} unit into a
@@ -499,11 +395,8 @@ public final class RoundedAmount
 	public static RoundedAmount of( BigDecimal number ,
 	                                Unit unit )
 		{
-		return new RoundedAmount( number ,
-		                          unit );
+		return new RoundedAmount( number , unit );
 		}
-	
-	
 	
 	/**
 	 * Translates a {@code BigDecimal} value and a {@code Unit} unit into a
@@ -522,12 +415,8 @@ public final class RoundedAmount
 	                                Unit unit ,
 	                                Operator rounding )
 		{
-		return new RoundedAmount( number ,
-		                          unit ,
-		                          rounding );
+		return new RoundedAmount( number , unit , rounding );
 		}
-	
-	
 	
 	/**
 	 * Translates a {@code BigDecimal} value and a {@code Unit} unit into a
@@ -546,12 +435,8 @@ public final class RoundedAmount
 	                                Unit unit ,
 	                                MathContext mathContext )
 		{
-		return new RoundedAmount( number ,
-		                          unit ,
-		                          mathContext );
+		return new RoundedAmount( number , unit , mathContext );
 		}
-	
-	
 	
 	/**
 	 * Static factory method for creating a new instance of {@link RoundedAmount} .
@@ -569,12 +454,8 @@ public final class RoundedAmount
 	                                Unit unit ,
 	                                Operator rounding )
 		{
-		return new RoundedAmount( number ,
-		                          unit ,
-		                          rounding );
+		return new RoundedAmount( number , unit , rounding );
 		}
-	
-	
 	
 	/**
 	 * Static factory method for creating a new instance of {@link RoundedAmount} .
@@ -592,12 +473,8 @@ public final class RoundedAmount
 	                                Unit unit ,
 	                                AmountContext amountContext )
 		{
-		return new RoundedAmount( number ,
-		                          unit ,
-		                          amountContext );
+		return new RoundedAmount( number , unit , amountContext );
 		}
-	
-	
 	
 	/**
 	 * Static factory method for creating a new instance of {@link RoundedAmount} .
@@ -619,13 +496,8 @@ public final class RoundedAmount
 	                                AmountContext amountContext ,
 	                                Operator rounding )
 		{
-		return new RoundedAmount( number ,
-		                          unit ,
-		                          amountContext ,
-		                          rounding );
+		return new RoundedAmount( number , unit , amountContext , rounding );
 		}
-	
-	
 	
 	/**
 	 * Static factory method for creating a new instance of {@link RoundedAmount} .
@@ -641,11 +513,8 @@ public final class RoundedAmount
 	public static RoundedAmount of( Number number ,
 	                                String unitCode )
 		{
-		return new RoundedAmount( number ,
-		                          Piece.of( unitCode ) );
+		return new RoundedAmount( number , Piece.of( unitCode ) );
 		}
-	
-	
 	
 	/**
 	 * Static factory method for creating a new instance of {@link RoundedAmount} .
@@ -663,12 +532,8 @@ public final class RoundedAmount
 	                                String unitCode ,
 	                                Operator rounding )
 		{
-		return new RoundedAmount( number ,
-		                          Piece.of( unitCode ) ,
-		                          rounding );
+		return new RoundedAmount( number , Piece.of( unitCode ) , rounding );
 		}
-	
-	
 	
 	/**
 	 * Static factory method for creating a new instance of {@link RoundedAmount} .
@@ -687,12 +552,8 @@ public final class RoundedAmount
 	                                String unitCode ,
 	                                AmountContext amountContext )
 		{
-		return new RoundedAmount( number ,
-		                          Piece.of( unitCode ) ,
-		                          amountContext );
+		return new RoundedAmount( number , Piece.of( unitCode ) , amountContext );
 		}
-	
-	
 	
 	/**
 	 * Static factory method for creating a new instance of {@link RoundedAmount} .
@@ -713,13 +574,8 @@ public final class RoundedAmount
 	                                AmountContext amountContext ,
 	                                Operator rounding )
 		{
-		return new RoundedAmount( number ,
-		                          Piece.of( unitCode ) ,
-		                          amountContext ,
-		                          rounding );
+		return new RoundedAmount( number , Piece.of( unitCode ) , amountContext , rounding );
 		}
-	
-	
 	
 	/**
 	 * Obtains an instance of {@link RoundedAmount} representing zero.
@@ -733,11 +589,8 @@ public final class RoundedAmount
 	 */
 	public static RoundedAmount zero( Unit unit )
 		{
-		return of( BigDecimal.ZERO ,
-		           unit );
+		return of( BigDecimal.ZERO , unit );
 		}
-	
-	
 	
 	/**
 	 * Obtains an instance of {@code RoundedAmount} from an amount in minor units.
@@ -760,12 +613,8 @@ public final class RoundedAmount
 	public static RoundedAmount ofMinor( Unit unit ,
 	                                     long amountMinor )
 		{
-		return ofMinor( unit ,
-		                amountMinor ,
-		                unit.getDefaultFractionDigits() );
+		return ofMinor( unit , amountMinor , unit.getDefaultFractionDigits() );
 		}
-	
-	
 	
 	/**
 	 * Obtains an instance of {@code RoundedAmount} from an amount in minor units.
@@ -796,12 +645,8 @@ public final class RoundedAmount
 			{
 			throw new IllegalArgumentException( "The factionDigits cannot be negative" );
 			}
-		return of( BigDecimal.valueOf( amountMinor ,
-		                               factionDigits ) ,
-		           unit );
+		return of( BigDecimal.valueOf( amountMinor , factionDigits ) , unit );
 		}
-	
-	
 	
 	/**
 	 * From rounded unit.
@@ -820,21 +665,16 @@ public final class RoundedAmount
 		if( amt.getClass() == Amount.class )
 			{
 			return RoundedAmount.of( amt.getNumber()
-			                            .numberValue( BigDecimal.class ) ,
-			                         amt.getUnit() );
+			                            .numberValue( BigDecimal.class ) , amt.getUnit() );
 			}
 		else if( amt.getClass() == BigAmount.class )
 			{
 			return RoundedAmount.of( amt.getNumber()
-			                            .numberValue( BigDecimal.class ) ,
-			                         amt.getUnit() );
+			                            .numberValue( BigDecimal.class ) , amt.getUnit() );
 			}
 		return RoundedAmount.of( amt.getNumber()
-		                            .numberValue( BigDecimal.class ) ,
-		                         amt.getUnit() );
+		                            .numberValue( BigDecimal.class ) , amt.getUnit() );
 		}
-	
-	
 	
 	/**
 	 * Obtains an instance of RoundedAmount from a text string such as 'EUR
@@ -857,29 +697,19 @@ public final class RoundedAmount
 		                        .split( " " );
 		if( array.length != 2 )
 			{
-			throw new AmountParseException( "An error happened when try to parse the Amount." ,
-			                                text ,
-			                                0 );
+			throw new AmountParseException( "An error happened when try to parse the Amount." , text , 0 );
 			}
 		
 		String parsed_unit = array[0];
 		
-		
-		
 		BigDecimal number = new BigDecimal( array[1] );
-		return RoundedAmount.of( number ,
-		                         Piece.of( parsed_unit ) );
-			
+		return RoundedAmount.of( number , Piece.of( parsed_unit ) );
+		
 		}
-	
-	
 	
 	//</editor-fold>
 	
-	
 	//<editor-fold desc="implemented interface">
-	
-	
 	
 	/**
 	 * Gets unit.
@@ -892,8 +722,6 @@ public final class RoundedAmount
 		return unit;
 		}
 	
-	
-	
 	/**
 	 * Access the {@link MathContext} used by this instance.
 	 *
@@ -904,8 +732,6 @@ public final class RoundedAmount
 		{
 		return amountContext;
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount abs()
@@ -919,8 +745,6 @@ public final class RoundedAmount
 	
 	// Arithmetic Operations
 	
-	
-	
 	/**
 	 * Add rounded unit.
 	 *
@@ -932,19 +756,14 @@ public final class RoundedAmount
 	@Override
 	public RoundedAmount add( Quantity amount )
 		{
-		NumberUtils.checkAmountParameter( amount ,
-		                                  unit );
+		NumberUtils.checkAmountParameter( amount , unit );
 		if( amount.isZero() )
 			{
 			return this;
 			}
 		return new RoundedAmount( number.add( amount.getNumber()
-		                                            .numberValue( BigDecimal.class ) ) ,
-		                          unit ,
-		                          rounding ).with( rounding );
+		                                            .numberValue( BigDecimal.class ) ) , unit , rounding ).with( rounding );
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount divide( Number divisor )
@@ -954,15 +773,10 @@ public final class RoundedAmount
 			{
 			return this;
 			}
-		BigDecimal dec = number.divide( bd ,
-		                                Optional.ofNullable( amountContext.getRoundingMode() )
-		                                        .orElse( RoundingMode.HALF_EVEN ) );
-		return new RoundedAmount( dec ,
-		                          unit ,
-		                          rounding ).with( rounding );
+		BigDecimal dec = number.divide( bd , Optional.ofNullable( amountContext.getRoundingMode() )
+		                                             .orElse( RoundingMode.HALF_EVEN ) );
+		return new RoundedAmount( dec , unit , rounding ).with( rounding );
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount[] divideAndRemainder( Number divisor )
@@ -971,35 +785,21 @@ public final class RoundedAmount
 		if( isOne( bd ) )
 			{
 			return new RoundedAmount[] { this ,
-			                             new RoundedAmount( 0L ,
-			                                                getUnit() ,
-			                                                rounding ) };
+			                             new RoundedAmount( 0L , getUnit() , rounding ) };
 			}
-		BigDecimal[] dec = number.divideAndRemainder( NumberUtils.getBigDecimal( divisor ) ,
-		                                              Optional.ofNullable( amountContext.getMathContext() )
-		                                                      .orElse( MathContext.DECIMAL64 ) );
-		return new RoundedAmount[] { new RoundedAmount( dec[0] ,
-		                                                unit ,
-		                                                rounding ) ,
-		                             new RoundedAmount( dec[1] ,
-		                                                unit ,
-		                                                rounding ).with( rounding ) };
+		BigDecimal[] dec = number.divideAndRemainder( NumberUtils.getBigDecimal( divisor ) , Optional.ofNullable( amountContext.getMathContext() )
+		                                                                                             .orElse( MathContext.DECIMAL64 ) );
+		return new RoundedAmount[] { new RoundedAmount( dec[0] , unit , rounding ) ,
+		                             new RoundedAmount( dec[1] , unit , rounding ).with( rounding ) };
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount divideToIntegralValue( Number divisor )
 		{
-		BigDecimal dec = number.divideToIntegralValue( NumberUtils.getBigDecimal( divisor ) ,
-		                                               Optional.ofNullable( amountContext.getMathContext() )
-		                                                       .orElse( MathContext.DECIMAL64 ) );
-		return new RoundedAmount( dec ,
-		                          unit ,
-		                          rounding );
+		BigDecimal dec = number.divideToIntegralValue( NumberUtils.getBigDecimal( divisor ) , Optional.ofNullable( amountContext.getMathContext() )
+		                                                                                              .orElse( MathContext.DECIMAL64 ) );
+		return new RoundedAmount( dec , unit , rounding );
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount multiply( Number multiplicand )
@@ -1009,34 +809,23 @@ public final class RoundedAmount
 			{
 			return this;
 			}
-		BigDecimal dec = number.multiply( bd ,
-		                                  Optional.ofNullable( amountContext.getMathContext() )
-		                                          .orElse( MathContext.DECIMAL64 ) );
-		return new RoundedAmount( dec ,
-		                          unit ,
-		                          rounding ).with( rounding );
+		BigDecimal dec = number.multiply( bd , Optional.ofNullable( amountContext.getMathContext() )
+		                                               .orElse( MathContext.DECIMAL64 ) );
+		return new RoundedAmount( dec , unit , rounding ).with( rounding );
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount negate()
 		{
 		return new RoundedAmount( number.negate( Optional.ofNullable( amountContext.getMathContext() )
-		                                                 .orElse( MathContext.DECIMAL64 ) ) ,
-		                          unit ,
-		                          rounding );
+		                                                 .orElse( MathContext.DECIMAL64 ) ) , unit , rounding );
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount plus()
 		{
 		return this;
 		}
-	
-	
 	
 	/**
 	 * Subtract rounded unit.
@@ -1049,43 +838,28 @@ public final class RoundedAmount
 	@Override
 	public RoundedAmount subtract( Quantity amount )
 		{
-		NumberUtils.checkAmountParameter( amount ,
-		                                  unit );
+		NumberUtils.checkAmountParameter( amount , unit );
 		if( amount.isZero() )
 			{
 			return this;
 			}
 		return new RoundedAmount( number.subtract( amount.getNumber()
-		                                                 .numberValue( BigDecimal.class ) ,
-		                                           Optional.ofNullable( amountContext.getMathContext() )
-		                                                   .orElse( MathContext.DECIMAL64 ) ) ,
-		                          unit ,
-		                          rounding );
+		                                                 .numberValue( BigDecimal.class ) , Optional.ofNullable( amountContext.getMathContext() )
+		                                                                                            .orElse( MathContext.DECIMAL64 ) ) , unit , rounding );
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount remainder( Number divisor )
 		{
-		return new RoundedAmount( number.remainder( NumberUtils.getBigDecimal( divisor ) ,
-		                                            Optional.ofNullable( amountContext.getMathContext() )
-		                                                    .orElse( MathContext.DECIMAL64 ) ) ,
-		                          unit ,
-		                          rounding );
+		return new RoundedAmount( number.remainder( NumberUtils.getBigDecimal( divisor ) , Optional.ofNullable( amountContext.getMathContext() )
+		                                                                                           .orElse( MathContext.DECIMAL64 ) ) , unit , rounding );
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount scaleByPowerOfTen( int power )
 		{
-		return new RoundedAmount( number.scaleByPowerOfTen( power ) ,
-		                          unit ,
-		                          rounding );
+		return new RoundedAmount( number.scaleByPowerOfTen( power ) , unit , rounding );
 		}
-	
-	
 	
 	@Override
 	public boolean isZero()
@@ -1093,15 +867,11 @@ public final class RoundedAmount
 		return number.signum() == 0;
 		}
 	
-	
-	
 	@Override
 	public boolean isPositive()
 		{
 		return signum() == 1;
 		}
-	
-	
 	
 	@Override
 	public boolean isPositiveOrZero()
@@ -1109,15 +879,11 @@ public final class RoundedAmount
 		return signum() >= 0;
 		}
 	
-	
-	
 	@Override
 	public boolean isNegative()
 		{
 		return signum() == -1;
 		}
-	
-	
 	
 	@Override
 	public boolean isNegativeOrZero()
@@ -1125,15 +891,11 @@ public final class RoundedAmount
 		return signum() <= 0;
 		}
 	
-	
-	
 	@Override
 	public int signum()
 		{
 		return number.signum();
 		}
-	
-	
 	
 	/**
 	 * Is less than boolean.
@@ -1147,15 +909,12 @@ public final class RoundedAmount
 	@Override
 	public boolean isLessThan( Quantity amount )
 		{
-		NumberUtils.checkAmountParameter( amount ,
-		                                  unit );
+		NumberUtils.checkAmountParameter( amount , unit );
 		return number.stripTrailingZeros()
 		             .compareTo( amount.getNumber()
 		                               .numberValue( BigDecimal.class )
 		                               .stripTrailingZeros() ) < 0;
 		}
-	
-	
 	
 	/**
 	 * Is less than or equal to boolean.
@@ -1169,15 +928,12 @@ public final class RoundedAmount
 	@Override
 	public boolean isLessThanOrEqualTo( Quantity amount )
 		{
-		NumberUtils.checkAmountParameter( amount ,
-		                                  unit );
+		NumberUtils.checkAmountParameter( amount , unit );
 		return number.stripTrailingZeros()
 		             .compareTo( amount.getNumber()
 		                               .numberValue( BigDecimal.class )
 		                               .stripTrailingZeros() ) <= 0;
 		}
-	
-	
 	
 	/**
 	 * Is greater than boolean.
@@ -1191,15 +947,12 @@ public final class RoundedAmount
 	@Override
 	public boolean isGreaterThan( Quantity amount )
 		{
-		NumberUtils.checkAmountParameter( amount ,
-		                                  unit );
+		NumberUtils.checkAmountParameter( amount , unit );
 		return number.stripTrailingZeros()
 		             .compareTo( amount.getNumber()
 		                               .numberValue( BigDecimal.class )
 		                               .stripTrailingZeros() ) > 0;
 		}
-	
-	
 	
 	/**
 	 * Is greater than or equal to boolean.
@@ -1213,15 +966,12 @@ public final class RoundedAmount
 	@Override
 	public boolean isGreaterThanOrEqualTo( Quantity amount )
 		{
-		NumberUtils.checkAmountParameter( amount ,
-		                                  unit );
+		NumberUtils.checkAmountParameter( amount , unit );
 		return number.stripTrailingZeros()
 		             .compareTo( amount.getNumber()
 		                               .numberValue( BigDecimal.class )
 		                               .stripTrailingZeros() ) >= 0;
 		}
-	
-	
 	
 	/**
 	 * Is equal to boolean.
@@ -1235,15 +985,12 @@ public final class RoundedAmount
 	@Override
 	public boolean isEqualTo( Quantity amount )
 		{
-		NumberUtils.checkAmountParameter( amount ,
-		                                  unit );
+		NumberUtils.checkAmountParameter( amount , unit );
 		return number.stripTrailingZeros()
 		             .compareTo( amount.getNumber()
 		                               .numberValue( BigDecimal.class )
 		                               .stripTrailingZeros() ) == 0;
 		}
-	
-	
 	
 	/**
 	 * Is not equal to boolean.
@@ -1255,15 +1002,12 @@ public final class RoundedAmount
 	 */
 	public boolean isNotEqualTo( Quantity amount )
 		{
-		NumberUtils.checkAmountParameter( amount ,
-		                                  unit );
+		NumberUtils.checkAmountParameter( amount , unit );
 		return number.stripTrailingZeros()
 		             .compareTo( amount.getNumber()
 		                               .numberValue( BigDecimal.class )
 		                               .stripTrailingZeros() ) != 0;
 		}
-	
-	
 	
 	/**
 	 * With rounded unit.
@@ -1288,12 +1032,9 @@ public final class RoundedAmount
 			}
 		catch( Exception e )
 			{
-			throw new ValueException( "Query failed: " + operator ,
-			                          e );
+			throw new ValueException( "Query failed: " + operator , e );
 			}
 		}
-	
-	
 	
 	@Override
 	public String toString()
@@ -1301,16 +1042,11 @@ public final class RoundedAmount
 		return unit.getCode() + ' ' + number;
 		}
 	
-	
-	
 	@Override
 	public int hashCode()
 		{
-		return Objects.hash( unit ,
-		                     asNumberStripped() );
+		return Objects.hash( unit , asNumberStripped() );
 		}
-	
-	
 	
 	@Override
 	public boolean equals( Object obj )
@@ -1322,14 +1058,10 @@ public final class RoundedAmount
 		if( obj instanceof RoundedAmount )
 			{
 			RoundedAmount other = (RoundedAmount) obj;
-			return Objects.equals( unit ,
-			                       other.unit ) && Objects.equals( asNumberStripped() ,
-			                                                       other.asNumberStripped() );
+			return Objects.equals( unit , other.unit ) && Objects.equals( asNumberStripped() , other.asNumberStripped() );
 			}
 		return false;
 		}
-	
-	
 	
 	/**
 	 * Compare to int.
@@ -1359,15 +1091,11 @@ public final class RoundedAmount
 		return compare;
 		}
 	
-	
-	
 	@Override
 	public NumberValue getNumber()
 		{
 		return new DefaultNumberValue( number );
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount multiply( long multiplicand )
@@ -1378,8 +1106,6 @@ public final class RoundedAmount
 			}
 		return multiply( NumberUtils.getBigDecimal( multiplicand ) );
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount multiply( double multiplicand )
@@ -1392,8 +1118,6 @@ public final class RoundedAmount
 		return multiply( NumberUtils.getBigDecimal( multiplicand ) );
 		}
 	
-	
-	
 	@Override
 	public RoundedAmount divide( long divisor )
 		{
@@ -1404,17 +1128,12 @@ public final class RoundedAmount
 		return divide( NumberUtils.getBigDecimal( divisor ) );
 		}
 	
-	
-	
 	@Override
 	public RoundedAmount divide( double divisor )
 		{
 		if( NumberUtils.isInfinityAndNotNaN( divisor ) )
 			{
-			return new RoundedAmount( 0L ,
-			                          getUnit() ,
-			                          amountContext ,
-			                          rounding );
+			return new RoundedAmount( 0L , getUnit() , amountContext , rounding );
 			}
 		if( divisor == 1.0d )
 			{
@@ -1423,30 +1142,21 @@ public final class RoundedAmount
 		return divide( NumberUtils.getBigDecimal( divisor ) );
 		}
 	
-	
-	
 	@Override
 	public RoundedAmount remainder( long divisor )
 		{
 		return remainder( NumberUtils.getBigDecimal( divisor ) );
 		}
 	
-	
-	
 	@Override
 	public RoundedAmount remainder( double divisor )
 		{
 		if( NumberUtils.isInfinityAndNotNaN( divisor ) )
 			{
-			return new RoundedAmount( 0L ,
-			                          getUnit() ,
-			                          amountContext ,
-			                          rounding );
+			return new RoundedAmount( 0L , getUnit() , amountContext , rounding );
 			}
 		return remainder( NumberUtils.getBigDecimal( divisor ) );
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount[] divideAndRemainder( long divisor )
@@ -1454,38 +1164,27 @@ public final class RoundedAmount
 		return divideAndRemainder( NumberUtils.getBigDecimal( divisor ) );
 		}
 	
-	
-	
 	@Override
 	public RoundedAmount[] divideAndRemainder( double divisor )
 		{
 		if( NumberUtils.isInfinityAndNotNaN( divisor ) )
 			{
-			RoundedAmount zero = new RoundedAmount( 0L ,
-			                                        getUnit() ,
-			                                        amountContext ,
-			                                        rounding );
+			RoundedAmount zero = new RoundedAmount( 0L , getUnit() , amountContext , rounding );
 			return new RoundedAmount[] { zero ,
 			                             zero };
 			}
 		return divideAndRemainder( NumberUtils.getBigDecimal( divisor ) );
 		}
 	
-	
-	
 	@Override
 	public RoundedAmount stripTrailingZeros()
 		{
 		if( isZero() )
 			{
-			return of( BigDecimal.ZERO ,
-			           getUnit() );
+			return of( BigDecimal.ZERO , getUnit() );
 			}
-		return of( number.stripTrailingZeros() ,
-		           getUnit() );
+		return of( number.stripTrailingZeros() , getUnit() );
 		}
-	
-	
 	
 	@Override
 	public RoundedAmount divideToIntegralValue( long divisor )
@@ -1493,18 +1192,12 @@ public final class RoundedAmount
 		return divideToIntegralValue( NumberUtils.getBigDecimal( divisor ) );
 		}
 	
-	
-	
 	@Override
 	public RoundedAmount divideToIntegralValue( double divisor )
 		{
 		return divideToIntegralValue( NumberUtils.getBigDecimal( divisor ) );
 		}
 	
-	
-	
 	//</editor-fold>
-	
-	
 	
 	}

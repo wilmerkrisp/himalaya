@@ -7,14 +7,6 @@ package life.expert.common.function;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 /**
  * in order to be able to put the code that calls checked exceptions in lambda
  *
@@ -34,8 +26,6 @@ package life.expert.common.function;
 @FunctionalInterface
 public interface CheckedPredicate6<T1, T2, T3, T4, T5, T6>
 	{
-	
-	
 	
 	/**
 	 * Test boolean.

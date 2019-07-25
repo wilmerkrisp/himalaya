@@ -7,14 +7,6 @@ package life.expert.value.numeric.unit;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import com.google.common.collect.ComparisonChain;
 import life.expert.value.numeric.context.PieceContext;
 import lombok.AllArgsConstructor;
@@ -23,14 +15,6 @@ import lombok.NonNull;
 import lombok.Value;
 
 import java.util.Map;
-
-
-
-
-
-
-
-
 
 /**
  * The type Piece.
@@ -43,34 +27,22 @@ public class Piece
 	           Comparable<Unit>
 	{
 	
-	
-	
 	/**
 	 * The constant DEFAULT_CONTEXT.
 	 */
 	public static final PieceContext DEFAULT_CONTEXT = PieceContext.of( Map.of() );
 	
-	
-	
 	@NonNull private final String code;
-	
-	
 	
 	//@NonNull
 	@Builder.Default private final int numericCode = -1;
 	
-	
-	
 	//@NonNull
 	@Builder.Default private final int defaultFractionDigits = 0;
-	
-	
 	
 	@NonNull
 	@Builder.Default
 	private final PieceContext context = DEFAULT_CONTEXT;
-	
-	
 	
 	/**
 	 * Create piece instance with given unit code.
@@ -86,17 +58,12 @@ public class Piece
 		                .build();
 		}
 	
-	
-	
 	@Override
 	public int compareTo( Unit o )
 		{
 		return ComparisonChain.start()
-		                      .compare( this.getCode() ,
-		                                o.getCode() )
+		                      .compare( this.getCode() , o.getCode() )
 		                      .result();
 		}
-		
-		
 		
 	}

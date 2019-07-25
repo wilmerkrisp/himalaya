@@ -6,25 +6,9 @@ package life.expert.common.async;//@Header@
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-
-
-
-
-
-
-
-
 
 /**
  * The interface Runnable interrupted.
@@ -33,8 +17,6 @@ import java.util.concurrent.TimeoutException;
 @FunctionalInterface
 public interface RunnableInterrupted
 	{
-	
-	
 	
 	/**
 	 * When an object implementing interface <pre>{@code Runnable}</pre> is used

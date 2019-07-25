@@ -4,6 +4,4 @@
  * you should value-class, passed all checks once during creation
  */
 
-
-
 package life.expert.value.string;

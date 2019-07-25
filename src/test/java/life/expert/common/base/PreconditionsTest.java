@@ -2,20 +2,12 @@ package life.expert.common.base;
 
 
 
-
-
-
-
-
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.common.collect.*;                     //ImmutableList
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-
 
 //@Header@
 //--------------------------------------------------------------------------------
@@ -25,42 +17,20 @@ import org.junit.jupiter.api.Test;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 class PreconditionsTest
 	{
 	
+	private ImmutableList<String> badList_;
 	
+	private ImmutableList<String> goodList_;
 	
-	private ImmutableList< String > badList_;
+	private ImmutableMap<String,String> badMap_;
 	
+	private ImmutableMap<String,String> goodMap_;
 	
+	private ImmutableList<String> emptyList_;
 	
-	private ImmutableList< String > goodList_;
-	
-	
-	
-	private ImmutableMap< String, String > badMap_;
-	
-	
-	
-	private ImmutableMap< String, String > goodMap_;
-	
-	
-	
-	private ImmutableList< String > emptyList_;
-	
-	
-	
-	private ImmutableMap< String, String > emptyMap_;
-	
-	
+	private ImmutableMap<String,String> emptyMap_;
 	
 	@BeforeEach
 	void setUp()
@@ -70,20 +40,15 @@ class PreconditionsTest
 		badMap_ = ImmutableMap.of( "1" , "one" , "2" , "two" , "3" , "" );
 		goodMap_ = ImmutableMap.of( "1" , "one" , "2" , "two" , "3" , "three" );
 		
-		
 		emptyList_ = ImmutableList.of();
 		
 		emptyMap_ = ImmutableMap.of();
 		}
 	
-	
-	
 	@AfterEach
 	void tearDown()
 		{
 		}
-	
-	
 	
 	//<editor-fold desc="Check collections and maps">
 	@Test
@@ -97,8 +62,6 @@ class PreconditionsTest
 		
 		}
 	
-	
-	
 	@Test
 	void checkArgument_Map_filter()
 		{
@@ -108,8 +71,6 @@ class PreconditionsTest
 		} );
 		assertNotNull( thrown.getMessage() );
 		}
-	
-	
 	
 	@Test
 	void checkArgumentThen_Collection_filter()
@@ -121,8 +82,6 @@ class PreconditionsTest
 		assertTrue( output2 );
 		}
 	
-	
-	
 	@Test
 	void checkArgumentThen_Map_filter()
 		{
@@ -132,8 +91,6 @@ class PreconditionsTest
 		boolean output2 = Preconditions.isCheckArgument( badMap_ , String::isBlank );
 		assertTrue( output2 );
 		}
-	
-	
 	
 	@Test
 	void checkState_Collection_filter()
@@ -145,8 +102,6 @@ class PreconditionsTest
 		assertNotNull( thrown.getMessage() );
 		}
 	
-	
-	
 	@Test
 	void checkState_Map_filter()
 		{
@@ -157,8 +112,6 @@ class PreconditionsTest
 		assertNotNull( thrown.getMessage() );
 		}
 	
-	
-	
 	@Test
 	void assertArgument_Collection_filter()
 		{
@@ -168,8 +121,6 @@ class PreconditionsTest
 		} );
 		assertNotNull( thrown.getMessage() );
 		}
-	
-	
 	
 	@Test
 	void assertArgument_Map_filter()
@@ -183,11 +134,7 @@ class PreconditionsTest
 	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="Generic checks">
-	
-	
 	
 	@Test
 	void checkArgument_bool()
@@ -198,8 +145,6 @@ class PreconditionsTest
 		} );
 		assertNotNull( thrown.getMessage() );
 		}
-	
-	
 	
 	@Test
 	void checkArgument_bool_LazyMessage()
@@ -220,8 +165,6 @@ class PreconditionsTest
 		
 		}
 	
-	
-	
 	@Test
 	void checkState_bool()
 		{
@@ -231,8 +174,6 @@ class PreconditionsTest
 		} );
 		assertNotNull( thrown.getMessage() );
 		}
-	
-	
 	
 	@Test
 	void checkState_bool_LazyMessage()
@@ -252,8 +193,6 @@ class PreconditionsTest
 		} );
 		}
 	
-	
-	
 	@Test
 	void assertArgument_bool()
 		{
@@ -263,8 +202,6 @@ class PreconditionsTest
 		} );
 		assertNotNull( thrown.getMessage() );
 		}
-	
-	
 	
 	@Test
 	void checkArgumentNotNull()
@@ -276,8 +213,6 @@ class PreconditionsTest
 		assertNotNull( thrown.getMessage() );
 		}
 	
-	
-	
 	@Test
 	void checkStateNotNull()
 		{
@@ -288,8 +223,6 @@ class PreconditionsTest
 		} );
 		assertNotNull( thrown.getMessage() );
 		}
-	
-	
 	
 	@Test
 	void assertArgumentNotNull()
@@ -305,8 +238,6 @@ class PreconditionsTest
 	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="Check strings">
 	@Test
 	void checkArgument_String()
@@ -318,8 +249,6 @@ class PreconditionsTest
 		assertNotNull( thrown.getMessage() );
 		}
 	
-	
-	
 	@Test
 	void checkArgumentThen_String()
 		{
@@ -330,8 +259,6 @@ class PreconditionsTest
 		assertTrue( output2 );
 		}
 	
-	
-	
 	@Test
 	void checkState_String()
 		{
@@ -341,8 +268,6 @@ class PreconditionsTest
 		} );
 		assertNotNull( thrown.getMessage() );
 		}
-	
-	
 	
 	@Test
 	void assertArgument_String()
@@ -358,8 +283,6 @@ class PreconditionsTest
 	
 	//<editor-fold desc="Check numbers">
 	
-	
-	
 	@Test
 	void checkArgument_Long()
 		{
@@ -369,8 +292,6 @@ class PreconditionsTest
 		} );
 		assertNotNull( thrown.getMessage() );
 		}
-	
-	
 	
 	@Test
 	void checkArgumentThen_Long()
@@ -382,8 +303,6 @@ class PreconditionsTest
 		assertTrue( output2 );
 		}
 	
-	
-	
 	@Test
 	void checkState_Long()
 		{
@@ -393,8 +312,6 @@ class PreconditionsTest
 		} );
 		assertNotNull( thrown.getMessage() );
 		}
-	
-	
 	
 	@Test
 	void assertArgument_Long()
@@ -410,8 +327,6 @@ class PreconditionsTest
 	
 	//<editor-fold desc="Check collection and maps (subfunctions)">
 	
-	
-	
 	@Test
 	void checkArgument_Collection()
 		{
@@ -423,8 +338,6 @@ class PreconditionsTest
 		
 		}
 	
-	
-	
 	@Test
 	void checkArgumentThen_Collection()
 		{
@@ -434,8 +347,6 @@ class PreconditionsTest
 		boolean output2 = Preconditions.isCheckArgument( emptyList_ );
 		assertTrue( output2 );
 		}
-	
-	
 	
 	@Test
 	void checkState_Collection()
@@ -447,8 +358,6 @@ class PreconditionsTest
 		assertNotNull( thrown.getMessage() );
 		}
 	
-	
-	
 	@Test
 	void assertArgument_Collection()
 		{
@@ -458,8 +367,6 @@ class PreconditionsTest
 		} );
 		assertNotNull( thrown.getMessage() );
 		}
-	
-	
 	
 	@Test
 	void checkArgument_Map()
@@ -471,8 +378,6 @@ class PreconditionsTest
 		assertNotNull( thrown.getMessage() );
 		}
 	
-	
-	
 	@Test
 	void checkArgumentThen_Map()
 		{
@@ -482,8 +387,6 @@ class PreconditionsTest
 		boolean output2 = Preconditions.isCheckArgument( emptyMap_ );
 		assertTrue( output2 );
 		}
-	
-	
 	
 	@Test
 	void checkState_Map()
@@ -495,8 +398,6 @@ class PreconditionsTest
 		assertNotNull( thrown.getMessage() );
 		}
 	
-	
-	
 	@Test
 	void assertArgument_Map()
 		{
@@ -507,14 +408,9 @@ class PreconditionsTest
 		assertNotNull( thrown.getMessage() );
 		}
 	
-	
-	
 	//</editor-fold>
 	
-	
 	//<editor-fold desc="Log functions">
-	
-	
 	
 	@Test
 	void getIndexesOfObjectsInCollection()
@@ -526,8 +422,6 @@ class PreconditionsTest
 		assertFalse( output2.isBlank() );
 		}
 	
-	
-	
 	@Test
 	void getIndexesOfObjectsInCollectionForLog()
 		{
@@ -537,8 +431,6 @@ class PreconditionsTest
 		String output2 = Preconditions.getIndexesOfObjectsInCollectionForLog( badList_ , String::isBlank );
 		assertFalse( output2.isBlank() );
 		}
-	
-	
 	
 	@Test
 	void getKeysOfObjectsInMap()
@@ -550,8 +442,6 @@ class PreconditionsTest
 		assertFalse( output2.isBlank() );
 		}
 	
-	
-	
 	@Test
 	void getKeysOfObjectsInMapForLog()
 		{
@@ -562,8 +452,6 @@ class PreconditionsTest
 		assertFalse( output2.isBlank() );
 		}
 	
-	
-	
 	@Test
 	void getCountOfObjectsInCollection()
 		{
@@ -573,10 +461,7 @@ class PreconditionsTest
 		long output2 = Preconditions.getCountOfObjectsInCollection( badList_ , String::isBlank );
 		assertFalse( output2 == 0 );
 		
-		
 		}
-	
-	
 	
 	@Test
 	void getCountOfObjectsInMap()
@@ -587,7 +472,5 @@ class PreconditionsTest
 		long output2 = Preconditions.getCountOfObjectsInMap( badMap_ , String::isBlank );
 		assertFalse( output2 == 0 );
 		}
-		
-		
 		
 	}

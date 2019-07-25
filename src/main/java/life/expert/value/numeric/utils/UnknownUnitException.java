@@ -7,26 +7,10 @@ package life.expert.value.numeric.utils;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import life.expert.value.numeric.unit.Piece;
 
 import java.util.Locale;
 import java.util.Objects;
-
-
-
-
-
-
-
-
 
 /**
  * Exception thrown when a unit code cannot be resolved into a {@link life.expert.value.numeric.unit.Unit}.
@@ -35,21 +19,15 @@ public class UnknownUnitException
 	extends ValueException
 	{
 	
-	
-	
 	/**
 	 * The invalid currency code requested.
 	 */
 	private final String currencyCode;
 	
-	
-	
 	/**
 	 * The invalid {@link Locale} requested.
 	 */
 	private final Locale locale;
-	
-	
 	
 	/**
 	 * Creates a new exception instance when a {@link  life.expert.value.numeric.unit.Unit} could not be evaluated given a
@@ -67,8 +45,6 @@ public class UnknownUnitException
 		this.locale = null;
 		}
 	
-	
-	
 	/**
 	 * Creates a new exception instance when a {@link life.expert.value.numeric.unit.Unit} could not be evaluated given a
 	 * (country) {@link Locale}.
@@ -85,8 +61,6 @@ public class UnknownUnitException
 		this.currencyCode = null;
 		}
 	
-	
-	
 	/**
 	 * Access the invalid currency code.
 	 *
@@ -97,8 +71,6 @@ public class UnknownUnitException
 		return currencyCode;
 		}
 	
-	
-	
 	/**
 	 * Access the invalid {@link Locale}.
 	 *
@@ -108,8 +80,6 @@ public class UnknownUnitException
 		{
 		return locale;
 		}
-	
-	
 	
 	/*
 	 * (non-Javadoc)

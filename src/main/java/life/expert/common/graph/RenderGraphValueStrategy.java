@@ -7,28 +7,12 @@ package life.expert.common.graph;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import com.google.common.graph.EndpointPair;
 import com.google.common.graph.ValueGraph;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
-
-
-
-
-
-
-
-
 
 /**
  * The type Render graph value strategy.
@@ -43,11 +27,7 @@ public class RenderGraphValueStrategy<N, V>
 	implements RenderGraphStrategy<N>
 	{
 	
-	
-	
 	private @NonNull ValueGraph<N,V> graph;
-	
-	
 	
 	@Override
 	public boolean isDirected()
@@ -55,15 +35,12 @@ public class RenderGraphValueStrategy<N, V>
 		return false;
 		}
 	
-	
-	
 	@Override
 	public String renderToString( @NonNull Map<N,String> markNodes ,
 	                              @NonNull Map<EndpointPair<N>,String> markEdges )
 		{
 		StringBuilder dot = new StringBuilder();
 		dot.append( graph.isDirected() ? "digraph G{\n\tratio = fill; node [shape = circle]; \n" : "graph G{\n\tratio = fill; node [shape = circle]; edge [dir=none];\n" );
-		
 		
 		for( N n : graph.nodes() )
 			{
@@ -73,9 +50,10 @@ public class RenderGraphValueStrategy<N, V>
 		
 		for( EndpointPair<N> e : graph.edges() )
 			{
-			String value       = graph.edgeValue( e )
-			                          .isPresent() ? String.format( "label = \"%s\"" , graph.edgeValue( e ).get() ) : ""; //difference is only here
-			var    description = markEdges.getOrDefault( e , "" );
+			String value = graph.edgeValue( e )
+			                    .isPresent() ? String.format( "label = \"%s\"" , graph.edgeValue( e )
+			                                                                          .get() ) : ""; //difference is only here
+			var description = markEdges.getOrDefault( e , "" );
 			dot.append( String.format( "\t%s %s %s [%s %s];\n" , e.nodeU() , graph.isDirected() ? "->" : "--" , e.nodeV() , value , description ) );
 			}
 		dot.append( "}\n" );

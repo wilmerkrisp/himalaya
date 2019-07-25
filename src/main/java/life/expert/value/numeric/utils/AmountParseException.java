@@ -7,23 +7,7 @@ package life.expert.value.numeric.utils;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import java.util.Objects;
-
-
-
-
-
-
-
-
 
 /**
  * Signals that an error has been reached unexpectedly while parsing.
@@ -31,8 +15,6 @@ import java.util.Objects;
 public class AmountParseException
 	extends ValueException
 	{
-	
-	
 	
 	/**
 	 * The zero-based character offset into the string being parsed at which the
@@ -42,14 +24,10 @@ public class AmountParseException
 	 */
 	private int errorIndex;
 	
-	
-	
 	/**
 	 * The original input data.
 	 */
 	private CharSequence data;
-	
-	
 	
 	/**
 	 * Constructs a AmountParseException with the specified detail message,
@@ -76,8 +54,6 @@ public class AmountParseException
 		this.errorIndex = errorIndex;
 		}
 	
-	
-	
 	/**
 	 * Constructs a MonetaryParseException with the parsed text and offset. A
 	 * detail message is a String that describes this particular exception.
@@ -99,8 +75,6 @@ public class AmountParseException
 		this.errorIndex = errorIndex;
 		}
 	
-	
-	
 	/**
 	 * Returns the index where the error was found.
 	 *
@@ -110,8 +84,6 @@ public class AmountParseException
 		{
 		return errorIndex;
 		}
-	
-	
 	
 	/**
 	 * Returns the string that was being parsed.

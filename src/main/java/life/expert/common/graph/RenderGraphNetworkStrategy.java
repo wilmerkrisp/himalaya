@@ -7,28 +7,12 @@ package life.expert.common.graph;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import com.google.common.graph.EndpointPair;
 import com.google.common.graph.Network;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
-
-
-
-
-
-
-
-
 
 /**
  * The type Render graph network strategy.
@@ -43,11 +27,7 @@ public class RenderGraphNetworkStrategy<N, E>
 	implements RenderGraphStrategy<N>
 	{
 	
-	
-	
 	private @NonNull Network<N,E> graph;
-	
-	
 	
 	@Override
 	public boolean isDirected()
@@ -55,15 +35,12 @@ public class RenderGraphNetworkStrategy<N, E>
 		return false;
 		}
 	
-	
-	
 	@Override
 	public String renderToString( @NonNull Map<N,String> markNodes ,
 	                              @NonNull Map<EndpointPair<N>,String> markEdges )
 		{
 		StringBuilder dot = new StringBuilder();
 		dot.append( graph.isDirected() ? "digraph G{\n\tratio = fill; node [shape = circle]; \n" : "graph G{\n\tratio = fill; node [shape = circle]; edge [dir=none];\n" );
-		
 		
 		for( N n : graph.nodes() )
 			{

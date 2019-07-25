@@ -2,12 +2,6 @@ package life.expert.common.reactivestreams;
 
 
 
-
-
-
-
-
-
 import life.expert.common.function.CheckedUtils;
 import life.expert.common.reactivestreams.Preconditions;
 
@@ -22,15 +16,10 @@ import reactor.core.publisher.Mono;
 import reactor.function.TupleUtils;
 import reactor.test.StepVerifier;
 
-
-
 import static reactor.core.publisher.Mono.*;
 import static life.expert.common.async.LogUtils.*;        //logAtInfo
 
-
 //switch
-
-
 
 //import java.util.List;                                  //usual list
 //import io.vavr.collection.List;                         //immutable List
@@ -44,18 +33,8 @@ import static life.expert.common.async.LogUtils.*;        //logAtInfo
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 class PatternsTest
 	{
-	
-	
 	
 	/*
 	full analog of:
@@ -210,8 +189,6 @@ o.subscribe( logAtInfoConsumer( "NEXT" ) , logAtInfoConsumer( "ERROR" ) , logAtI
 		
 		}
 	
-	
-	
 	public static String meth1_( final String string1 ,
 	                             final String string2 ,
 	                             final String string3 )
@@ -219,8 +196,6 @@ o.subscribe( logAtInfoConsumer( "NEXT" ) , logAtInfoConsumer( "ERROR" ) , logAtI
 		//throw new RuntimeException( " cause " );
 		return "otvet+" + string1 + string2 + string3;
 		}
-	
-	
 	
 	public static Mono<String> meth1err( final String string1 ,
 	                                     final String string2 ,
@@ -235,8 +210,6 @@ o.subscribe( logAtInfoConsumer( "NEXT" ) , logAtInfoConsumer( "ERROR" ) , logAtI
 		
 		}
 	
-	
-	
 	public static String meth1err_( final String string1 ,
 	                                final String string2 ,
 	                                final String string3 )
@@ -244,8 +217,6 @@ o.subscribe( logAtInfoConsumer( "NEXT" ) , logAtInfoConsumer( "ERROR" ) , logAtI
 		throw new RuntimeException( " cause " );
 		///return "otvet+" + string1 + string2 + string3;
 		}
-	
-	
 	
 	public static Mono<String> meth1noerr( final String string1 ,
 	                                       final String string2 ,
@@ -267,8 +238,6 @@ o.subscribe( logAtInfoConsumer( "NEXT" ) , logAtInfoConsumer( "ERROR" ) , logAtI
 		
 		}
 	
-	
-	
 	@Test
 	void checkArgumentTest()
 		{
@@ -282,22 +251,17 @@ o.subscribe( logAtInfoConsumer( "NEXT" ) , logAtInfoConsumer( "ERROR" ) , logAtI
 			
 		}
 	
-	
-	
 	@Test
 	void checkArgumentTest2()
 		{
 		var o = Preconditions.checkArgument( " " , StringUtils::isNotBlank , "arg is blank" );
 		//o.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
 		
-		
 		StepVerifier.setDefaultTimeout( Duration.ofSeconds( 1 ) );
 		StepVerifier.create( o )
 		            .expectError()
 		            .verify();
 		}
-	
-	
 	
 	@Test
 	void checkArgumentTest3()
@@ -315,7 +279,7 @@ o.subscribe( logAtInfoConsumer( "NEXT" ) , logAtInfoConsumer( "ERROR" ) , logAtI
 	@Test
 	void checkArgumentTest4()
 		{
-		var o = Preconditions.checkArgument( "i " , StringUtils::isNotBlank  , "arg is blank" );
+		var o = Preconditions.checkArgument( "i " , StringUtils::isNotBlank , "arg is blank" );
 		//o.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
 		
 		StepVerifier.setDefaultTimeout( Duration.ofSeconds( 1 ) );
@@ -326,7 +290,6 @@ o.subscribe( logAtInfoConsumer( "NEXT" ) , logAtInfoConsumer( "ERROR" ) , logAtI
 		            .verify();
 			
 		}
-	
 	
 	//
 	//	@Test
@@ -345,7 +308,6 @@ o.subscribe( logAtInfoConsumer( "NEXT" ) , logAtInfoConsumer( "ERROR" ) , logAtI
 	//		return "el2";
 	//		}
 	
-	
 	//	@Test
 	//	void checkArgumentTest3()
 	//		{
@@ -355,7 +317,5 @@ o.subscribe( logAtInfoConsumer( "NEXT" ) , logAtInfoConsumer( "ERROR" ) , logAtI
 	//
 	//		o.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
 	//		}
-	
-	
 	
 	}

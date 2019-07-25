@@ -7,24 +7,8 @@ package life.expert.value.numeric.unit;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import life.expert.value.numeric.context.Context;
 import life.expert.value.numeric.context.PieceContext;
-
-
-
-
-
-
-
-
 
 /**
  * A unit of values.
@@ -51,8 +35,6 @@ public interface Unit
 	extends Comparable<Unit>
 	{
 	
-	
-	
 	/**
 	 * Gets the unique unit code, the effective code depends on the
 	 * unit.
@@ -61,12 +43,9 @@ public interface Unit
 	 * required to be defined for every {@link Unit} and not
 	 * {@code null} or empty.
 	 *
-	 *
 	 * @return the unit code, never {@code null}.
 	 */
 	String getCode();
-	
-	
 	
 	/**
 	 * Gets a numeric unit code. within the ISO name space, this equals
@@ -76,12 +55,9 @@ public interface Unit
 	 * The numeric code is an optional alternative to the standard unit
 	 * code. If defined, the numeric code is required to be unique.
 	 *
-	 *
 	 * @return the numeric unit code
 	 */
 	int getNumericCode();
-	
-	
 	
 	/**
 	 * Gets the number of fractional digits typically used by this unit.
@@ -89,12 +65,9 @@ public interface Unit
 	 * Different units have different numbers of fractional digits by
 	 * default.
 	 *
-	 *
 	 * @return the fractional digits, from 0 to 9 (normally 0, 2 or 3), or 0 for 	pseudo-units.
 	 */
 	int getDefaultFractionDigits();
-	
-	
 	
 	/**
 	 * Returns the {@link PieceContext} of a unit. This context contains additional information

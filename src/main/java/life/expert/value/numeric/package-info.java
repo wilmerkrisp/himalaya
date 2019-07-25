@@ -4,6 +4,4 @@
  * - "value object" Enterprise pattern, "value objects" Domain Driven Design pattern, "quantity" Analysis pattern.
  */
 
-
-
 package life.expert.value.numeric;

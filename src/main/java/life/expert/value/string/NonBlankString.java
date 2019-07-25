@@ -2,12 +2,6 @@ package life.expert.value.string;
 
 
 
-
-
-
-
-
-
 import io.vavr.Tuple1;
 import io.vavr.control.Try;
 import lombok.AccessLevel;
@@ -19,27 +13,20 @@ import io.vavr.Tuple;
 import io.vavr.match.annotation.Patterns;
 import io.vavr.match.annotation.Unapply;
 
-
 import com.google.common.collect.ComparisonChain;
-
 
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 
 import org.apache.commons.lang3.StringUtils;            //isNotBlank
 import reactor.core.publisher.Mono;
 
-
 import java.util.Optional;
-
-
 
 import static reactor.core.publisher.Mono.*;
 import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
 
 import static io.vavr.API.*;                              //switch
 import static io.vavr.Predicates.*;                       //switch - case
-
-
 
 //import java.util.List;                                  //usual list
 //import io.vavr.collection.List;                         //immutable List
@@ -52,14 +39,6 @@ import static io.vavr.Predicates.*;                       //switch - case
 //                           wilmer 2019/05/12
 //
 //--------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
 
 /**
  * simple immutable class: String
@@ -87,8 +66,6 @@ public final class NonBlankString
 	implements Comparable<NonBlankString>
 	{
 	
-	
-	
 	/**
 	 * item1
 	 *
@@ -105,8 +82,6 @@ public final class NonBlankString
 	 */
 	private final String string;
 	
-	
-	
 	/*
 	pattern matching in vavr
 	
@@ -120,8 +95,6 @@ public final class NonBlankString
 		
 		}
 	
-	
-	
 	@Override
 	public int compareTo( NonBlankString o )
 		{
@@ -129,8 +102,6 @@ public final class NonBlankString
 		                      .compare( this.string , o.string )
 		                      .result();
 		}
-	
-	
 	
 	/**
 	 * Of non blank string.
@@ -157,8 +128,6 @@ public final class NonBlankString
 		return try_.get();
 		}
 	
-	
-	
 	/**
 	 * Optional of optional.
 	 *
@@ -173,8 +142,6 @@ public final class NonBlankString
 		               .filter( StringUtils::isNotBlank )
 		               .map( NonBlankString::new );
 		}
-	
-	
 	
 	/**
 	 * Mono of mono.
@@ -191,17 +158,7 @@ public final class NonBlankString
 		                            .single();
 		}
 	
-	
-	
 	/////////////////////////////Builder/////////////////////////////
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * The type Non blank string builder.
@@ -209,17 +166,11 @@ public final class NonBlankString
 	public static class NonBlankStringBuilder
 		{
 		
-		
-		
 		private String string;
-		
-		
 		
 		NonBlankStringBuilder()
 			{
 			}
-		
-		
 		
 		/**
 		 * String non blank string builder.
@@ -236,8 +187,6 @@ public final class NonBlankString
 			return this;
 			}
 		
-		
-		
 		/**
 		 * Build non blank string.
 		 *
@@ -252,8 +201,6 @@ public final class NonBlankString
 			return NonBlankString.of( string );
 			}
 		
-		
-		
 		/**
 		 * Build optional optional.
 		 *
@@ -263,8 +210,6 @@ public final class NonBlankString
 			{
 			return NonBlankString.optionalOf( string );
 			}
-		
-		
 		
 		/**
 		 * Build mono mono.
@@ -276,16 +221,12 @@ public final class NonBlankString
 			return NonBlankString.monoOf( string );
 			}
 		
-		
-		
 		@Override
 		public String toString()
 			{
 			return "NonBlankString.NonBlankStringBuilder(string=" + this.string + ")";
 			}
 		}
-	
-	
 	
 	/**
 	 * Builder non blank string builder.
@@ -298,8 +239,6 @@ public final class NonBlankString
 		return new NonBlankStringBuilder();
 		}
 	
-	
-	
 	/**
 	 * To builder non blank string builder.
 	 *
@@ -309,7 +248,5 @@ public final class NonBlankString
 		{
 		return new NonBlankStringBuilder().string( this.string );
 		}
-		
-		
 		
 	}

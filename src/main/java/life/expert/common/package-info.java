@@ -1,7 +1,7 @@
-/**<pre>
+/**
+ * <pre>
  * contains subpackages for various features
- </pre>*/
-
-
+ * </pre>
+ */
 
 package life.expert.common;

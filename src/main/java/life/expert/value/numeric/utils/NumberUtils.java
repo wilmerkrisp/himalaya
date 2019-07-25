@@ -7,14 +7,6 @@ package life.expert.value.numeric.utils;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import life.expert.value.numeric.amount.Quantity;
 import life.expert.value.numeric.context.AmountContext;
 import life.expert.value.numeric.unit.Unit;
@@ -26,14 +18,6 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
 import java.util.Optional;
-
-
-
-
-
-
-
-
 
 /**
  * This utility class simplifies implementing {@link life.expert.value.numeric.amount.Amount},
@@ -52,8 +36,6 @@ public class NumberUtils
 	
 	//<editor-fold desc="big decimapl helper functions">
 	
-	
-	
 	/**
 	 * Creates a {@link BigDecimal} from the given {@link Number} doing the
 	 * valid conversion depending the type given.
@@ -67,8 +49,6 @@ public class NumberUtils
 		{
 		return BigDecimal.valueOf( num );
 		}
-	
-	
 	
 	/**
 	 * Creates a {@link BigDecimal} from the given {@link Number} doing the
@@ -92,8 +72,6 @@ public class NumberUtils
 		return new BigDecimal( String.valueOf( num ) );
 		}
 	
-	
-	
 	/**
 	 * Creates a {@link BigDecimal} from the given {@link Number} doing the
 	 * valid conversion depending the type given.
@@ -107,8 +85,6 @@ public class NumberUtils
 		{
 		return ConvertBigDecimal.of( num );
 		}
-	
-	
 	
 	/**
 	 * Creates a {@link BigDecimal} from the given {@link Number} doing the
@@ -139,8 +115,6 @@ public class NumberUtils
 		return bd;
 		}
 	
-	
-	
 	/**
 	 * Evaluates the {@link MathContext} from the given {@link AmountContext}.
 	 *
@@ -168,8 +142,6 @@ public class NumberUtils
 		return new MathContext( amountContext.getPrecision() , roundingMode );
 		}
 	
-	
-	
 	/**
 	 * Method to check if a unit is compatible with this amount instance.
 	 *
@@ -193,8 +165,6 @@ public class NumberUtils
 			}
 		}
 	
-	
-	
 	/**
 	 * Internal method to check for correct number parameter.
 	 *
@@ -209,11 +179,7 @@ public class NumberUtils
 		Objects.requireNonNull( number , "Number is required." );
 		}
 	
-	
-	
 	//</editor-fold>
-	
-	
 	
 	/**
 	 * Check no infinity or na n.
@@ -240,8 +206,6 @@ public class NumberUtils
 			}
 			
 		}
-	
-	
 	
 	/**
 	 * Is infinity and not na n boolean.
@@ -272,7 +236,5 @@ public class NumberUtils
 		}
 	
 	//</editor-fold>
-	
-	
 	
 	}

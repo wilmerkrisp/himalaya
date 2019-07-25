@@ -7,14 +7,6 @@ package life.expert.common.io;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -35,14 +27,6 @@ import static life.expert.common.function.CheckedUtils.uncheckedFunction;
 import static life.expert.common.function.NullableUtils.nullableFunction;
 import static reactor.core.publisher.Mono.*;
 import static reactor.core.publisher.Mono.justOrEmpty;
-
-
-
-
-
-
-
-
 
 /**
  * The type File utils.
@@ -65,8 +49,6 @@ public class FileUtils
 	
 	//<editor-fold desc="read file">
 	
-	
-	
 	/**
 	 * Lines from path flux.
 	 *
@@ -80,8 +62,6 @@ public class FileUtils
 		return path.flatMapMany( FileUtils::linesFromPath );
 		}
 	
-	
-	
 	/**
 	 * Lines from path flux.
 	 *
@@ -94,8 +74,6 @@ public class FileUtils
 		{
 		return Flux.using( () -> Files.lines( path ) , Flux::fromStream , BaseStream::close );
 		}
-	
-	
 	
 	/**
 	 * Lines from path flux.
@@ -111,8 +89,6 @@ public class FileUtils
 		}
 	
 	//</editor-fold>
-	
-	
 	
 	/**
 	 * Write to path flux.
@@ -130,8 +106,6 @@ public class FileUtils
 		return using( () -> new PrintWriter( file ) , Mono::just , PrintWriter::close );
 		}
 	
-	
-	
 	/**
 	 * Write to path flux.
 	 *
@@ -146,8 +120,6 @@ public class FileUtils
 		{
 		return writerFromPath( path.toFile() );
 		}
-	
-	
 	
 	/**
 	 * Write to path flux.
@@ -168,8 +140,6 @@ public class FileUtils
 	
 	//<editor-fold desc="create file">
 	
-	
-	
 	/**
 	 * Create file mono.
 	 *
@@ -182,8 +152,6 @@ public class FileUtils
 		{
 		return createFile( justOrEmpty( path ) );
 		}
-	
-	
 	
 	/**
 	 * Create file to mono mono.
@@ -198,8 +166,6 @@ public class FileUtils
 		return createFileToMono( justOrEmpty( path ) );
 		}
 	
-	
-	
 	/**
 	 * Create file mono.
 	 *
@@ -212,8 +178,6 @@ public class FileUtils
 		{
 		return createFile( Paths.get( path ) );
 		}
-	
-	
 	
 	/**
 	 * Create file to mono mono.
@@ -228,8 +192,6 @@ public class FileUtils
 		return createFileToMono( Paths.get( path ) );
 		}
 	
-	
-	
 	/**
 	 * Create file mono.
 	 *
@@ -243,8 +205,6 @@ public class FileUtils
 		return path.map( Path::toFile )
 		           .map( consumerToBoolean( org.apache.commons.io.FileUtils::touch ) );
 		}
-	
-	
 	
 	/**
 	 * Create file to mono mono.
@@ -262,8 +222,6 @@ public class FileUtils
 		                                    return p;
 		                                    } ) );
 		}
-	
-	
 	
 	/**
 	 * Gets path for new file.
@@ -293,22 +251,17 @@ public class FileUtils
 		                       .takeWhile( StringUtils::isNotBlank )
 		                       .map( p -> Paths.get( p ) );
 		
-		
 		var name = path_.flatMap( nullableFunction( Path::getFileName ) )
 		                .switchIfEmpty( default_name );
 		
-		
 		var root = path_.flatMap( nullableFunction( Path::getParent ) )
 		                .switchIfEmpty( default_root );
-		
 		
 		var name_root = Flux.concat( root , name )
 		                    .reduce( Path::resolve );
 		
 		return name_root.single();
 		}
-	
-	
 	
 	/**
 	 * Create file mono.
@@ -328,8 +281,6 @@ public class FileUtils
 		{
 		return createFile( getPathForNewFile( path , defaultParentDirectory , defaultFileName ) );
 		}
-	
-	
 	
 	/**
 	 * Create file to mono mono.
@@ -351,11 +302,7 @@ public class FileUtils
 		}
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="delete file or directory recursively">
-	
-	
 	
 	/**
 	 * delete file or directory recursively
@@ -370,8 +317,6 @@ public class FileUtils
 		return deleteFile( justOrEmpty( path ) );
 		}
 	
-	
-	
 	/**
 	 * Delete file to mono mono.
 	 *
@@ -384,8 +329,6 @@ public class FileUtils
 		{
 		return deleteFileToMono( justOrEmpty( path ) );
 		}
-	
-	
 	
 	/**
 	 * delete file or directory recursively
@@ -400,8 +343,6 @@ public class FileUtils
 		return deleteFile( Paths.get( path ) );
 		}
 	
-	
-	
 	/**
 	 * Delete file to mono mono.
 	 *
@@ -414,8 +355,6 @@ public class FileUtils
 		{
 		return deleteFileToMono( Paths.get( path ) );
 		}
-	
-	
 	
 	/**
 	 * delete file or directory recursively
@@ -430,8 +369,6 @@ public class FileUtils
 		return path.map( Path::toFile )
 		           .map( consumerToBoolean( org.apache.commons.io.FileUtils::deleteQuietly ) );
 		}
-	
-	
 	
 	/**
 	 * Delete file to mono mono.
@@ -449,10 +386,7 @@ public class FileUtils
 		                                    return p;
 		                                    } ) );
 		
-		
 		//</editor-fold>
-		
-		
 		
 		}
 	}

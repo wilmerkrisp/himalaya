@@ -1,7 +1,7 @@
-/**<pre>
+/**
+ * <pre>
  * auxiliary classes for working with collections
- </pre>*/
-
-
+ * </pre>
+ */
 
 package life.expert.common.collect;

@@ -7,14 +7,6 @@ package life.expert.value.numeric.context;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;
@@ -22,14 +14,6 @@ import lombok.Singular;
 import lombok.Value;
 
 import java.util.Map;
-
-
-
-
-
-
-
-
 
 /**
  * The type Unit context.
@@ -41,16 +25,15 @@ public class PieceContext
 	implements Context
 	{
 	
-	
-	
 	/**
 	 * -- SETTER --
+	 *
 	 * @param traits
 	 * 	traits
 	 * @return traits
 	 *
-	 * -- GETTER --
-	 @return  map  with additional information about numeric amount.
+	 * 	-- GETTER --
+	 * @return map  with additional information about numeric amount.
 	 */
 	@NonNull
 	@Singular

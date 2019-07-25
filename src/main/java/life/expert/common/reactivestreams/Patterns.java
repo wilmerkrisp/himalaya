@@ -2,12 +2,6 @@ package life.expert.common.reactivestreams;
 
 
 
-
-
-
-
-
-
 import io.vavr.CheckedConsumer;
 import io.vavr.CheckedFunction1;
 import io.vavr.Function3;
@@ -22,10 +16,7 @@ import lombok.experimental.ExtensionMethod;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
-
-
 import lombok.NonNull;//@NOTNULL
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,15 +35,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
-
 import java.util.function.*;                            //producer supplier
 
 import static java.util.stream.Collectors.*;            //toList streamAPI
 import static java.util.function.Predicate.*;           //isEqual streamAPI
 
 import java.util.Optional;
-
-
 
 import static reactor.core.publisher.Mono.*;
 import static reactor.core.scheduler.Schedulers.*;
@@ -61,14 +49,11 @@ import static life.expert.common.function.NullableUtils.*;//.map(nullableFunctio
 import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
 import static life.expert.common.base.Objects.*;          //deepCopyOfObject
 
-
 import static io.vavr.API.*;                              //switch
 import static io.vavr.Predicates.*;                       //switch - case
 import static io.vavr.Patterns.*;                         //switch - case - success/failure
 import static cyclops.control.Trampoline.more;
 import static cyclops.control.Trampoline.done;
-
-
 
 //import java.util.List;                                  //usual list
 //import io.vavr.collection.List;                         //immutable List
@@ -81,14 +66,6 @@ import static cyclops.control.Trampoline.done;
 //                           wilmer 2019/05/18
 //
 //--------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
 
 /**
  * auxiliary static functions with arguments - several Mono
@@ -103,13 +80,7 @@ import static cyclops.control.Trampoline.done;
 public final class Patterns
 	{
 	
- 
-	
-	
-	
 	//<editor-fold desc="reactor parallel flows">
-	
-	
 	
 	/**
 	 * Alias for {@link CheckedConsumer#unchecked}
@@ -131,8 +102,6 @@ public final class Patterns
 		return t -> Mono.fromSupplier( () -> uncheckedFunction( function ).apply( t ) )
 		                .subscribeOn( scheduler );
 		}
-	
-	
 	
 	/**
 	 * Function to mono parallel log error function.
@@ -159,14 +128,9 @@ public final class Patterns
 		                .onErrorResume( logAtErrorFunction( message , never() ) ); //logAtErrorFunction
 		}
 	
-	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="For-comprehension">
-	
-	
 	
 	//	/**
 	//	 * A shortcut for {@code  ts).flatMap(f)} which allows us to write real for-comprehensions using
@@ -197,8 +161,6 @@ public final class Patterns
 	//		return ts.flatMap( f );
 	//		}
 	
-	
-	
 	/**
 	 * Creates a {@code For}-comprehension of one Mono.
 	 *
@@ -214,8 +176,6 @@ public final class Patterns
 		Objects.requireNonNull( ts1 , "ts1 is null" );
 		return new For1<>( ts1 );
 		}
-	
-	
 	
 	/**
 	 * Creates a {@code For}-comprehension of two Monos.
@@ -238,8 +198,6 @@ public final class Patterns
 		Objects.requireNonNull( ts2 , "ts2 is null" );
 		return new For2<>( ts1 , ts2 );
 		}
-	
-	
 	
 	/**
 	 * Creates a {@code For}-comprehension of three Monos.
@@ -268,8 +226,6 @@ public final class Patterns
 		Objects.requireNonNull( ts3 , "ts3 is null" );
 		return new For3<>( ts1 , ts2 , ts3 );
 		}
-	
-	
 	
 	/**
 	 * Creates a {@code For}-comprehension of 4 Monos.
@@ -304,8 +260,6 @@ public final class Patterns
 		Objects.requireNonNull( ts4 , "ts4 is null" );
 		return new For4<>( ts1 , ts2 , ts3 , ts4 );
 		}
-	
-	
 	
 	/**
 	 * Creates a {@code For}-comprehension of 5 Monos.
@@ -346,8 +300,6 @@ public final class Patterns
 		Objects.requireNonNull( ts5 , "ts5 is null" );
 		return new For5<>( ts1 , ts2 , ts3 , ts4 , ts5 );
 		}
-	
-	
 	
 	/**
 	 * Creates a {@code For}-comprehension of 6 Monos.
@@ -394,8 +346,6 @@ public final class Patterns
 		Objects.requireNonNull( ts6 , "ts6 is null" );
 		return new For6<>( ts1 , ts2 , ts3 , ts4 , ts5 , ts6 );
 		}
-	
-	
 	
 	/**
 	 * Creates a {@code For}-comprehension of 7 Monos.
@@ -448,8 +398,6 @@ public final class Patterns
 		Objects.requireNonNull( ts7 , "ts7 is null" );
 		return new For7<>( ts1 , ts2 , ts3 , ts4 , ts5 , ts6 , ts7 );
 		}
-	
-	
 	
 	/**
 	 * Creates a {@code For}-comprehension of 8 Monos.
@@ -509,19 +457,9 @@ public final class Patterns
 		return new For8<>( ts1 , ts2 , ts3 , ts4 , ts5 , ts6 , ts7 , ts8 );
 		}
 	
-	
 	//</editor-fold>
 	
-	
 	//<editor-fold desc="For-comprehension helper classes">
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * For-comprehension with one Mono.
@@ -532,18 +470,12 @@ public final class Patterns
 	public static class For1<T1>
 		{
 		
-		
-		
 		private final Mono<T1> ts1;
-		
-		
 		
 		private For1( Mono<T1> ts1 )
 			{
 			this.ts1 = ts1;
 			}
-		
-		
 		
 		/**
 		 * Yields a result for elements of the cross product of the underlying Mono.
@@ -561,8 +493,6 @@ public final class Patterns
 			return ts1.map( f );
 			}
 		
-		
-		
 		/**
 		 * A shortcut for {@code yield(Function.identity())}.
 		 *
@@ -573,14 +503,6 @@ public final class Patterns
 			return yield( Function.identity() );
 			}
 		}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * For-comprehension with two Monos.
@@ -593,15 +515,9 @@ public final class Patterns
 	public static class For2<T1, T2>
 		{
 		
-		
-		
 		private final Mono<T1> ts1;
 		
-		
-		
 		private final Mono<T2> ts2;
-		
-		
 		
 		private For2( Mono<T1> ts1 ,
 		              Mono<T2> ts2 )
@@ -609,8 +525,6 @@ public final class Patterns
 			this.ts1 = ts1;
 			this.ts2 = ts2;
 			}
-		
-		
 		
 		/**
 		 * Yields a result for elements of the cross product of the underlying Monos.
@@ -630,14 +544,6 @@ public final class Patterns
 			
 		}
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * For-comprehension with three Monos.
 	 *
@@ -651,19 +557,11 @@ public final class Patterns
 	public static class For3<T1, T2, T3>
 		{
 		
-		
-		
 		private final Mono<T1> ts1;
-		
-		
 		
 		private final Mono<T2> ts2;
 		
-		
-		
 		private final Mono<T3> ts3;
-		
-		
 		
 		private For3( Mono<T1> ts1 ,
 		              Mono<T2> ts2 ,
@@ -673,8 +571,6 @@ public final class Patterns
 			this.ts2 = ts2;
 			this.ts3 = ts3;
 			}
-		
-		
 		
 		/**
 		 * Yields a result for elements of the cross product of the underlying Monos.
@@ -694,14 +590,6 @@ public final class Patterns
 			
 		}
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * For-comprehension with 4 Monos.
 	 *
@@ -717,23 +605,13 @@ public final class Patterns
 	public static class For4<T1, T2, T3, T4>
 		{
 		
-		
-		
 		private final Mono<T1> ts1;
-		
-		
 		
 		private final Mono<T2> ts2;
 		
-		
-		
 		private final Mono<T3> ts3;
 		
-		
-		
 		private final Mono<T4> ts4;
-		
-		
 		
 		private For4( Mono<T1> ts1 ,
 		              Mono<T2> ts2 ,
@@ -745,8 +623,6 @@ public final class Patterns
 			this.ts3 = ts3;
 			this.ts4 = ts4;
 			}
-		
-		
 		
 		/**
 		 * Yields a result for elements of the cross product of the underlying Monos.
@@ -766,14 +642,6 @@ public final class Patterns
 			
 		}
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * For-comprehension with 5 Monos.
 	 *
@@ -791,27 +659,15 @@ public final class Patterns
 	public static class For5<T1, T2, T3, T4, T5>
 		{
 		
-		
-		
 		private final Mono<T1> ts1;
-		
-		
 		
 		private final Mono<T2> ts2;
 		
-		
-		
 		private final Mono<T3> ts3;
-		
-		
 		
 		private final Mono<T4> ts4;
 		
-		
-		
 		private final Mono<T5> ts5;
-		
-		
 		
 		private For5( Mono<T1> ts1 ,
 		              Mono<T2> ts2 ,
@@ -825,8 +681,6 @@ public final class Patterns
 			this.ts4 = ts4;
 			this.ts5 = ts5;
 			}
-		
-		
 		
 		/**
 		 * Yields a result for elements of the cross product of the underlying Monos.
@@ -845,14 +699,6 @@ public final class Patterns
 			}
 			
 		}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * For-comprehension with 6 Monos.
@@ -873,31 +719,17 @@ public final class Patterns
 	public static class For6<T1, T2, T3, T4, T5, T6>
 		{
 		
-		
-		
 		private final Mono<T1> ts1;
-		
-		
 		
 		private final Mono<T2> ts2;
 		
-		
-		
 		private final Mono<T3> ts3;
-		
-		
 		
 		private final Mono<T4> ts4;
 		
-		
-		
 		private final Mono<T5> ts5;
 		
-		
-		
 		private final Mono<T6> ts6;
-		
-		
 		
 		private For6( Mono<T1> ts1 ,
 		              Mono<T2> ts2 ,
@@ -913,8 +745,6 @@ public final class Patterns
 			this.ts5 = ts5;
 			this.ts6 = ts6;
 			}
-		
-		
 		
 		/**
 		 * Yields a result for elements of the cross product of the underlying Monos.
@@ -933,14 +763,6 @@ public final class Patterns
 			}
 			
 		}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * For-comprehension with 7 Monos.
@@ -963,35 +785,19 @@ public final class Patterns
 	public static class For7<T1, T2, T3, T4, T5, T6, T7>
 		{
 		
-		
-		
 		private final Mono<T1> ts1;
-		
-		
 		
 		private final Mono<T2> ts2;
 		
-		
-		
 		private final Mono<T3> ts3;
-		
-		
 		
 		private final Mono<T4> ts4;
 		
-		
-		
 		private final Mono<T5> ts5;
-		
-		
 		
 		private final Mono<T6> ts6;
 		
-		
-		
 		private final Mono<T7> ts7;
-		
-		
 		
 		private For7( Mono<T1> ts1 ,
 		              Mono<T2> ts2 ,
@@ -1010,8 +816,6 @@ public final class Patterns
 			this.ts7 = ts7;
 			}
 		
-		
-		
 		/**
 		 * Yields a result for elements of the cross product of the underlying Monos.
 		 *
@@ -1029,14 +833,6 @@ public final class Patterns
 			}
 			
 		}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * For-comprehension with 8 Monos.
@@ -1061,39 +857,21 @@ public final class Patterns
 	public static class For8<T1, T2, T3, T4, T5, T6, T7, T8>
 		{
 		
-		
-		
 		private final Mono<T1> ts1;
-		
-		
 		
 		private final Mono<T2> ts2;
 		
-		
-		
 		private final Mono<T3> ts3;
-		
-		
 		
 		private final Mono<T4> ts4;
 		
-		
-		
 		private final Mono<T5> ts5;
-		
-		
 		
 		private final Mono<T6> ts6;
 		
-		
-		
 		private final Mono<T7> ts7;
 		
-		
-		
 		private final Mono<T8> ts8;
-		
-		
 		
 		private For8( Mono<T1> ts1 ,
 		              Mono<T2> ts2 ,
@@ -1114,8 +892,6 @@ public final class Patterns
 			this.ts8 = ts8;
 			}
 		
-		
-		
 		/**
 		 * Yields a result for elements of the cross product of the underlying Monos.
 		 *
@@ -1134,8 +910,6 @@ public final class Patterns
 			
 		}
 	//</editor-fold>
-	
-	
 	
 	}
 

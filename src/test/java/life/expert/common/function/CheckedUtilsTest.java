@@ -2,19 +2,12 @@ package life.expert.common.function;
 
 
 
-
-
-
-
-
-
 import static life.expert.common.async.LogUtils.printConsumer;
 import static life.expert.common.async.LogUtils.printRunnable;
 import static life.expert.common.function.CheckedUtils.*;
 import static reactor.core.publisher.Mono.justOrEmpty;
 
 import io.vavr.control.Try;
-
 
 import life.expert.common.async.ThreadUtils;
 import life.expert.common.reactivestreams.Patterns;
@@ -26,15 +19,11 @@ import reactor.test.StepVerifier;
 import java.io.IOException;
 import java.time.Duration;
 
-
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
-
 
 import static reactor.core.scheduler.Schedulers.*;
 import static life.expert.common.async.LogUtils.*;
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
-
-
 
 //import java.util.List;                                 //usual list
 //import io.vavr.collection.List;                        //immutable List
@@ -48,18 +37,8 @@ import static life.expert.common.async.LogUtils.*;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 class CheckedUtilsTest
 	{
-	
-	
 	
 	private static void throwIoException_( final String string )
 	throws IOException
@@ -68,16 +47,11 @@ class CheckedUtilsTest
 		
 		}
 	
-	
-	
 	private static void noThrowIoException_( final String string )
 	throws IOException
 		{
 		
-		
 		}
-	
-	
 	
 	@Test
 	void consumerToTryTest()
@@ -92,12 +66,9 @@ class CheckedUtilsTest
 		
 		}
 	
-	
-	
 	@Test
 	void consumerToOptionTest()
 		{
-		
 		
 		var t1 = consumerToOptional( CheckedUtilsTest::throwIoException_ ).apply( "test" );
 		var t2 = consumerToOptional( CheckedUtilsTest::noThrowIoException_ ).apply( "test" );
@@ -108,8 +79,6 @@ class CheckedUtilsTest
 		assert t1.isEmpty();
 		assert t2.isPresent();
 		}
-	
-	
 	
 	@Test
 	void consumerToBooleanTest()
@@ -128,8 +97,6 @@ class CheckedUtilsTest
 		assert false;
 		}
 	
-	
-	
 	@Test
 	void consumerToBooleanReactiveTest()
 		{
@@ -141,8 +108,6 @@ class CheckedUtilsTest
 		            .expectError()
 		            .verify();
 		}
-	
-	
 	
 	@Test
 	void consumerToMonoTest()
@@ -159,14 +124,11 @@ class CheckedUtilsTest
 		//System.out.println( "RESULT:" );
 		}
 	
-	
-	
 	@Test
 	void uncheckedFunctionTest()
 		{
 		var o = Flux.just( 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 )
 		            .map( i -> "a" + i );
-		
 		
 		var b = o.parallel()
 		         .runOn( parallel() )
@@ -190,12 +152,9 @@ class CheckedUtilsTest
 		//ThreadUtils.delay( 20 );
 		}
 	
-	
-	
 	@Test
 	void functionToMonoTest()
 		{
-		
 		
 		var o = Flux.just( 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 )
 		            .map( i -> "a" + i );
@@ -216,20 +175,15 @@ class CheckedUtilsTest
 		         .onErrorContinue( logAtErrorBiConsumer( "CONTINUEE" ) );
 		*/
 		
-		
 		var b = o.flatMap( Patterns.functionToMonoParallelLogError( x ->
-		                                                   {
-		                                                   //return x;
-		                                                   throw new IOException();
-		                                                   } , elastic(), "vovan" ) );
+		                                                            {
+		                                                            //return x;
+		                                                            throw new IOException();
+		                                                            } , elastic() , "vovan" ) );
 		//  .onErrorContinue !НЕ РАБОТАЕТ ТК применимо только к ограниченному набору операторов
-		
-		
 		
 		b.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
 		ThreadUtils.delay( 20 );
 		}
-		
-		
 		
 	}

@@ -2,16 +2,8 @@ package life.expert.common.reactivestreams;
 
 
 
-
-
-
-
-
-
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-
-
 
 import org.reactivestreams.Publisher;
 
@@ -20,14 +12,9 @@ import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-
 import java.util.function.*;                            //producer supplier
 
-
-
 import static reactor.core.publisher.Mono.*;
-
-
 
 //import java.util.List;                                  //usual list
 //import io.vavr.collection.List;                         //immutable List
@@ -41,14 +28,6 @@ import static reactor.core.publisher.Mono.*;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 /**
  * auxiliary static functions with arguments - several Function
  *
@@ -60,8 +39,6 @@ import static reactor.core.publisher.Mono.*;
 @Slf4j
 public final class ForComprehension
 	{
-	
-	
 	
 	/**
 	 * For publisher.
@@ -81,13 +58,9 @@ public final class ForComprehension
 	                                          Function<? super Flux<T1>,? extends Publisher<T2>> ts2 )
 		{
 		
-		
-		
 		return ts1.flatMap( t1 -> justOrEmpty( t1 ).flux()
 		                                           .transform( ts2 ) );
 		}
-	
-	
 	
 	/**
 	 * For mono.
@@ -107,12 +80,8 @@ public final class ForComprehension
 	                                     Function<? super Mono<T1>,? extends Mono<T2>> ts2 )
 		{
 		
-		
-		
 		return ts1.flatMap( t1 -> justOrEmpty( t1 ).transform( ts2 ) );
 		}
-	
-	
 	
 	/**
 	 * For publisher.
@@ -142,8 +111,6 @@ public final class ForComprehension
 		                                                                            .transform( ts3 ) ) );
 		}
 	
-	
-	
 	/**
 	 * For mono.
 	 *
@@ -169,8 +136,6 @@ public final class ForComprehension
 		return ts1.flatMap( t1 -> justOrEmpty( t1 ).transform( ts2 )
 		                                           .flatMap( t2 -> justOrEmpty( t2 ).transform( ts3 ) ) );
 		}
-	
-	
 	
 	/**
 	 * For publisher.
@@ -207,8 +172,6 @@ public final class ForComprehension
 		                                                                                                             .transform( ts4 ) ) ) );
 		}
 	
-	
-	
 	/**
 	 * For mono.
 	 *
@@ -240,8 +203,6 @@ public final class ForComprehension
 		                                           .flatMap( t2 -> justOrEmpty( t2 ).transform( ts3 )
 		                                                                            .flatMap( t3 -> justOrEmpty( t3 ).transform( ts4 ) ) ) );
 		}
-	
-	
 	
 	/**
 	 * For publisher.
@@ -285,8 +246,6 @@ public final class ForComprehension
 		                                                                                                                                              .transform( ts5 ) ) ) ) );
 		}
 	
-	
-	
 	/**
 	 * For mono.
 	 *
@@ -324,8 +283,6 @@ public final class ForComprehension
 		                                                                            .flatMap( t3 -> justOrEmpty( t3 ).transform( ts4 )
 		                                                                                                             .flatMap( t4 -> justOrEmpty( t4 ).transform( ts5 ) ) ) ) );
 		}
-	
-	
 	
 	/**
 	 * For publisher.
@@ -376,8 +333,6 @@ public final class ForComprehension
 		                                                                                                                                                                               .transform( ts6 ) ) ) ) ) );
 		}
 	
-	
-	
 	/**
 	 * For mono.
 	 *
@@ -421,8 +376,6 @@ public final class ForComprehension
 		                                                                                                             .flatMap( t4 -> justOrEmpty( t4 ).transform( ts5 )
 		                                                                                                                                              .flatMap( t5 -> justOrEmpty( t5 ).transform( ts6 ) ) ) ) ) );
 		}
-	
-	
 	
 	/**
 	 * For publisher.
@@ -480,8 +433,6 @@ public final class ForComprehension
 		                                                                                                                                                                                                                .transform( ts7 ) ) ) ) ) ) );
 		}
 	
-	
-	
 	/**
 	 * For mono.
 	 *
@@ -531,8 +482,6 @@ public final class ForComprehension
 		                                                                                                                                              .flatMap( t5 -> justOrEmpty( t5 ).transform( ts6 )
 		                                                                                                                                                                               .flatMap( t6 -> justOrEmpty( t6 ).transform( ts7 ) ) ) ) ) ) );
 		}
-	
-	
 	
 	/**
 	 * For publisher.
@@ -597,8 +546,6 @@ public final class ForComprehension
 		                                                                                                                                                                                                                                                 .transform( ts8 ) ) ) ) ) ) ) );
 		}
 	
-	
-	
 	/**
 	 * For mono.
 	 *
@@ -654,7 +601,5 @@ public final class ForComprehension
 		                                                                                                                                                                               .flatMap( t6 -> justOrEmpty( t6 ).transform( ts7 )
 		                                                                                                                                                                                                                .flatMap( t7 -> justOrEmpty( t7 ).transform( ts8 ) ) ) ) ) ) ) );
 		}
-		
-		
 		
 	}

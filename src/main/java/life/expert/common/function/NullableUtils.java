@@ -2,17 +2,9 @@ package life.expert.common.function;
 
 
 
-
-
-
-
-
-
 import io.vavr.CheckedFunction1;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-
-
 
 import lombok.NonNull;//@NOTNULL
 
@@ -37,15 +29,12 @@ import reactor.function.Function6;
 import reactor.function.Function7;
 import reactor.function.Function8;
 
-
 import java.util.function.*;                            //producer supplier
 
 import static java.util.stream.Collectors.*;            //toList streamAPI
 import static java.util.function.Predicate.*;           //isEqual streamAPI
 
 import java.util.Optional;
-
-
 
 import static reactor.core.publisher.Mono.*;
 import static reactor.core.scheduler.Schedulers.*;
@@ -57,8 +46,6 @@ import static io.vavr.Predicates.*;                     //switch - case
 import static io.vavr.Patterns.*;                       //switch - case - success/failure
 import static cyclops.control.Trampoline.more;
 import static cyclops.control.Trampoline.done;
-
-
 
 //import java.util.List;                                 //usual list
 //import io.vavr.collection.List;                        //immutable List
@@ -72,14 +59,6 @@ import static cyclops.control.Trampoline.done;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 /**
  * wraps the null value returned by the function into an empty flow event
  */
@@ -87,8 +66,6 @@ import static cyclops.control.Trampoline.done;
 @Slf4j
 public final class NullableUtils
 	{
-	
-	
 	
 	/**
 	 * Nullable function function.
@@ -108,8 +85,6 @@ public final class NullableUtils
 		return t -> fromSupplier( () -> function.apply( t ) );
 		}
 	
-	
-	
 	/**
 	 * Nullable bi function bi function.
 	 *
@@ -128,8 +103,6 @@ public final class NullableUtils
 		{
 		return ( t1 , t2 ) -> fromSupplier( () -> function.apply( t1 , t2 ) );
 		}
-	
-	
 	
 	/**
 	 * Nullable function 3 function 3.
@@ -151,8 +124,6 @@ public final class NullableUtils
 		{
 		return ( t1 , t2 , t3 ) -> fromSupplier( () -> function.apply( t1 , t2 , t3 ) );
 		}
-	
-	
 	
 	/**
 	 * Nullable function 4 function 4.
@@ -176,8 +147,6 @@ public final class NullableUtils
 		{
 		return ( t1 , t2 , t3 , t4 ) -> fromSupplier( () -> function.apply( t1 , t2 , t3 , t4 ) );
 		}
-	
-	
 	
 	/**
 	 * Nullable function 5 function 5.
@@ -203,8 +172,6 @@ public final class NullableUtils
 		{
 		return ( t1 , t2 , t3 , t4 , t5 ) -> fromSupplier( () -> function.apply( t1 , t2 , t3 , t4 , t5 ) );
 		}
-	
-	
 	
 	/**
 	 * Nullable function 6 function 6.
@@ -232,8 +199,6 @@ public final class NullableUtils
 		{
 		return ( t1 , t2 , t3 , t4 , t5 , t6 ) -> fromSupplier( () -> function.apply( t1 , t2 , t3 , t4 , t5 , t6 ) );
 		}
-	
-	
 	
 	/**
 	 * Nullable function 7 function 7.
@@ -263,8 +228,6 @@ public final class NullableUtils
 		{
 		return ( t1 , t2 , t3 , t4 , t5 , t6 , t7 ) -> fromSupplier( () -> function.apply( t1 , t2 , t3 , t4 , t5 , t6 , t7 ) );
 		}
-	
-	
 	
 	/**
 	 * Nullable function 8 function 8.
@@ -297,8 +260,6 @@ public final class NullableUtils
 		return ( t1 , t2 , t3 , t4 , t5 , t6 , t7 , t8 ) -> fromSupplier( () -> function.apply( t1 , t2 , t3 , t4 , t5 , t6 , t7 , t8 ) );
 		}
 	
-	
-	
 	/**
 	 * Nullable supplier supplier.
 	 *
@@ -314,6 +275,5 @@ public final class NullableUtils
 		return () -> fromSupplier( supplier::get );
 		
 		}
-		
 		
 	}

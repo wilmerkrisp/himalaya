@@ -2,12 +2,6 @@ package life.expert.common.function;
 
 
 
-
-
-
-
-
-
 import com.google.common.base.Throwables;
 import cyclops.function.checked.CheckedBiConsumer;
 import cyclops.function.checked.CheckedBiFunction;
@@ -43,11 +37,7 @@ import static life.expert.common.async.LogUtils.logAtErrorFunction;
 import static life.expert.common.async.LogUtils.printFunction;
 import static reactor.core.publisher.Mono.never;
 
-
-
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
-
-
 
 //import java.util.List;                                 //usual list
 //import io.vavr.collection.List;                        //immutable List
@@ -61,14 +51,6 @@ import static reactor.core.publisher.Mono.never;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 /**
  * - contains methods that wrap lambdas with checked exceptions inside
  * 1) wrap to bool
@@ -80,11 +62,7 @@ import static reactor.core.publisher.Mono.never;
 public final class CheckedUtils
 	{
 	
-	
-	
 	//<editor-fold desc="consumer->bool">
-	
-	
 	
 	/**
 	 * Lifts the given {@code consumer} into a total function that returns an {@code Option} result.
@@ -106,8 +84,6 @@ public final class CheckedUtils
 		                             } ).toJavaOptional();
 		}
 	
-	
-	
 	/**
 	 * Bi consumer to optional bi function.
 	 *
@@ -128,8 +104,6 @@ public final class CheckedUtils
 		                                       return true;
 		                                       } ).toJavaOptional();
 		}
-	
-	
 	
 	/**
 	 * Consumer 3 to optional function 3.
@@ -153,8 +127,6 @@ public final class CheckedUtils
 		                                            return true;
 		                                            } ).toJavaOptional();
 		}
-	
-	
 	
 	/**
 	 * Consumer 4 to optional function 4.
@@ -180,8 +152,6 @@ public final class CheckedUtils
 		                                                 return true;
 		                                                 } ).toJavaOptional();
 		}
-	
-	
 	
 	/**
 	 * Consumer 5 to optional function 5.
@@ -209,8 +179,6 @@ public final class CheckedUtils
 		                                                      return true;
 		                                                      } ).toJavaOptional();
 		}
-	
-	
 	
 	/**
 	 * Consumer 6 to optional function 6.
@@ -240,8 +208,6 @@ public final class CheckedUtils
 		                                                           return true;
 		                                                           } ).toJavaOptional();
 		}
-	
-	
 	
 	/**
 	 * Consumer 7 to optional function 7.
@@ -273,8 +239,6 @@ public final class CheckedUtils
 		                                                                return true;
 		                                                                } ).toJavaOptional();
 		}
-	
-	
 	
 	/**
 	 * Consumer 8 to optional function 8.
@@ -309,8 +273,6 @@ public final class CheckedUtils
 		                                                                     } ).toJavaOptional();
 		}
 	
-	
-	
 	/**
 	 * Lifts the given {@code consumer} into a total function that returns an {@code Try} result.
 	 *
@@ -330,8 +292,6 @@ public final class CheckedUtils
 		                    return true;
 		                    } );
 		}
-	
-	
 	
 	/**
 	 * Bi consumer to try bi function.
@@ -355,8 +315,6 @@ public final class CheckedUtils
 		                              } );
 		}
 	
-	
-	
 	/**
 	 * Consumer 3 to try function 3.
 	 *
@@ -379,8 +337,6 @@ public final class CheckedUtils
 		                                            return true;
 		                                            } );
 		}
-	
-	
 	
 	/**
 	 * Consumer 4 to try function 4.
@@ -406,8 +362,6 @@ public final class CheckedUtils
 		                                                 return true;
 		                                                 } );
 		}
-	
-	
 	
 	/**
 	 * Consumer 5 to try function 5.
@@ -435,8 +389,6 @@ public final class CheckedUtils
 		                                                      return true;
 		                                                      } );
 		}
-	
-	
 	
 	/**
 	 * Consumer 6 to try function 6.
@@ -466,8 +418,6 @@ public final class CheckedUtils
 		                                                           return true;
 		                                                           } );
 		}
-	
-	
 	
 	/**
 	 * Consumer 7 to try function 7.
@@ -499,8 +449,6 @@ public final class CheckedUtils
 		                                                                return true;
 		                                                                } );
 		}
-	
-	
 	
 	/**
 	 * Consumer 8 to try function 8.
@@ -535,8 +483,6 @@ public final class CheckedUtils
 		                                                                     } );
 		}
 	
-	
-	
 	/**
 	 * Alias for {@link CheckedConsumer#unchecked}
 	 *
@@ -555,8 +501,6 @@ public final class CheckedUtils
 		return true;
 		};
 		}
-	
-	
 	
 	/**
 	 * Bi consumer to boolean bi function.
@@ -578,8 +522,6 @@ public final class CheckedUtils
 		return true;
 		};
 		}
-	
-	
 	
 	/**
 	 * Consumer 3 to boolean function 3.
@@ -603,8 +545,6 @@ public final class CheckedUtils
 		return true;
 		};
 		}
-	
-	
 	
 	/**
 	 * Consumer 4 to boolean function 4.
@@ -630,8 +570,6 @@ public final class CheckedUtils
 		return true;
 		};
 		}
-	
-	
 	
 	/**
 	 * Consumer 5 to boolean function 5.
@@ -659,8 +597,6 @@ public final class CheckedUtils
 		return true;
 		};
 		}
-	
-	
 	
 	/**
 	 * Consumer 6 to boolean function 6.
@@ -690,8 +626,6 @@ public final class CheckedUtils
 		return true;
 		};
 		}
-	
-	
 	
 	/**
 	 * Consumer 7 to boolean function 7.
@@ -723,8 +657,6 @@ public final class CheckedUtils
 		return true;
 		};
 		}
-	
-	
 	
 	/**
 	 * Consumer 8 to boolean function 8.
@@ -759,8 +691,6 @@ public final class CheckedUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Alias for {@link CheckedConsumer#unchecked}
 	 *
@@ -779,11 +709,7 @@ public final class CheckedUtils
 		                               return true;
 		                               } );
 			
-			
-			
 		}
-	
-	
 	
 	/**
 	 * Bi consumer to mono bi function.
@@ -805,8 +731,6 @@ public final class CheckedUtils
 		                                         return true;
 		                                         } );
 		}
-	
-	
 	
 	/**
 	 * Consumer 3 to mono function 3.
@@ -830,8 +754,6 @@ public final class CheckedUtils
 		                                              return true;
 		                                              } );
 		}
-	
-	
 	
 	/**
 	 * Consumer 4 to mono function 4.
@@ -857,8 +779,6 @@ public final class CheckedUtils
 		                                                   return true;
 		                                                   } );
 		}
-	
-	
 	
 	/**
 	 * Consumer 5 to mono function 5.
@@ -886,8 +806,6 @@ public final class CheckedUtils
 		                                                        return true;
 		                                                        } );
 		}
-	
-	
 	
 	/**
 	 * Consumer 6 to mono function 6.
@@ -917,8 +835,6 @@ public final class CheckedUtils
 		                                                             return true;
 		                                                             } );
 		}
-	
-	
 	
 	/**
 	 * Consumer 7 to mono function 7.
@@ -950,8 +866,6 @@ public final class CheckedUtils
 		                                                                  return true;
 		                                                                  } );
 		}
-	
-	
 	
 	/**
 	 * Consumer 8 to mono function 8.
@@ -988,10 +902,7 @@ public final class CheckedUtils
 	
 	//</editor-fold>
 	
-	
 	//<editor-fold desc="runnable->bool">
-	
-	
 	
 	/**
 	 * Runnable to option function 1.
@@ -1013,8 +924,6 @@ public final class CheckedUtils
 		                             } ).toJavaOptional();
 		}
 	
-	
-	
 	/**
 	 * Runnable to try function 1.
 	 *
@@ -1035,8 +944,6 @@ public final class CheckedUtils
 		                    } );
 		}
 	
-	
-	
 	/**
 	 * Runnable to boolean function 1.
 	 *
@@ -1055,8 +962,6 @@ public final class CheckedUtils
 		return true;
 		};
 		}
-	
-	
 	
 	/**
 	 * Alias for {@link CheckedConsumer#unchecked}
@@ -1079,10 +984,7 @@ public final class CheckedUtils
 		                               } );
 		}
 	
-	
 	//</editor-fold>
-	
-	
 	
 	//
 	//
@@ -1104,11 +1006,7 @@ public final class CheckedUtils
 	//		}
 	//
 	
-	
-	
 	//<editor-fold desc="unchecked wrappers">
-	
-	
 	
 	/**
 	 * Unchecked consumer consumer.
@@ -1134,8 +1032,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked bi consumer bi consumer.
@@ -1164,8 +1060,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked consumer 3 consumer 3.
@@ -1196,8 +1090,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked consumer 4 consumer 4.
@@ -1230,8 +1122,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked consumer 5 consumer 5.
@@ -1266,8 +1156,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked consumer 6 consumer 6.
@@ -1304,8 +1192,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked consumer 7 consumer 7.
@@ -1344,8 +1230,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked consumer 8 consumer 8.
@@ -1387,8 +1271,6 @@ public final class CheckedUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Unchecked runnable runnable.
 	 *
@@ -1399,7 +1281,6 @@ public final class CheckedUtils
 	 */
 	public static Runnable uncheckedRunnable( CheckedRunnable runnable )
 		{
-		
 		
 		return () ->
 		{
@@ -1415,8 +1296,6 @@ public final class CheckedUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Unchecked supplier supplier.
 	 *
@@ -1429,7 +1308,6 @@ public final class CheckedUtils
 	 */
 	public static <E> Supplier<E> uncheckedSupplier( CheckedFunction0<E> supplier )
 		{
-		
 		
 		return () ->
 		{
@@ -1444,8 +1322,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked function function.
@@ -1473,8 +1349,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked bi function bi function.
@@ -1505,8 +1379,6 @@ public final class CheckedUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Unchecked predicate predicate.
 	 *
@@ -1531,8 +1403,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked bi predicate bi predicate.
@@ -1560,8 +1430,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked predicate 3 predicate 3.
@@ -1591,8 +1459,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked predicate 4 predicate 4.
@@ -1624,8 +1490,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked predicate 5 predicate 5.
@@ -1659,8 +1523,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked predicate 6 predicate 6.
@@ -1696,8 +1558,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked predicate 7 predicate 7.
@@ -1735,8 +1595,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked predicate 8 predicate 8.
@@ -1779,11 +1637,7 @@ public final class CheckedUtils
 	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="unchecked wrappers +err test">
-	
-	
 	
 	/**
 	 * Unchecked consumer consumer.
@@ -1812,8 +1666,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked bi consumer bi consumer.
@@ -1845,8 +1697,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked consumer 3 consumer 3.
@@ -1880,8 +1730,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked consumer 4 consumer 4.
@@ -1917,8 +1765,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked consumer 5 consumer 5.
@@ -1956,8 +1802,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked consumer 6 consumer 6.
@@ -1997,8 +1841,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked consumer 7 consumer 7.
@@ -2040,8 +1882,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked consumer 8 consumer 8.
@@ -2086,8 +1926,6 @@ public final class CheckedUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Unchecked runnable runnable.
 	 *
@@ -2102,7 +1940,6 @@ public final class CheckedUtils
 	                                          String errorMessage )
 		{
 		
-		
 		return () ->
 		{
 		try
@@ -2116,8 +1953,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked supplier supplier.
@@ -2135,7 +1970,6 @@ public final class CheckedUtils
 	                                                 String errorMessage )
 		{
 		
-		
 		return () ->
 		{
 		try
@@ -2149,8 +1983,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked function function.
@@ -2181,8 +2013,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked bi function bi function.
@@ -2216,8 +2046,6 @@ public final class CheckedUtils
 		};
 		}
 	
-	
-	
 	/**
 	 * Unchecked predicate predicate.
 	 *
@@ -2245,8 +2073,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked bi predicate bi predicate.
@@ -2277,8 +2103,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked predicate 3 predicate 3.
@@ -2311,8 +2135,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked predicate 4 predicate 4.
@@ -2347,8 +2169,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked predicate 5 predicate 5.
@@ -2385,8 +2205,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked predicate 6 predicate 6.
@@ -2425,8 +2243,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked predicate 7 predicate 7.
@@ -2467,8 +2283,6 @@ public final class CheckedUtils
 			}
 		};
 		}
-	
-	
 	
 	/**
 	 * Unchecked predicate 8 predicate 8.
@@ -2512,11 +2326,7 @@ public final class CheckedUtils
 		};
 		}
 	
-	
-	
 	//<editor-fold desc="exception utils">
-	
-	
 	
 	/**
 	 * Null pointer exception function.
@@ -2532,8 +2342,6 @@ public final class CheckedUtils
 		return ( err ) -> new NullPointerException( description );
 		}
 	
-	
-	
 	/**
 	 * Illegal argument exception function.
 	 *
@@ -2547,8 +2355,6 @@ public final class CheckedUtils
 		Objects.requireNonNull( description , "description is null" );
 		return ( err ) -> new IllegalArgumentException( description , err );
 		}
-	
-	
 	
 	/**
 	 * Illegal state exception function.
@@ -2568,8 +2374,6 @@ public final class CheckedUtils
 	
 	//<editor-fold desc="try utils">
 	
-	
-	
 	/**
 	 * Alias for  Try.failure(new NullPointerException())
 	 *
@@ -2583,8 +2387,6 @@ public final class CheckedUtils
 		{
 		return (Try.Failure<T>) Try.failure( new NullPointerException() );
 		}
-	
-	
 	
 	/**
 	 * Alias for  Try.failure(new NullPointerException(description))
@@ -2602,8 +2404,6 @@ public final class CheckedUtils
 		return (Try.Failure<T>) Try.failure( new NullPointerException( description ) );
 		}
 	
-	
-	
 	/**
 	 * Alias for  Try.failure(new IllegalArgumentException())
 	 *
@@ -2617,8 +2417,6 @@ public final class CheckedUtils
 		{
 		return (Try.Failure<T>) Try.failure( new IllegalArgumentException() );
 		}
-	
-	
 	
 	/**
 	 * Alias for  Try.failure(new IllegalArgumentException(description))
@@ -2635,8 +2433,6 @@ public final class CheckedUtils
 		{
 		return (Try.Failure<T>) Try.failure( new IllegalArgumentException( description ) );
 		}
-	
-	
 	
 	/**
 	 * Alias for  Try.failure(new IllegalArgumentException(description,cause))
@@ -2657,8 +2453,6 @@ public final class CheckedUtils
 		return (Try.Failure<T>) Try.failure( new IllegalArgumentException( description , cause ) );
 		}
 	
-	
-	
 	/**
 	 * Alias for  Try.failure(new IllegalStateException())
 	 *
@@ -2672,8 +2466,6 @@ public final class CheckedUtils
 		{
 		return (Try.Failure<T>) Try.failure( new IllegalStateException() );
 		}
-	
-	
 	
 	/**
 	 * Alias for  Try.failure(new IllegalStateException(description))
@@ -2690,8 +2482,6 @@ public final class CheckedUtils
 		{
 		return (Try.Failure<T>) Try.failure( new IllegalStateException( description ) );
 		}
-	
-	
 	
 	/**
 	 * Alias for  Try.failure(new IllegalStateException(description,cause))
@@ -2712,14 +2502,9 @@ public final class CheckedUtils
 		return (Try.Failure<T>) Try.failure( new IllegalStateException( description , cause ) );
 		}
 	
-	
 	//</editor-fold>
 	
-	
-	
 	}
-
-
 
 //
 //interface CheckedConsumerModule

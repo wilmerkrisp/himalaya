@@ -7,22 +7,12 @@ package life.expert.value.numeric.utils;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 /**
  * The type Value exception.
  */
 public class ValueException
 	extends RuntimeException
 	{
-	
-	
 	
 	/**
 	 * Creates an instance.
@@ -35,8 +25,6 @@ public class ValueException
 		super( message );
 		}
 	
-	
-	
 	/**
 	 * Creates an instance with the specified detail message and cause.
 	 *
@@ -48,7 +36,6 @@ public class ValueException
 	public ValueException( String message ,
 	                       Throwable cause )
 		{
-		super( message ,
-		       cause );
+		super( message , cause );
 		}
 	}

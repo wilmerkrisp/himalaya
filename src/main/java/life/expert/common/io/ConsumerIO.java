@@ -2,10 +2,6 @@ package life.expert.common.io;
 
 
 
-
-
-
-
 import java.io.IOException;
 import java.util.function.Consumer;
 
@@ -17,14 +13,6 @@ import java.util.function.Consumer;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 /**
  * The interface Consumer io.
  *
@@ -35,8 +23,6 @@ import java.util.function.Consumer;
 public interface ConsumerIO<T>
 	{
 	
-	
-	
 	/**
 	 * Accept.
 	 *
@@ -46,6 +32,7 @@ public interface ConsumerIO<T>
 	 * @throws IOException
 	 * 	the io exception
 	 */
-	void accept(T t) throws IOException;
+	void accept( T t )
+	throws IOException;
 	
 	}

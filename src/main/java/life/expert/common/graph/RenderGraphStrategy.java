@@ -7,26 +7,10 @@ package life.expert.common.graph;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import com.google.common.graph.EndpointPair;
 import lombok.NonNull;
 
 import java.util.Map;
-
-
-
-
-
-
-
-
 
 /**
  * The interface Render graph strategy.
@@ -37,16 +21,12 @@ import java.util.Map;
 public interface RenderGraphStrategy<N>
 	{
 	
-	
-	
 	/**
 	 * Is directed boolean.
 	 *
 	 * @return the boolean
 	 */
 	public boolean isDirected();
-	
-	
 	
 	/**
 	 * Render to string string.

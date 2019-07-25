@@ -7,14 +7,6 @@ package life.expert.value.numeric.amount;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import life.expert.common.async.LogUtils;
 import life.expert.value.numeric.context.AmountContext;
 import life.expert.value.numeric.utils.AmountParseException;
@@ -30,18 +22,9 @@ import life.expert.value.numeric.utils.NumberValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
-
-
-
-
-
-
-
-
 
 /**
  * <pre>{@code long}</pre> based implementation of {@link Quantity}.This class internally uses a
@@ -63,123 +46,80 @@ public final class Amount
 	           Comparable<Quantity>
 	{
 	
-	
-	
 	private static final Logger logger_ = LoggerFactory.getLogger( LogUtils.class );
-	
-	
 	
 	private static final void log_( String format ,
 	                                Object... arguments )
 		{
-		logger_.info( format ,
-		              arguments );
+		logger_.info( format , arguments );
 		}
-	
-	
 	
 	private static final void logAtError_( String format ,
 	                                       Object... arguments )
 		{
-		logger_.error( format ,
-		               arguments );
+		logger_.error( format , arguments );
 		}
-	
-	
 	
 	private static final void logAtWarning_( String format ,
 	                                         Object... arguments )
 		{
-		logger_.warn( format ,
-		              arguments );
+		logger_.warn( format , arguments );
 		}
 	
-	
 	//<editor-fold desc="properties & concstants">
-	
-	
 	
 	/**
 	 * The unit of this amount.
 	 */
 	private final Unit unit;
 	
-	
-	
 	/**
 	 * The numeric part of this amount.
 	 */
 	private final long number;
-	
-	
 	
 	/**
 	 * The current scale represented by the number.
 	 */
 	private static final int SCALE = 5;
 	
-	
-	
 	/**
 	 * The constant DEFAULT_CONTEXT.
 	 */
-	public static final AmountContext DEFAULT_CONTEXT = AmountContext.of( Amount.class ,
-	                                                                      19 ,
-	                                                                      true ,
-	                                                                      5 ,
-	                                                                      RoundingMode.HALF_EVEN );
-	
-	
+	public static final AmountContext DEFAULT_CONTEXT = AmountContext.of( Amount.class , 19 , true , 5 , RoundingMode.HALF_EVEN );
 	
 	/**
 	 * The constant MAX_CONTEXT.
 	 */
-	public static final AmountContext MAX_CONTEXT = AmountContext.of( Amount.class ,
-	                                                                  19 ,
-	                                                                  true ,
-	                                                                  5 ,
-	                                                                  RoundingMode.HALF_EVEN );
-	
-	
+	public static final AmountContext MAX_CONTEXT = AmountContext.of( Amount.class , 19 , true , 5 , RoundingMode.HALF_EVEN );
 	
 	/**
 	 * Maximum possible value supported, using XX (no unit).
 	 */
-	public static final Amount MAX_VALUE = new Amount( Long.MAX_VALUE ,
-	                                                   Piece.builder()
-	                                                        .code( "piece" )
-	                                                        .build() );
-	
-	
+	public static final Amount MAX_VALUE = new Amount( Long.MAX_VALUE , Piece.builder()
+	                                                                         .code( "piece" )
+	                                                                         .build() );
 	
 	/**
 	 * Maximum possible numeric value supported.
 	 */
 	private static final BigDecimal MAX_BD = MAX_VALUE.getBigDecimal();
 	
-	
-	
 	/**
 	 * Minimum possible value supported, using XX (no unit).
 	 */
-	public static final Amount MIN_VALUE = new Amount( Long.MIN_VALUE ,
-	                                                   Piece.builder()
-	                                                        .code( "piece" )
-	                                                        .build() );
-	
-	
+	public static final Amount MIN_VALUE = new Amount( Long.MIN_VALUE , Piece.builder()
+	                                                                         .code( "piece" )
+	                                                                         .build() );
 	
 	/**
 	 * Minimum possible numeric value supported.
 	 */
 	private static final BigDecimal MIN_BD = MIN_VALUE.getBigDecimal();
 	
-	
 	//</editor-fold>
 	
 	//<editor-fold desc="helper methods">
-	
-	
 	
 	private long getInternalNumber( Number number ,
 	                                boolean allowInternalRounding )
@@ -201,12 +141,9 @@ public final class Amount
 		         .longValue();
 		}
 	
-	
-	
 	private void checkAmountParameter( Quantity amount )
 		{
-		NumberUtils.checkAmountParameter( amount ,
-		                                  this.unit );
+		NumberUtils.checkAmountParameter( amount , this.unit );
 		// numeric check for overflow...
 		if( amount.getNumber()
 		          .getScale() > SCALE )
@@ -220,11 +157,7 @@ public final class Amount
 			}
 		}
 	
-	
-	
 	// Internal helper methods
-	
-	
 	
 	/**
 	 * Internal method to check for correct number parameter.
@@ -239,8 +172,7 @@ public final class Amount
 	 */
 	protected void checkNumber( Number number )
 		{
-		Objects.requireNonNull( number ,
-		                        "Number is required." );
+		Objects.requireNonNull( number , "Number is required." );
 		// numeric check for overflow...
 		if( number.longValue() > MAX_BD.longValue() )
 			{
@@ -258,8 +190,6 @@ public final class Amount
 			}
 		}
 	
-	
-	
 	private boolean isOne( Number number )
 		{
 		BigDecimal bd = NumberUtils.getBigDecimal( number );
@@ -275,15 +205,11 @@ public final class Amount
 			}
 		}
 	
-	
-	
 	private BigDecimal getBigDecimal()
 		{
 		return BigDecimal.valueOf( this.number )
 		                 .movePointLeft( SCALE );
 		}
-	
-	
 	
 	/**
 	 * Is less than boolean.
@@ -299,8 +225,6 @@ public final class Amount
 		return getBigDecimal().compareTo( NumberUtils.getBigDecimal( number ) ) < 0;
 		}
 	
-	
-	
 	/**
 	 * Is less than or equal to boolean.
 	 *
@@ -314,8 +238,6 @@ public final class Amount
 		checkNumber( number );
 		return getBigDecimal().compareTo( NumberUtils.getBigDecimal( number ) ) <= 0;
 		}
-	
-	
 	
 	/**
 	 * Is greater than boolean.
@@ -331,8 +253,6 @@ public final class Amount
 		return getBigDecimal().compareTo( NumberUtils.getBigDecimal( number ) ) > 0;
 		}
 	
-	
-	
 	/**
 	 * Is greater than or equal to boolean.
 	 *
@@ -347,8 +267,6 @@ public final class Amount
 		return getBigDecimal().compareTo( NumberUtils.getBigDecimal( number ) ) >= 0;
 		}
 	
-	
-	
 	/**
 	 * Has same number as boolean.
 	 *
@@ -362,8 +280,7 @@ public final class Amount
 		checkNumber( number );
 		try
 			{
-			return this.number == getInternalNumber( number ,
-			                                         false );
+			return this.number == getInternalNumber( number , false );
 			}
 		catch( ArithmeticException e )
 			{
@@ -371,15 +288,9 @@ public final class Amount
 			}
 		}
 	
-	
-	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="constructors & fabrics">
-	
-	
 	
 	/**
 	 * Creates a new instance os {@link Amount}.
@@ -393,16 +304,11 @@ public final class Amount
 	                Unit unit ,
 	                boolean allowInternalRounding )
 		{
-		Objects.requireNonNull( unit ,
-		                        "Unit is required." );
+		Objects.requireNonNull( unit , "Unit is required." );
 		this.unit = unit;
-		Objects.requireNonNull( number ,
-		                        "Number is required." );
-		this.number = getInternalNumber( number ,
-		                                 allowInternalRounding );
+		Objects.requireNonNull( number , "Number is required." );
+		this.number = getInternalNumber( number , allowInternalRounding );
 		}
-	
-	
 	
 	/**
 	 * Creates a new instance os {@link Amount}.
@@ -416,16 +322,11 @@ public final class Amount
 	                Unit unit ,
 	                boolean allowInternalRounding )
 		{
-		Objects.requireNonNull( unit ,
-		                        "Unit is required." );
+		Objects.requireNonNull( unit , "Unit is required." );
 		this.unit = unit;
-		Objects.requireNonNull( numberValue ,
-		                        "Number is required." );
-		this.number = getInternalNumber( numberValue.numberValue( BigDecimal.class ) ,
-		                                 allowInternalRounding );
+		Objects.requireNonNull( numberValue , "Number is required." );
+		this.number = getInternalNumber( numberValue.numberValue( BigDecimal.class ) , allowInternalRounding );
 		}
-	
-	
 	
 	/**
 	 * Creates a new instance os {@link Amount}.
@@ -438,13 +339,10 @@ public final class Amount
 	private Amount( long number ,
 	                Unit unit )
 		{
-		Objects.requireNonNull( unit ,
-		                        "Unit is required." );
+		Objects.requireNonNull( unit , "Unit is required." );
 		this.unit = unit;
 		this.number = number;
 		}
-	
-	
 	
 	/**
 	 * Static factory method for creating a new instance of {@link Amount}.
@@ -459,12 +357,8 @@ public final class Amount
 	public static Amount of( NumberValue numberBinding ,
 	                         Unit unit )
 		{
-		return new Amount( numberBinding ,
-		                   unit ,
-		                   false );
+		return new Amount( numberBinding , unit , false );
 		}
-	
-	
 	
 	/**
 	 * Static factory method for creating a new instance of {@link Amount}.
@@ -479,12 +373,8 @@ public final class Amount
 	public static Amount of( Number number ,
 	                         Unit unit )
 		{
-		return new Amount( number ,
-		                   unit ,
-		                   false );
+		return new Amount( number , unit , false );
 		}
-	
-	
 	
 	/**
 	 * Static factory method for creating a new instance of {@link Amount}.
@@ -500,11 +390,8 @@ public final class Amount
 	                         String unitCode )
 		{
 		Unit unit = Piece.of( unitCode );
-		return of( number ,
-		           unit );
+		return of( number , unit );
 		}
-	
-	
 	
 	/**
 	 * Static factory method for creating a new instance of {@link Amount}.
@@ -517,11 +404,8 @@ public final class Amount
 	public static Amount of( Number number )
 		{
 		Unit unit = Piece.of( "piece" );
-		return of( number ,
-		           unit );
+		return of( number , unit );
 		}
-	
-	
 	
 	/**
 	 * Obtains an instance of {@link Amount} representing zero.
@@ -535,11 +419,8 @@ public final class Amount
 	 */
 	public static Amount zero( Unit unit )
 		{
-		return of( BigDecimal.ZERO ,
-		           unit );
+		return of( BigDecimal.ZERO , unit );
 		}
-	
-	
 	
 	/**
 	 * Obtains an instance of {@code DefaultAmount} from an amount in minor units.
@@ -563,12 +444,8 @@ public final class Amount
 	public static Amount ofMinor( Unit unit ,
 	                              long amountMinor )
 		{
-		return ofMinor( unit ,
-		                amountMinor ,
-		                unit.getDefaultFractionDigits() );
+		return ofMinor( unit , amountMinor , unit.getDefaultFractionDigits() );
 		}
-	
-	
 	
 	/**
 	 * Obtains an instance of {@code DefaultAmount} from an amount in minor units.
@@ -597,12 +474,8 @@ public final class Amount
 			{
 			throw new IllegalArgumentException( "The factionDigits cannot be negative" );
 			}
-		return of( BigDecimal.valueOf( amountMinor ,
-		                               factionDigits ) ,
-		           unit );
+		return of( BigDecimal.valueOf( amountMinor , factionDigits ) , unit );
 		}
-	
-	
 	
 	/**
 	 * From amount.
@@ -618,12 +491,8 @@ public final class Amount
 			{
 			return Amount.class.cast( amount );
 			}
-		return new Amount( amount.getNumber() ,
-		                   amount.getUnit() ,
-		                   false );
+		return new Amount( amount.getNumber() , amount.getUnit() , false );
 		}
-	
-	
 	
 	/**
 	 * Obtains an instance of DefaultAmount from a text string such as 'piece 25.25'.
@@ -646,31 +515,19 @@ public final class Amount
 		                        .split( " " );
 		if( array.length != 2 )
 			{
-			throw new AmountParseException( "An error happened when try to parse the Amount." ,
-			                                text ,
-			                                0 );
+			throw new AmountParseException( "An error happened when try to parse the Amount." , text , 0 );
 			}
 		
 		String parsed_unit = array[0];
 		
-		
-		
 		BigDecimal number = new BigDecimal( array[1] );
-		return Amount.of( number ,
-		                  Piece.of( parsed_unit ) );
-			
-			
+		return Amount.of( number , Piece.of( parsed_unit ) );
+		
 		}
-	
-	
 	
 	//</editor-fold>
 	
-	
-	
 	//<editor-fold desc="interface methods">
-	
-	
 	
 	/**
 	 * Returns the amount’s unit, modelled as {@link Unit}.
@@ -687,8 +544,6 @@ public final class Amount
 		return unit;
 		}
 	
-	
-	
 	/**
 	 * Access the {@link AmountContext} used by this instance.
 	 *
@@ -701,8 +556,6 @@ public final class Amount
 		{
 		return DEFAULT_CONTEXT;
 		}
-	
-	
 	
 	/**
 	 * Compare to int.
@@ -728,16 +581,11 @@ public final class Amount
 		return compare;
 		}
 	
-	
-	
 	@Override
 	public int hashCode()
 		{
-		return Objects.hash( unit ,
-		                     number );
+		return Objects.hash( unit , number );
 		}
-	
-	
 	
 	@Override
 	public boolean equals( Object obj )
@@ -749,14 +597,10 @@ public final class Amount
 		if( obj instanceof Amount )
 			{
 			Amount other = (Amount) obj;
-			return Objects.equals( unit ,
-			                       other.unit ) && Objects.equals( number ,
-			                                                       other.number );
+			return Objects.equals( unit , other.unit ) && Objects.equals( number , other.number );
 			}
 		return false;
 		}
-	
-	
 	
 	@Override
 	public Amount abs()
@@ -767,8 +611,6 @@ public final class Amount
 			}
 		return this.negate();
 		}
-	
-	
 	
 	/**
 	 * Add amount.
@@ -786,63 +628,46 @@ public final class Amount
 			{
 			return this;
 			}
-		return new Amount( Math.addExact( this.number ,
-		                                  getInternalNumber( amount.getNumber() ,
-		                                                     false ) ) ,
-		                   getUnit() );
+		return new Amount( Math.addExact( this.number , getInternalNumber( amount.getNumber() , false ) ) , getUnit() );
 		}
-	
-	
 	
 	@Override
 	public Amount divide( Number divisor )
 		{
 		if( NumberUtils.isInfinityAndNotNaN( divisor ) )
 			{
-			return new Amount( 0L ,
-			                   getUnit() );
+			return new Amount( 0L , getUnit() );
 			}
 		checkNumber( divisor );
 		if( isOne( divisor ) )
 			{
 			return this;
 			}
-		return new Amount( Math.round( this.number / divisor.doubleValue() ) ,
-		                   getUnit() );
+		return new Amount( Math.round( this.number / divisor.doubleValue() ) , getUnit() );
 		}
-	
-	
 	
 	@Override
 	public Amount[] divideAndRemainder( Number divisor )
 		{
 		if( NumberUtils.isInfinityAndNotNaN( divisor ) )
 			{
-			Amount zero = new Amount( 0L ,
-			                          getUnit() );
+			Amount zero = new Amount( 0L , getUnit() );
 			return new Amount[] { zero ,
 			                      zero };
 			}
 		checkNumber( divisor );
 		BigDecimal   div = NumberUtils.getBigDecimal( divisor );
 		BigDecimal[] res = getBigDecimal().divideAndRemainder( div );
-		return new Amount[] { new Amount( res[0] ,
-		                                  getUnit() ,
-		                                  true ) ,
-		                      new Amount( res[1] ,
-		                                  getUnit() ,
-		                                  true ) };
+		return new Amount[] { new Amount( res[0] , getUnit() , true ) ,
+		                      new Amount( res[1] , getUnit() , true ) };
 		}
-	
-	
 	
 	@Override
 	public Amount divideToIntegralValue( Number divisor )
 		{
 		if( NumberUtils.isInfinityAndNotNaN( divisor ) )
 			{
-			return new Amount( 0L ,
-			                   getUnit() );
+			return new Amount( 0L , getUnit() );
 			}
 		checkNumber( divisor );
 		if( isOne( divisor ) )
@@ -850,12 +675,8 @@ public final class Amount
 			return this;
 			}
 		BigDecimal div = NumberUtils.getBigDecimal( divisor );
-		return new Amount( getBigDecimal().divideToIntegralValue( div ) ,
-		                   getUnit() ,
-		                   false );
+		return new Amount( getBigDecimal().divideToIntegralValue( div ) , getUnit() , false );
 		}
-	
-	
 	
 	@Override
 	public Amount multiply( Number multiplicand )
@@ -866,31 +687,20 @@ public final class Amount
 			{
 			return this;
 			}
-		return new Amount( Math.multiplyExact( this.number ,
-		                                       getInternalNumber( multiplicand ,
-		                                                          false ) ) / 100000L ,
-		                   getUnit() );
+		return new Amount( Math.multiplyExact( this.number , getInternalNumber( multiplicand , false ) ) / 100000L , getUnit() );
 		}
-	
-	
 	
 	@Override
 	public Amount negate()
 		{
-		return new Amount( Math.multiplyExact( this.number ,
-		                                       -1 ) ,
-		                   getUnit() );
+		return new Amount( Math.multiplyExact( this.number , -1 ) , getUnit() );
 		}
-	
-	
 	
 	@Override
 	public Amount plus()
 		{
 		return this;
 		}
-	
-	
 	
 	/**
 	 * Subtract amount.
@@ -908,35 +718,22 @@ public final class Amount
 			{
 			return this;
 			}
-		return new Amount( Math.subtractExact( this.number ,
-		                                       getInternalNumber( amount.getNumber() ,
-		                                                          false ) ) ,
-		                   getUnit() );
+		return new Amount( Math.subtractExact( this.number , getInternalNumber( amount.getNumber() , false ) ) , getUnit() );
 		}
-	
-	
 	
 	@Override
 	public Amount remainder( Number divisor )
 		{
 		checkNumber( divisor );
-		return new Amount( this.number % getInternalNumber( divisor ,
-		                                                    false ) ,
-		                   getUnit() );
+		return new Amount( this.number % getInternalNumber( divisor , false ) , getUnit() );
 		}
-	
-	
 	
 	@Override
 	public Amount scaleByPowerOfTen( int power )
 		{
 		return new Amount( getNumber().numberValue( BigDecimal.class )
-		                              .scaleByPowerOfTen( power ) ,
-		                   getUnit() ,
-		                   true );
+		                              .scaleByPowerOfTen( power ) , getUnit() , true );
 		}
-	
-	
 	
 	@Override
 	public boolean isZero()
@@ -944,15 +741,11 @@ public final class Amount
 		return this.number == 0L;
 		}
 	
-	
-	
 	@Override
 	public boolean isPositive()
 		{
 		return this.number > 0L;
 		}
-	
-	
 	
 	@Override
 	public boolean isPositiveOrZero()
@@ -960,23 +753,17 @@ public final class Amount
 		return this.number >= 0L;
 		}
 	
-	
-	
 	@Override
 	public boolean isNegative()
 		{
 		return this.number < 0L;
 		}
 	
-	
-	
 	@Override
 	public boolean isNegativeOrZero()
 		{
 		return this.number <= 0L;
 		}
-	
-	
 	
 	/**
 	 * Gets scale.
@@ -988,8 +775,6 @@ public final class Amount
 		return Amount.SCALE;
 		}
 	
-	
-	
 	/**
 	 * Gets precision.
 	 *
@@ -1000,8 +785,6 @@ public final class Amount
 		return getNumber().numberValue( BigDecimal.class )
 		                  .precision();
 		}
-	
-	
 	
 	@Override
 	public int signum()
@@ -1016,8 +799,6 @@ public final class Amount
 			}
 		return 1;
 		}
-	
-	
 	
 	/**
 	 * Is less than boolean.
@@ -1035,8 +816,6 @@ public final class Amount
 		                                        .numberValue( BigDecimal.class ) ) < 0;
 		}
 	
-	
-	
 	/**
 	 * Is less than or equal to boolean.
 	 *
@@ -1052,8 +831,6 @@ public final class Amount
 		return getBigDecimal().compareTo( amount.getNumber()
 		                                        .numberValue( BigDecimal.class ) ) <= 0;
 		}
-	
-	
 	
 	/**
 	 * Is greater than boolean.
@@ -1071,8 +848,6 @@ public final class Amount
 		                                        .numberValue( BigDecimal.class ) ) > 0;
 		}
 	
-	
-	
 	/**
 	 * Is greater than or equal to boolean.
 	 *
@@ -1088,8 +863,6 @@ public final class Amount
 		return getBigDecimal().compareTo( amount.getNumber()
 		                                        .numberValue( BigDecimal.class ) ) >= 0;
 		}
-	
-	
 	
 	/**
 	 * Is equal to boolean.
@@ -1107,8 +880,6 @@ public final class Amount
 		                                        .numberValue( BigDecimal.class ) ) == 0;
 		}
 	
-	
-	
 	/**
 	 * Gets the number representation of the numeric value of this item.
 	 *
@@ -1120,16 +891,12 @@ public final class Amount
 		return new DefaultNumberValue( getBigDecimal() );
 		}
 	
-	
-	
 	@Override
 	public String toString()
 		{
 		
 		return unit.toString() + ' ' + getBigDecimal();
 		}
-	
-	
 	
 	/**
 	 * With amount.
@@ -1153,12 +920,9 @@ public final class Amount
 			}
 		catch( Exception e )
 			{
-			throw new ValueException( "Operator failed: " + operator ,
-			                          e );
+			throw new ValueException( "Operator failed: " + operator , e );
 			}
 		}
-	
-	
 	
 	@Override
 	public Amount multiply( double multiplicand )
@@ -1170,14 +934,10 @@ public final class Amount
 			}
 		if( multiplicand == 0.0 )
 			{
-			return new Amount( 0 ,
-			                   this.unit );
+			return new Amount( 0 , this.unit );
 			}
-		return new Amount( Math.round( this.number * multiplicand ) ,
-		                   this.unit );
+		return new Amount( Math.round( this.number * multiplicand ) , this.unit );
 		}
-	
-	
 	
 	@Override
 	public Amount divide( long divisor )
@@ -1186,29 +946,22 @@ public final class Amount
 			{
 			return this;
 			}
-		return new Amount( this.number / divisor ,
-		                   this.unit );
+		return new Amount( this.number / divisor , this.unit );
 		}
-	
-	
 	
 	@Override
 	public Amount divide( double divisor )
 		{
 		if( NumberUtils.isInfinityAndNotNaN( divisor ) )
 			{
-			return new Amount( 0L ,
-			                   getUnit() );
+			return new Amount( 0L , getUnit() );
 			}
 		if( divisor == 1.0d )
 			{
 			return this;
 			}
-		return new Amount( Math.round( this.number / divisor ) ,
-		                   getUnit() );
+		return new Amount( Math.round( this.number / divisor ) , getUnit() );
 		}
-	
-	
 	
 	@Override
 	public Amount remainder( long divisor )
@@ -1216,20 +969,15 @@ public final class Amount
 		return remainder( BigDecimal.valueOf( divisor ) );
 		}
 	
-	
-	
 	@Override
 	public Amount remainder( double divisor )
 		{
 		if( NumberUtils.isInfinityAndNotNaN( divisor ) )
 			{
-			return new Amount( 0L ,
-			                   getUnit() );
+			return new Amount( 0L , getUnit() );
 			}
 		return remainder( new BigDecimal( String.valueOf( divisor ) ) );
 		}
-	
-	
 	
 	@Override
 	public Amount[] divideAndRemainder( long divisor )
@@ -1237,15 +985,12 @@ public final class Amount
 		return divideAndRemainder( BigDecimal.valueOf( divisor ) );
 		}
 	
-	
-	
 	@Override
 	public Amount[] divideAndRemainder( double divisor )
 		{
 		if( NumberUtils.isInfinityAndNotNaN( divisor ) )
 			{
-			Amount zero = new Amount( 0L ,
-			                          getUnit() );
+			Amount zero = new Amount( 0L , getUnit() );
 			return new Amount[] { zero ,
 			                      zero };
 			}
@@ -1256,15 +1001,11 @@ public final class Amount
 		return divideAndRemainder( new BigDecimal( String.valueOf( divisor ) ) );
 		}
 	
-	
-	
 	@Override
 	public Amount stripTrailingZeros()
 		{
 		return this;
 		}
-	
-	
 	
 	@Override
 	public Amount multiply( long multiplicand )
@@ -1275,15 +1016,10 @@ public final class Amount
 			}
 		if( multiplicand == 0 )
 			{
-			return new Amount( 0L ,
-			                   this.unit );
+			return new Amount( 0L , this.unit );
 			}
-		return new Amount( Math.multiplyExact( multiplicand ,
-		                                       this.number ) ,
-		                   this.unit );
+		return new Amount( Math.multiplyExact( multiplicand , this.number ) , this.unit );
 		}
-	
-	
 	
 	@Override
 	public Amount divideToIntegralValue( long divisor )
@@ -1295,15 +1031,12 @@ public final class Amount
 		return divideToIntegralValue( NumberUtils.getBigDecimal( divisor ) );
 		}
 	
-	
-	
 	@Override
 	public Amount divideToIntegralValue( double divisor )
 		{
 		if( NumberUtils.isInfinityAndNotNaN( divisor ) )
 			{
-			return new Amount( 0L ,
-			                   getUnit() );
+			return new Amount( 0L , getUnit() );
 			}
 		if( divisor == 1.0 )
 			{
@@ -1311,8 +1044,6 @@ public final class Amount
 			}
 		return divideToIntegralValue( NumberUtils.getBigDecimal( divisor ) );
 		}
-	
-	
 	
 	//</editor-fold>
 	

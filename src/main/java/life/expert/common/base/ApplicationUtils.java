@@ -2,16 +2,8 @@ package life.expert.common.base;
 
 
 
-
-
-
-
-
-
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-
-
 
 import lombok.NonNull;//@NOTNULL
 
@@ -28,15 +20,12 @@ import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
 
 import org.apache.commons.lang3.StringUtils;            //isNotBlank
 
-
 import java.util.function.*;                            //producer supplier
 
 import static java.util.stream.Collectors.*;            //toList streamAPI
 import static java.util.function.Predicate.*;           //isEqual streamAPI
 
 import java.util.Optional;
-
-
 
 import static reactor.core.publisher.Mono.*;
 import static reactor.core.scheduler.Schedulers.*;
@@ -52,8 +41,6 @@ import static io.vavr.Patterns.*;                         //switch - case - succ
 import static cyclops.control.Trampoline.more;
 import static cyclops.control.Trampoline.done;
 
-
-
 //import java.util.List;                                  //usual list
 //import io.vavr.collection.List;                         //immutable List
 //import com.google.common.collect.*;                     //ImmutableList
@@ -66,14 +53,6 @@ import static cyclops.control.Trampoline.done;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 /**
  * helper methods for the main cycle of the application
  */
@@ -82,14 +61,10 @@ import static cyclops.control.Trampoline.done;
 public final class ApplicationUtils
 	{
 	
-	
-	
 	/**
 	 * some constant
 	 */
 	public static final String FATAL_MESSAGE = "The program has encountered a problem and should close. We apologize for any inconvenience.";
-	
-	
 	
 	/**
 	 * general info:
@@ -118,7 +93,5 @@ public final class ApplicationUtils
 		logger_.error( FATAL_MESSAGE , throwable );
 		System.exit( 1 );
 		}
-		
-		
 		
 	}

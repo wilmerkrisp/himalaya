@@ -2,12 +2,6 @@ package life.expert.common.collect;
 
 
 
-
-
-
-
-
-
 import com.google.common.collect.Range;
 import life.expert.common.async.LogUtils;
 import life.expert.common.graph.RenderGraph;
@@ -38,30 +32,18 @@ import static life.expert.common.async.LogUtils.logAtError;
 public class RenderCollection<T>
 	{
 	
-	
-	
 	private static final Logger logger_ = LoggerFactory.getLogger( RenderGraph.class );
-	
-	
 	
 	private @NonNull Collection<T> collection;
 	
-	
-	
 	private Map<Integer,String> markElements = new HashMap<>();
 	
-	
-	
 	private Map<Range<Integer>,String> markRanges = new HashMap<>();
-	
-	
 	
 	private RenderCollection( @NotNull Collection<T> collection )
 		{
 		this.collection = collection;
 		}
-	
-	
 	
 	/**
 	 * Collection render collection.
@@ -77,8 +59,6 @@ public class RenderCollection<T>
 		{
 		return new RenderCollection<E>( collection );
 		}
-	
-	
 	
 	/**
 	 * Mark element render collection.
@@ -98,8 +78,6 @@ public class RenderCollection<T>
 		return this;
 		}
 	
-	
-	
 	/**
 	 * Mark element render collection.
 	 *
@@ -115,8 +93,6 @@ public class RenderCollection<T>
 		return this;
 		}
 	
-	
-	
 	/**
 	 * Clear mark elements render collection.
 	 *
@@ -128,8 +104,6 @@ public class RenderCollection<T>
 		
 		return this;
 		}
-	
-	
 	
 	/**
 	 * Mark range render collection.
@@ -148,8 +122,6 @@ public class RenderCollection<T>
 		
 		return this;
 		}
-	
-	
 	
 	/**
 	 * Mark range render collection.
@@ -172,8 +144,6 @@ public class RenderCollection<T>
 		return this;
 		}
 	
-	
-	
 	/**
 	 * Mark ranges render collection.
 	 *
@@ -189,8 +159,6 @@ public class RenderCollection<T>
 		return this;
 		}
 	
-	
-	
 	/**
 	 * Clear mark ranges render collection.
 	 *
@@ -203,8 +171,6 @@ public class RenderCollection<T>
 		return this;
 		}
 	
-	
-	
 	/**
 	 * Log render collection.
 	 *
@@ -215,8 +181,6 @@ public class RenderCollection<T>
 		LogUtils.log( renderToString() );
 		return this;
 		}
-	
-	
 	
 	/**
 	 * Render to string string.
@@ -264,7 +228,5 @@ public class RenderCollection<T>
 		
 		return list.toString();
 		}
-		
-		
 		
 	}

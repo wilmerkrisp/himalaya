@@ -7,25 +7,9 @@ package life.expert.value.numeric.operators;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import life.expert.value.numeric.amount.Quantity;
 
 import java.util.function.UnaryOperator;
-
-
-
-
-
-
-
-
 
 /**
  * Represents an operation on a single {@link Quantity} that produces a
@@ -67,8 +51,6 @@ import java.util.function.UnaryOperator;
 public interface Operator
 	extends UnaryOperator<Quantity>
 	{
-	
-	
 	
 	/**
 	 * Applies the operator on the given amount.

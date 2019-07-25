@@ -2,12 +2,6 @@ package life.expert.common.graph;
 
 
 
-
-
-
-
-
-
 import com.google.common.graph.EndpointPair;
 import com.google.common.graph.Graph;
 import com.google.common.graph.Network;
@@ -30,8 +24,6 @@ import static reactor.core.publisher.Mono.just;
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 //import static life.expert.common.function.Patterns.*;    //for-comprehension
 
-
-
 //import java.util.List;                                  //usual list
 //import io.vavr.collection.List;                         //immutable List
 //import com.google.common.collect.*;                     //ImmutableList
@@ -43,14 +35,6 @@ import static reactor.core.publisher.Mono.just;
 //                           wilmer 2019/06/20
 //
 //--------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
 
 /**
  * the class allows you to mark some vertices or edges of the graph when outputting to a .dot file
@@ -85,34 +69,20 @@ import static reactor.core.publisher.Mono.just;
 public final class RenderGraph<N>
 	{
 	
-	
-	
 	private static final String DOT_OUTPUT_FOLDER = "src/main/graphviz/";
-	
-	
 	
 	private static final Logger logger_ = LoggerFactory.getLogger( RenderGraph.class );
 	
-	
-	
 	private @NonNull RenderGraphStrategy graph;
-	
-	
 	
 	private Map<N,String> markNodes = new HashMap<>();
 	
-	
-	
 	private Map<EndpointPair<N>,String> markEdges = new HashMap<>();
-	
-	
 	
 	private RenderGraph( @NotNull RenderGraphStrategy graph )
 		{
 		this.graph = graph;
 		}
-	
-	
 	
 	/**
 	 * Graph render graph.
@@ -128,8 +98,6 @@ public final class RenderGraph<N>
 		{
 		return new RenderGraph<V>( RenderGraphDefaultStrategy.of( graph ) );
 		}
-	
-	
 	
 	/**
 	 * Graph render graph.
@@ -148,8 +116,6 @@ public final class RenderGraph<N>
 		return new RenderGraph<V>( RenderGraphNetworkStrategy.of( graph ) );
 		}
 	
-	
-	
 	/**
 	 * Graph render graph.
 	 *
@@ -167,8 +133,6 @@ public final class RenderGraph<N>
 		return new RenderGraph<V>( RenderGraphValueStrategy.of( graph ) );
 		}
 	
-	
-	
 	/**
 	 * Delete rendered graph folder.
 	 */
@@ -178,8 +142,6 @@ public final class RenderGraph<N>
 		FileUtils.deleteFile( DOT_OUTPUT_FOLDER )
 		         .subscribe();
 		}
-	
-	
 	
 	/**
 	 * Mark node render graph.
@@ -199,8 +161,6 @@ public final class RenderGraph<N>
 		return this;
 		}
 	
-	
-	
 	/**
 	 * Mark nodes render graph.
 	 *
@@ -216,8 +176,6 @@ public final class RenderGraph<N>
 		return this;
 		}
 	
-	
-	
 	/**
 	 * Clear mark nodes render graph.
 	 *
@@ -229,8 +187,6 @@ public final class RenderGraph<N>
 		
 		return this;
 		}
-	
-	
 	
 	/**
 	 * Mark edge render graph.
@@ -249,8 +205,6 @@ public final class RenderGraph<N>
 		
 		return this;
 		}
-	
-	
 	
 	/**
 	 * Mark edge render graph.
@@ -275,8 +229,6 @@ public final class RenderGraph<N>
 		return this;
 		}
 	
-	
-	
 	/**
 	 * Mark edges render graph.
 	 *
@@ -292,8 +244,6 @@ public final class RenderGraph<N>
 		return this;
 		}
 	
-	
-	
 	/**
 	 * Clear mark edges render graph.
 	 *
@@ -306,8 +256,6 @@ public final class RenderGraph<N>
 		return this;
 		}
 	
-	
-	
 	/**
 	 * Log render graph.
 	 *
@@ -319,8 +267,6 @@ public final class RenderGraph<N>
 		return this;
 		}
 	
-	
-	
 	/**
 	 * Render to string string.
 	 *
@@ -330,8 +276,6 @@ public final class RenderGraph<N>
 		{
 		return graph.renderToString( markNodes , markEdges );
 		}
-	
-	
 	
 	/**
 	 * Render to file render graph.
@@ -354,8 +298,6 @@ public final class RenderGraph<N>
 		return this;
 		}
 	
-	
-	
 	/**
 	 * Render to file render graph.
 	 *
@@ -369,6 +311,5 @@ public final class RenderGraph<N>
 		//var filename_with_counter = String.format( "%d.dot" , ++file_name_counter_ );
 		return renderToFile( filename_with_datetime );
 		}
-		
 		
 	}

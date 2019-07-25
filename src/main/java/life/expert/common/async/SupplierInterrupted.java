@@ -6,25 +6,9 @@ package life.expert.common.async;//@Header@
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-
-
-
-
-
-
-
-
 
 /**
  * The interface Supplier interrupted.
@@ -34,10 +18,8 @@ import java.util.concurrent.TimeoutException;
  * 	the type parameter
  */
 @FunctionalInterface
-public interface SupplierInterrupted< T >
+public interface SupplierInterrupted<T>
 	{
-	
-	
 	
 	/**
 	 * Gets a result.

@@ -2,12 +2,6 @@ package life.expert.common.graph;
 
 
 
-
-
-
-
-
-
 import lombok.NonNull;//@NOTNULL
 
 import org.slf4j.Logger;
@@ -23,15 +17,12 @@ import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
 
 import org.apache.commons.lang3.StringUtils;            //isNotBlank
 
-
 import java.util.function.*;                            //producer supplier
 
 import static java.util.stream.Collectors.*;            //toList streamAPI
 import static java.util.function.Predicate.*;           //isEqual streamAPI
 
 import java.util.Optional;
-
-
 
 import static reactor.core.publisher.Mono.*;
 import static reactor.core.scheduler.Schedulers.*;
@@ -47,8 +38,6 @@ import static io.vavr.Patterns.*;                         //switch - case - succ
 import static cyclops.control.Trampoline.more;
 import static cyclops.control.Trampoline.done;
 
-
-
 //import java.util.List;                                  //usual list
 //import io.vavr.collection.List;                         //immutable List
 //import com.google.common.collect.*;                     //ImmutableList
@@ -60,14 +49,6 @@ import static cyclops.control.Trampoline.done;
 //                           wilmer 2019/07/11
 //
 //--------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
 
 /**
  * An enum representing the state of a node during DFS. {@code PENDING} means that the node is on

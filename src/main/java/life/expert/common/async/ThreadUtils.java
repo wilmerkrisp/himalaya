@@ -2,12 +2,6 @@ package life.expert.common.async;
 
 
 
-
-
-
-
-
-
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.oath.cyclops.internal.stream.spliterators.push.Operator;
@@ -50,8 +44,6 @@ import static java.util.function.Predicate.*;           //isEqual streamAPI
 
 import java.util.Optional;
 
-
-
 //@Header@
 //--------------------------------------------------------------------------------
 //
@@ -60,14 +52,6 @@ import java.util.Optional;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 /**
  * - contains methods that wrap (as an optional type) lambdas with checked exceptions
  *
@@ -75,31 +59,21 @@ import java.util.Optional;
  * for passing them to the Flux input
  *
  * - and some general purpose thread delay method
- *
- *
  */
 public final class ThreadUtils
 	{
 	
-	
-	
 	// constant
 	private static final int WAIT_TIME_RATIO_FOR_WAITING_TASKS = 100;
-	
-	
 	
 	private ThreadUtils()
 		{
 		super();
 		
-		
 		throw new UnsupportedOperationException( "Dont use this PRIVATE constructor.Please use constructor with parameters." );
 		}
 	
-	
-	
 	//<editor-fold desc="utils">
-	
 	
 	//
 	//	/**
@@ -118,8 +92,6 @@ public final class ThreadUtils
 	//		return Schedulers.from( ThreadUtils.executorCustom( name , size ) );
 	//		}
 	
-	
-	
 	/**
 	 * Delay.
 	 *
@@ -133,10 +105,7 @@ public final class ThreadUtils
 	
 	//</editor-fold>
 	
-	
 	//<editor-fold desc="executors">
-	
-	
 	
 	/**
 	 * Executor executor.
@@ -162,8 +131,6 @@ public final class ThreadUtils
 		return Executors.newFixedThreadPool( Math.min( size , thr_num ) , thread_factory );
 		}
 	
-	
-	
 	/**
 	 * Executor daemon executor.
 	 *
@@ -180,8 +147,6 @@ public final class ThreadUtils
 		return executorDaemon( null , size , waitTimeRatio );
 		}
 	
-	
-	
 	/**
 	 * Executor executor.
 	 *
@@ -194,8 +159,6 @@ public final class ThreadUtils
 		{
 		return executorDaemon( size , WAIT_TIME_RATIO_FOR_WAITING_TASKS );
 		}
-	
-	
 	
 	/**
 	 * Executor custom executor.
@@ -216,14 +179,9 @@ public final class ThreadUtils
 		return new ThreadPoolExecutor( size , size , 0L , TimeUnit.MILLISECONDS , new LinkedBlockingQueue<>( 1000 ) , thread_factory );
 		}
 	
-	
-	
 	//</editor-fold>
 	
-	
 	//<editor-fold desc="wrappers">
-	
-	
 	
 	/**
 	 * Io wrapper.
@@ -247,8 +205,6 @@ public final class ThreadUtils
 			throw new RuntimeException( exception );
 			}
 		}
-	
-	
 	
 	/**
 	 * Io wrapper e.
@@ -277,8 +233,6 @@ public final class ThreadUtils
 			}
 		}
 	
-	
-	
 	/**
 	 * Io optional optional.
 	 *
@@ -304,8 +258,6 @@ public final class ThreadUtils
 			return Optional.empty();
 			}
 		}
-	
-	
 	
 	/**
 	 * Io wrapper.
@@ -335,7 +287,5 @@ public final class ThreadUtils
 			}
 		}
 	//</editor-fold>
-	
-	
 	
 	}

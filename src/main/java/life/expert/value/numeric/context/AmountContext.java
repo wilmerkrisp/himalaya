@@ -2,12 +2,6 @@ package life.expert.value.numeric.context;
 
 
 
-
-
-
-
-
-
 import life.expert.value.numeric.amount.Quantity;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +11,7 @@ import lombok.NonNull;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
-
-
-
-
-
-
-
-
 
 /**
  * simple immutable class:  <pre>{@code  Class<? extends Quantity> }</pre>
@@ -61,8 +46,6 @@ public final class AmountContext
 	
 	{
 	
-	
-	
 	/**
 	 * Get the Quantity implementation class.
 	 *
@@ -78,8 +61,6 @@ public final class AmountContext
 	
 	@NonNull private final Class<? extends Quantity> quantityType;
 	
-	
-	
 	/**
 	 * Returns the {@code precision} setting. This value is always non-negative.
 	 *
@@ -94,8 +75,6 @@ public final class AmountContext
 	 */
 	private final int precision;
 	
-	
-	
 	/**
 	 * Allows to check if {@code minScale == maxScale}.
 	 *
@@ -109,8 +88,6 @@ public final class AmountContext
 	 * @return {@code true} if {@code minScale == maxScale}.
 	 */
 	private final boolean fixedScale;
-	
-	
 	
 	/**
 	 * Get the maximal scale supported, always {@code >= -1}. Fixed scaled
@@ -128,21 +105,17 @@ public final class AmountContext
 	 */
 	private final int maxScale;
 	
-	
-	
 	/**
 	 * -- SETTER --
-	 *  @param roundingMode
-	 *  	roundingMode
+	 *
+	 * @param roundingMode
+	 * 	roundingMode
 	 * @return roundingMode
 	 *
-	 * -- GETTER --
-	 *
+	 * 	-- GETTER --
 	 * @return java RoundingMode
 	 */
 	@NonNull private final RoundingMode roundingMode;
-	
-	
 	
 	/**
 	 * -- SETTER --
@@ -155,8 +128,6 @@ public final class AmountContext
 	 * @return math context
 	 */
 	private final MathContext mathContext;
-	
-	
 	
 	/**
 	 * Of amount context.
@@ -180,11 +151,7 @@ public final class AmountContext
 	                                      final int maxScale ,
 	                                      @NonNull final RoundingMode roundingMode )
 		{
-		return of( quantityType ,
-		           precision ,
-		           fixedScale ,
-		           maxScale ,
-		           roundingMode );
+		return of( quantityType , precision , fixedScale , maxScale , roundingMode );
 		}
 		
 	}

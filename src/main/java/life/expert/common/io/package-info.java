@@ -1,7 +1,7 @@
-/**<pre>
+/**
+ * <pre>
  * classes for reactive input output
- </pre> */
-
-
+ * </pre>
+ */
 
 package life.expert.common.io;

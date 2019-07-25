@@ -2,16 +2,8 @@ package life.expert.common.graph;
 
 
 
-
-
-
-
-
-
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-
-
 
 import lombok.NonNull;//@NOTNULL
 
@@ -28,15 +20,12 @@ import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
 
 import org.apache.commons.lang3.StringUtils;            //isNotBlank
 
-
 import java.util.function.*;                            //producer supplier
 
 import static java.util.stream.Collectors.*;            //toList streamAPI
 import static java.util.function.Predicate.*;           //isEqual streamAPI
 
 import java.util.Optional;
-
-
 
 import static reactor.core.publisher.Mono.*;
 import static reactor.core.scheduler.Schedulers.*;
@@ -52,8 +41,6 @@ import static io.vavr.Patterns.*;                         //switch - case - succ
 import static cyclops.control.Trampoline.more;
 import static cyclops.control.Trampoline.done;
 
-
-
 //import java.util.List;                                  //usual list
 //import io.vavr.collection.List;                         //immutable List
 //import com.google.common.collect.*;                     //ImmutableList
@@ -65,8 +52,6 @@ import static cyclops.control.Trampoline.done;
 //                           wilmer 2019/07/11
 //
 //--------------------------------------------------------------------------------
-
-
 
 //<editor-fold desc=".">
 /*
@@ -80,14 +65,6 @@ import static cyclops.control.Trampoline.done;
 */
 //</editor-fold>
 
-
-
-
-
-
-
-
-
 /**
  * service (static class)
  *
@@ -100,7 +77,5 @@ import static cyclops.control.Trampoline.done;
 @Slf4j
 public final class GraphUtils
 	{
-	
-	
 	
 	}

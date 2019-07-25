@@ -7,23 +7,7 @@ package life.expert.common.io;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import java.io.IOException;
-
-
-
-
-
-
-
-
 
 /**
  * The interface Runnable io.
@@ -31,8 +15,6 @@ import java.io.IOException;
 @FunctionalInterface
 public interface RunnableIO
 	{
-	
-	
 	
 	/**
 	 * When an object implementing interface <pre>{@code Runnable}</pre> is used

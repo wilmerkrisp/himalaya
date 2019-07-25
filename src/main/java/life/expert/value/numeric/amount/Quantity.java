@@ -7,28 +7,12 @@ package life.expert.value.numeric.amount;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import life.expert.value.numeric.context.Context;
 import life.expert.value.numeric.utils.ValueException;
 import life.expert.value.numeric.context.PieceContext;
 import life.expert.value.numeric.operators.Operator;
 import life.expert.value.numeric.unit.Unit;
 import life.expert.value.numeric.utils.NumberValue;
-
-
-
-
-
-
-
-
 
 /**
  * Interface defining an amount. The effective format representation of an amount may vary
@@ -57,8 +41,6 @@ public interface Quantity
 	extends Comparable<Quantity>
 	{
 	
-	
-	
 	/**
 	 * Returns the {@link  Context} of this {@code Quantity}. The
 	 * {@link  Context} provides additional information about the numeric representation and
@@ -70,8 +52,6 @@ public interface Quantity
 	 */
 	Context getContext();
 	
-	
-	
 	/**
 	 * Gets the corresponding {@link Unit}.
 	 *
@@ -79,16 +59,12 @@ public interface Quantity
 	 */
 	Unit getUnit();
 	
-	
-	
 	/**
 	 * Gets the corresponding {@link  NumberValue}.
 	 *
 	 * @return the corresponding {@link NumberValue}, not null.
 	 */
 	NumberValue getNumber();
-	
-	
 	
 	/**
 	 * Returns an operated object <b>of the same type</b> as this object with the operation made.
@@ -139,8 +115,6 @@ public interface Quantity
 		return operator.apply( this );
 		}
 	
-	
-	
 	/**
 	 * Compares two instances of {@link Quantity}, hereby ignoring non significant trailing
 	 * zeroes and different numeric capabilities.
@@ -154,8 +128,6 @@ public interface Quantity
 	 * 	if the amount's unit is not equals to the unit of this instance.
 	 */
 	boolean isGreaterThan( Quantity amount );
-	
-	
 	
 	/**
 	 * Compares two instances of {@link Quantity}, hereby ignoring non significant trailing
@@ -171,8 +143,6 @@ public interface Quantity
 	 */
 	boolean isGreaterThanOrEqualTo( Quantity amount );
 	
-	
-	
 	/**
 	 * Compares two instances of {@link Quantity}, hereby ignoring non significant trailing
 	 * zeroes and different numeric capabilities.
@@ -186,8 +156,6 @@ public interface Quantity
 	 * 	if the amount's unit is not equals to the unit of this instance.
 	 */
 	boolean isLessThan( Quantity amount );
-	
-	
 	
 	/**
 	 * Compares two instances of {@link Quantity}, hereby ignoring non significant trailing
@@ -203,8 +171,6 @@ public interface Quantity
 	 */
 	boolean isLessThanOrEqualTo( Quantity amount );
 	
-	
-	
 	/**
 	 * Compares two instances of {@link Quantity}, hereby ignoring non significant trailing
 	 * zeroes and different numeric capabilities.
@@ -219,8 +185,6 @@ public interface Quantity
 	 */
 	boolean isEqualTo( Quantity amount );
 	
-	
-	
 	/**
 	 * Checks if a {@code Quantity} is negative.
 	 *
@@ -230,8 +194,6 @@ public interface Quantity
 		{
 		return signum() < 0;
 		}
-	
-	
 	
 	/**
 	 * Checks if a {@code Quantity} is negative or zero.
@@ -243,8 +205,6 @@ public interface Quantity
 		return signum() <= 0;
 		}
 	
-	
-	
 	/**
 	 * Checks if a {@code Quantity} is positive.
 	 *
@@ -254,8 +214,6 @@ public interface Quantity
 		{
 		return signum() > 0;
 		}
-	
-	
 	
 	/**
 	 * Checks if a {@code Quantity} is positive or zero.
@@ -267,8 +225,6 @@ public interface Quantity
 		return signum() >= 0;
 		}
 	
-	
-	
 	/**
 	 * Checks if an {@code Quantity} is zero.
 	 *
@@ -279,16 +235,12 @@ public interface Quantity
 		return signum() == 0;
 		}
 	
-	
-	
 	/**
 	 * Returns the signum function of this {@code Quantity}.
 	 *
 	 * @return -1, 0, or 1 as the value of this  Quantity is negative, zero, or 	positive.
 	 */
 	int signum();
-	
-	
 	
 	/**
 	 * Returns a {@code Quantity} whose value is <pre>{@code this + amount}</pre>, and whose scale is <pre>{@code max(this.scale(),
@@ -303,8 +255,6 @@ public interface Quantity
 	 * 	if the result exceeds the numeric capabilities of this implementation class, i.e. 	the {@link PieceContext} cannot be adapted as required.
 	 */
 	Quantity add( Quantity amount );
-	
-	
 	
 	/**
 	 * Returns a {@code Quantity} whose value is <pre>{@code this -
@@ -321,8 +271,6 @@ public interface Quantity
 	 */
 	Quantity subtract( Quantity amount );
 	
-	
-	
 	/**
 	 * Returns a {@code Quantity} whose value is <b>(this &times;
 	 * multiplicand)</b>, and whose scale is <pre>{@code this.scale() +
@@ -337,8 +285,6 @@ public interface Quantity
 	 * 	if the result exceeds the numeric capabilities of this implementation class, i.e. 	the {@link PieceContext} cannot be adapted as required.
 	 */
 	Quantity multiply( long multiplicand );
-	
-	
 	
 	/**
 	 * Returns a {@code Quantity} whose value is <b>(this &times;
@@ -358,8 +304,6 @@ public interface Quantity
 	 */
 	Quantity multiply( double multiplicand );
 	
-	
-	
 	/**
 	 * Returns a {@code Quantity} whose value is    <b>(this &times;
 	 * multiplicand)   </b>, and whose scale is <pre>{@code this.scale() +
@@ -374,8 +318,6 @@ public interface Quantity
 	 * 	if the result exceeds the numeric capabilities of this implementation class, i.e. 	the {@link PieceContext} cannot be adapted as required.
 	 */
 	Quantity multiply( Number multiplicand );
-	
-	
 	
 	/**
 	 * Returns a {@code Quantity} whose value is <pre>{@code this /
@@ -393,8 +335,6 @@ public interface Quantity
 	 */
 	Quantity divide( long divisor );
 	
-	
-	
 	/**
 	 * Returns a {@code Quantity} whose value is <pre>{@code this /
 	 * divisor}</pre>, and whose preferred scale is <pre>{@code this.scale() -
@@ -411,8 +351,6 @@ public interface Quantity
 	 */
 	Quantity divide( double divisor );
 	
-	
-	
 	/**
 	 * Returns a {@code Quantity} whose value is <pre>{@code this /
 	 * divisor}</pre>, and whose preferred scale is <pre>{@code this.scale() -
@@ -428,8 +366,6 @@ public interface Quantity
 	 * 	if the exact quotient does not have a terminating decimal expansion, or if the 	result exceeds the numeric capabilities of this implementation class, i.e. the        {@link PieceContext} cannot be adapted as required.
 	 */
 	Quantity divide( Number divisor );
-	
-	
 	
 	/**
 	 * Returns a {@code Quantity} whose value is <pre>{@code this % divisor}</pre>.
@@ -449,8 +385,6 @@ public interface Quantity
 	 */
 	Quantity remainder( long divisor );
 	
-	
-	
 	/**
 	 * Returns a {@code Quantity} whose value is <pre>{@code this % divisor}</pre>.
 	 *
@@ -469,8 +403,6 @@ public interface Quantity
 	 */
 	Quantity remainder( double divisor );
 	
-	
-	
 	/**
 	 * Returns a {@code Quantity} whose value is <pre>{@code this % divisor}</pre>.
 	 *
@@ -488,8 +420,6 @@ public interface Quantity
 	 * 	if {@code divisor==0}, or if the result exceeds the numeric capabilities of this 	implementation class, i.e. the {@link PieceContext} cannot be adapted as 	required.
 	 */
 	Quantity remainder( Number divisor );
-	
-	
 	
 	/**
 	 * Returns a two-element {@code Quantity} array containing the result of
@@ -513,8 +443,6 @@ public interface Quantity
 	 */
 	Quantity[] divideAndRemainder( long divisor );
 	
-	
-	
 	/**
 	 * Returns a two-element {@code Quantity} array containing the result of
 	 * {@code divideToIntegralValue} followed by the result of {@code remainder} on the two
@@ -536,8 +464,6 @@ public interface Quantity
 	 * @see #remainder(double) #remainder(double)#remainder(double)#remainder(double)#remainder(double)#remainder(double)
 	 */
 	Quantity[] divideAndRemainder( double divisor );
-	
-	
 	
 	/**
 	 * Returns a two-element {@code Quantity} array containing the result of
@@ -561,8 +487,6 @@ public interface Quantity
 	 */
 	Quantity[] divideAndRemainder( Number divisor );
 	
-	
-	
 	/**
 	 * Returns a {@code Quantity} whose value is the integer part of the quotient
 	 * <pre>{@code this / divisor}</pre> rounded down. The preferred scale of the result is
@@ -580,8 +504,6 @@ public interface Quantity
 	 */
 	Quantity divideToIntegralValue( long divisor );
 	
-	
-	
 	/**
 	 * Returns a {@code Quantity} whose value is the integer part of the quotient
 	 * <pre>{@code this / divisor}</pre> rounded down. The preferred scale of the result is
@@ -597,8 +519,6 @@ public interface Quantity
 	 * @see java.math.BigDecimal#divideToIntegralValue(java.math.BigDecimal) java.math.BigDecimal#divideToIntegralValue(java.math.BigDecimal)java.math.BigDecimal#divideToIntegralValue(java.math.BigDecimal)java.math.BigDecimal#divideToIntegralValue(java.math.BigDecimal)java.math.BigDecimal#divideToIntegralValue(java.math.BigDecimal)java.math.BigDecimal#divideToIntegralValue(java.math.BigDecimal)
 	 */
 	Quantity divideToIntegralValue( double divisor );
-	
-	
 	
 	/**
 	 * Returns a {@code Quantity} whose value is the integer part of the quotient
@@ -617,8 +537,6 @@ public interface Quantity
 	 */
 	Quantity divideToIntegralValue( Number divisor );
 	
-	
-	
 	/**
 	 * Returns a {@code Quantity} whose numerical value is equal to ( {@code this} *
 	 * 10<sup>n</sup>). The scale of the result is <pre>{@code this.scale() - n}</pre>.
@@ -633,8 +551,6 @@ public interface Quantity
 	 */
 	Quantity scaleByPowerOfTen( int power );
 	
-	
-	
 	/**
 	 * Returns a {@code Quantity} whose value is the absolute value of this
 	 * {@code Quantity}, and whose scale is {@code this.scale()}.
@@ -643,8 +559,6 @@ public interface Quantity
 	 */
 	Quantity abs();
 	
-	
-	
 	/**
 	 * Returns a {@code Quantity} whose value is <pre>{@code -this}</pre>, and whose scale is
 	 * {@code this.scale()}.
@@ -652,8 +566,6 @@ public interface Quantity
 	 * @return {@code -this}.
 	 */
 	Quantity negate();
-	
-	
 	
 	/**
 	 * Returns a {@code Quantity} whose value is <pre>{@code +this}</pre>, with rounding according to
@@ -667,8 +579,6 @@ public interface Quantity
 	 */
 	Quantity plus();
 	
-	
-	
 	/**
 	 * Returns a {@code Quantity} which is numerically equal to this one but with any trailing
 	 * zeros removed from the representation. For example, stripping the trailing zeros from the
@@ -679,6 +589,5 @@ public interface Quantity
 	 * @return a numerically equal {@code Quantity} with any trailing zeros removed.
 	 */
 	Quantity stripTrailingZeros();
-	
 	
 	}

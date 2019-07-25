@@ -7,16 +7,8 @@ package life.expert.common.function;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 /**
- *in order to be able to put the code that calls checked exceptions in lambda
+ * in order to be able to put the code that calls checked exceptions in lambda
  *
  * @param <T1>
  * 	the type parameter
@@ -34,8 +26,6 @@ package life.expert.common.function;
 @FunctionalInterface
 public interface CheckedConsumer6<T1, T2, T3, T4, T5, T6>
 	{
-	
-	
 	
 	/**
 	 * Accept.

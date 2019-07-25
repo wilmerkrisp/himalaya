@@ -7,20 +7,10 @@ package life.expert.value.numeric.context;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 /**
  * The interface Context.
  */
 public interface Context
 	{
-	
-	
 	
 	}

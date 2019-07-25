@@ -7,14 +7,6 @@ package life.expert.value.numeric.utils;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -23,14 +15,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
-
-
-
-
-
-
-
 
 /**
  * This enumeration provides general utility functions supporting conversion of number types to BigDecimal.
@@ -133,20 +117,13 @@ public enum ConvertBigDecimal
 					}
 				};
 	
-	
-	
 	abstract BigDecimal getDecimal( Number num );
-	
-	
 	
 	static BigDecimal of( Number num )
 		{
-		Objects.requireNonNull( num ,
-		                        "Number is required." );
+		Objects.requireNonNull( num , "Number is required." );
 		return factory( num ).getDecimal( num );
 		}
-	
-	
 	
 	private static ConvertBigDecimal factory( Number num )
 		{
@@ -177,21 +154,9 @@ public enum ConvertBigDecimal
 		return DEFAULT;
 		}
 	
+	private static final List<Class<? extends Number>> INTEGERS = Arrays.asList( Long.class , Integer.class , Short.class , Byte.class , AtomicLong.class , AtomicInteger.class );
 	
-	
-	private static final List<Class<? extends Number>> INTEGERS = Arrays.asList( Long.class ,
-	                                                                             Integer.class ,
-	                                                                             Short.class ,
-	                                                                             Byte.class ,
-	                                                                             AtomicLong.class ,
-	                                                                             AtomicInteger.class );
-	
-	
-	
-	private static final List<Class<? extends Number>> FLOATINGS = Arrays.asList( Float.class ,
-	                                                                              Double.class );
-	
-	
+	private static final List<Class<? extends Number>> FLOATINGS = Arrays.asList( Float.class , Double.class );
 	
 	private static BigDecimal stripScalingZeroes( BigDecimal result )
 		{

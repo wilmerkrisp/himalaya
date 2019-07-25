@@ -2,12 +2,6 @@ package life.expert.common.io;
 
 
 
-
-
-
-
-
-
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -34,14 +28,6 @@ import static life.expert.common.async.LogUtils.*;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 /**
  * The type File helper.
  */
@@ -50,16 +36,8 @@ import static life.expert.common.async.LogUtils.*;
 public final class FileWrappers
 	{
 	
-	
-	
 	// constant
 	private static final String DEFAULT_FILENAME = "default.txt";
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * for using inside streamApi
@@ -82,8 +60,6 @@ public final class FileWrappers
 			return Optional.empty();
 			}
 		}
-	
-	
 	
 	/**
 	 * Create or retrieve file file.
@@ -112,8 +88,6 @@ public final class FileWrappers
 		
 		Path path   = Paths.get( fileName );
 		Path parent = path.getParent();
-		
-		
 		
 		try
 			{
@@ -148,8 +122,6 @@ public final class FileWrappers
 	
 	//<editor-fold desc="wrappers">
 	
-	
-	
 	/**
 	 * Io wrapper.
 	 *
@@ -172,8 +144,6 @@ public final class FileWrappers
 			throw new RuntimeException( exception );
 			}
 		}
-	
-	
 	
 	/**
 	 * Io wrapper.
@@ -201,8 +171,6 @@ public final class FileWrappers
 			}
 		}
 	
-	
-	
 	/**
 	 * Io wrapper.
 	 *
@@ -228,8 +196,6 @@ public final class FileWrappers
 			throw new RuntimeException( errorMessage.get() , exception );
 			}
 		}
-	
-	
 	
 	/**
 	 * Io wrapper e.
@@ -257,8 +223,6 @@ public final class FileWrappers
 			throw new RuntimeException( exception );
 			}
 		}
-	
-	
 	
 	/**
 	 * Io wrapper e.
@@ -290,8 +254,6 @@ public final class FileWrappers
 			}
 		}
 	
-	
-	
 	/**
 	 * Io wrapper e.
 	 *
@@ -322,8 +284,6 @@ public final class FileWrappers
 			}
 		}
 	
-	
-	
 	/**
 	 * Io optional optional.
 	 *
@@ -350,8 +310,6 @@ public final class FileWrappers
 			return Optional.empty();
 			}
 		}
-	
-	
 	
 	/**
 	 * Io wrapper.
@@ -384,8 +342,6 @@ public final class FileWrappers
 			}
 		}
 	
-	
-	
 	/**
 	 * Io wrapper.
 	 *
@@ -413,8 +369,6 @@ public final class FileWrappers
 			throw new RuntimeException( exception );
 			}
 		}
-	
-	
 	
 	/**
 	 * Io wrapper.
@@ -446,8 +400,6 @@ public final class FileWrappers
 			throw new RuntimeException( errorMessage.get() , exception );
 			}
 		}
-	
-	
 	
 	/**
 	 * Writer wrapper runnable io.

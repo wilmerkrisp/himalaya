@@ -7,25 +7,9 @@ package life.expert.value.numeric.utils;
 //
 //--------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Objects;
-
-
-
-
-
-
-
-
 
 /**
  * Default implementation of {@link NumberValue} based on {@link BigDecimal}.
@@ -34,14 +18,10 @@ public final class DefaultNumberValue
 	extends NumberValue
 	{
 	
-	
-	
 	/**
 	 * The numeric value.
 	 */
 	private final Number number;
-	
-	
 	
 	/**
 	 * The value 1, with a scale of 0.<br>
@@ -51,8 +31,6 @@ public final class DefaultNumberValue
 	 */
 	public static final NumberValue ONE = new DefaultNumberValue( BigDecimal.ONE );
 	
-	
-	
 	/**
 	 * Instantiates a new Default number value.
 	 *
@@ -61,11 +39,8 @@ public final class DefaultNumberValue
 	 */
 	public DefaultNumberValue( Number number )
 		{
-		this.number = Objects.requireNonNull( number ,
-		                                      "Number required" );
+		this.number = Objects.requireNonNull( number , "Number required" );
 		}
-	
-	
 	
 	/**
 	 * Creates a new instance of {@link NumberValue}, using the given number.
@@ -80,8 +55,6 @@ public final class DefaultNumberValue
 		return new DefaultNumberValue( number );
 		}
 	
-	
-	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.money.NumberValue#getNumberType()
@@ -92,8 +65,6 @@ public final class DefaultNumberValue
 		return this.number.getClass();
 		}
 	
-	
-	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.money.NumberValue#getPrecision()
@@ -103,8 +74,6 @@ public final class DefaultNumberValue
 		{
 		return numberValue( BigDecimal.class ).precision();
 		}
-	
-	
 	
 	/*
 	 * (non-Javadoc)
@@ -117,8 +86,6 @@ public final class DefaultNumberValue
 		                        .scale();
 		}
 	
-	
-	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.money.NumberValue#getIntValue()
@@ -128,8 +95,6 @@ public final class DefaultNumberValue
 		{
 		return this.number.intValue();
 		}
-	
-	
 	
 	/*
 	 * (non-Javadoc)
@@ -142,8 +107,6 @@ public final class DefaultNumberValue
 		                        .intValueExact();
 		}
 	
-	
-	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.money.NumberValue#getLongValue()
@@ -153,8 +116,6 @@ public final class DefaultNumberValue
 		{
 		return this.number.longValue();
 		}
-	
-	
 	
 	/*
 	 * (non-Javadoc)
@@ -167,8 +128,6 @@ public final class DefaultNumberValue
 		                        .longValueExact();
 		}
 	
-	
-	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.money.NumberValue#getFloatValue()
@@ -179,8 +138,6 @@ public final class DefaultNumberValue
 		return this.number.floatValue();
 		}
 	
-	
-	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.money.NumberValue#getDoubleValue()
@@ -190,8 +147,6 @@ public final class DefaultNumberValue
 		{
 		return this.number.doubleValue();
 		}
-	
-	
 	
 	/*
 	 * (non-Javadoc)
@@ -208,8 +163,6 @@ public final class DefaultNumberValue
 		return d;
 		}
 	
-	
-	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.money.NumberValue#getAmountFractionNumerator()
@@ -223,8 +176,6 @@ public final class DefaultNumberValue
 		         .longValueExact();
 		}
 	
-	
-	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.money.NumberValue#getAmountFractionDenominator()
@@ -237,8 +188,6 @@ public final class DefaultNumberValue
 		                                      .longValueExact();
 		}
 	
-	
-	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.money.NumberValue#getNumberValue(java.lang.Class)
@@ -246,11 +195,8 @@ public final class DefaultNumberValue
 	@Override
 	public <T extends Number> T numberValue( Class<T> numberType )
 		{
-		return ConvertNumberValue.of( numberType ,
-		                              number );
+		return ConvertNumberValue.of( numberType , number );
 		}
-	
-	
 	
 	/*
 	 * (non-Javadoc)
@@ -266,8 +212,6 @@ public final class DefaultNumberValue
 		return new DefaultNumberValue( new BigDecimal( this.number.toString() ).round( mathContext ) );
 		}
 	
-	
-	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.money.NumberValue#numberValueExact(java.lang.Class)
@@ -275,11 +219,8 @@ public final class DefaultNumberValue
 	@Override
 	public <T extends Number> T numberValueExact( Class<T> numberType )
 		{
-		return ConvertNumberValue.ofExact( numberType ,
-		                                   number );
+		return ConvertNumberValue.ofExact( numberType , number );
 		}
-	
-	
 	
 	/**
 	 * Creates a {@link BigDecimal} from the given {@link Number} doing the valid conversion
@@ -297,8 +238,6 @@ public final class DefaultNumberValue
 		{
 		return ConvertBigDecimal.of( num );
 		}
-	
-	
 	
 	/*
 	 * (non-Javadoc)

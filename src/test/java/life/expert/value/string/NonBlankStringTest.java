@@ -1,8 +1,8 @@
 package life.expert.value.string;
 
 
-import static life.expert.common.reactivestreams.Preconditions.*; //reactive check
 
+import static life.expert.common.reactivestreams.Preconditions.*; //reactive check
 
 import lombok.NonNull;//@NOTNULL
 
@@ -73,9 +73,8 @@ class NonBlankStringTest
 		                            .single();
 		
 		//var ff=checkNotNull( input ).then(just("NEW VALUE"));
-		var ff=just(input).then(just("NEW VALUE"));
-		ff.subscribe( logAtInfoConsumer("NEXTT") , logAtErrorConsumer("ERRORR") , logAtInfoRunnable("COMPLETEE") );
-		
+		var ff = just( input ).then( just( "NEW VALUE" ) );
+		ff.subscribe( logAtInfoConsumer( "NEXTT" ) , logAtErrorConsumer( "ERRORR" ) , logAtInfoRunnable( "COMPLETEE" ) );
 		
 		}
 	
@@ -86,6 +85,6 @@ class NonBlankStringTest
 		return "otvet+" + string;
 		//return null;
 		
-				}
+		}
 		
 	}
