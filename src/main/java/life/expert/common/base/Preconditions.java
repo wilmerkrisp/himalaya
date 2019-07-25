@@ -677,6 +677,7 @@ public final class Preconditions
 	public static <E> boolean isCheckArgument( Collection<E> collection ,
 	                                           @Nullable Predicate<E> invalidElement )
 		{
+		
 		//return !( (Predicate< Collection< E > >) goodCollection ).and( noneMatchInCollection( invalidElement ) ).test( collection );
 		return ( (Predicate<Collection<E>>) badCollection ).or( anyMatchInCollection( invalidElement ) )
 		                                                   .test( collection );

@@ -9,10 +9,8 @@ package life.expert.common.collect;
 
 
 import com.google.common.collect.Range;
-import com.google.common.graph.EndpointPair;
-import com.google.common.graph.Graph;
+import life.expert.common.async.LogUtils;
 import life.expert.common.graph.RenderGraph;
-import life.expert.common.io.FileUtils;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -24,16 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
-import static life.expert.common.async.LogUtils.logAtError_;
-import static life.expert.common.async.LogUtils.log_;
-
-
-
-
-
-
-
-
+import static life.expert.common.async.LogUtils.logAtError;
 
 /**
  * allows you to mark elements of a collection (for example, mark one of the elements with an asterisk) and output such a collection as a string
@@ -223,7 +212,7 @@ public class RenderCollection<T>
 	 */
 	public RenderCollection<T> log()
 		{
-		log_( renderToString() );
+		LogUtils.log( renderToString() );
 		return this;
 		}
 	
@@ -249,7 +238,7 @@ public class RenderCollection<T>
 			var sym = v == null ? "*" : v.isBlank() ? "*" : v;
 			if( !( list_range.contains( i ) ) )
 				{
-				logAtError_( "Element marker {} out of range in Collection of size {}" , i , list_range );
+				logAtError( "Element marker {} out of range in Collection of size {}" , i , list_range );
 				}
 			list.set( i , "*" + list.get( i ) );
 			}
@@ -261,10 +250,10 @@ public class RenderCollection<T>
 			var mid = v.length() / 2;
 			var v1  = v.substring( 0 , mid );
 			var v2  = v.substring( mid );
-			log_( "mid={} v1={} v2={}" , mid , v1 , v2 );
+			LogUtils.log( "mid={} v1={} v2={}" , mid , v1 , v2 );
 			if( !( list_range.encloses( i ) ) )
 				{
-				logAtError_( "Bracket marker {} out of range in Collection of size {}" , i , list_range );
+				logAtError( "Bracket marker {} out of range in Collection of size {}" , i , list_range );
 				}
 			
 			int a = i.lowerEndpoint();

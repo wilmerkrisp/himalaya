@@ -12,6 +12,7 @@ import com.google.common.graph.EndpointPair;
 import com.google.common.graph.Graph;
 import com.google.common.graph.Network;
 import com.google.common.graph.ValueGraph;
+import life.expert.common.async.LogUtils;
 import life.expert.common.io.FileUtils;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
@@ -314,7 +315,7 @@ public final class RenderGraph<N>
 	 */
 	public RenderGraph<N> log()
 		{
-		log_( renderToString() );
+		LogUtils.log( renderToString() );
 		return this;
 		}
 	

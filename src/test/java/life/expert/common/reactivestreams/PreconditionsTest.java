@@ -19,6 +19,7 @@ import static com.google.common.base.Preconditions.*;   //checkArgument
 import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
 
 import org.apache.commons.lang3.StringUtils;            //isNotBlank
+import reactor.function.TupleUtils;
 
 import java.util.function.*;                            //producer supplier
 
@@ -58,7 +59,24 @@ class PreconditionsTest
 	{
 	
 	@Test
-	void checkArgument()
+	void checkArgument1Test()
 		{
+		String input = "SUPERVALUE";
+		var    f     = checkArgument( input , StringUtils::isNotBlank , "EMPTY" );
+		f.subscribe( logAtInfoConsumer( "NEXT" ) , logAtErrorConsumer( "ERROR" ) , logAtInfoRunnable( "COMPLETE" ) );
+		
+		//f.map( TupleUtils.function( this::$method$_ ) ).single() ;
 		}
+	
+	@Test
+	void checkArgument2Test()
+		{
+		String input1 = "1";
+		String input2 = "2";
+		var    f      = checkArgument( input1 , input2 , ( x , y ) -> false , "EMPTY" );
+		f.subscribe( logAtInfoConsumer( "NEXT" ) , logAtErrorConsumer( "ERROR" ) , logAtInfoRunnable( "COMPLETE" ) );
+		
+		//f.map( TupleUtils.function( this::$method$_ ) ).single() ;
+		}
+		
 	}

@@ -8,11 +8,8 @@ package life.expert.common.io;
 
 
 
-import life.expert.common.async.LogUtils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,13 +24,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static reactor.core.publisher.Mono.*;
-import static reactor.core.scheduler.Schedulers.*;
 import static life.expert.common.async.LogUtils.*;
-
-import static io.vavr.API.*;                            //switch
-import static io.vavr.Predicates.*;                     //switch - case
-import static io.vavr.Patterns.*;                       //switch - case - success/failure
 
 //@Header@
 //--------------------------------------------------------------------------------
@@ -131,21 +122,21 @@ public final class FileWrappers
 				//Path build_dir = project.getBuildDir().toPath();
 				//parent = defaultDir.resolve( file);
 				path = defaultDir.resolve( fileName );
-				log_( "Parent is null. Using default dir: {}" , path.toAbsolutePath()
-				                                                    .toString() );
+				log( "Parent is null. Using default dir: {}" , path.toAbsolutePath()
+				                                                   .toString() );
 				}
 			if( Files.notExists( path ) )
 				{
 				Files.createDirectories( parent );
 				Files.createFile( path )
 				     .toFile();
-				log_( "Target file will be created: {}" , path.toAbsolutePath()
-				                                              .toString() );
+				log( "Target file will be created: {}" , path.toAbsolutePath()
+				                                             .toString() );
 				}
 			else
 				{
-				log_( "Target file will be retrieved: {}" , path.toAbsolutePath()
-				                                                .toString() );
+				log( "Target file will be retrieved: {}" , path.toAbsolutePath()
+				                                               .toString() );
 				}
 			}
 		catch( IOException exception )

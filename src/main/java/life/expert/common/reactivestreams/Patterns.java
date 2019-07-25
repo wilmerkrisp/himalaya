@@ -103,6 +103,8 @@ import static cyclops.control.Trampoline.done;
 public final class Patterns
 	{
 	
+ 
+	
 	
 	
 	//<editor-fold desc="reactor parallel flows">

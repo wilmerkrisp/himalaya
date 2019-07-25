@@ -15,12 +15,10 @@ package life.expert.common.async;
 
 
 
-import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -34,7 +32,6 @@ import java.util.function.UnaryOperator;
 //import io.reactivex.functions.Consumer;
 //import io.reactivex.functions.Function;
 //import io.reactivex.schedulers.Schedulers;
-import life.expert.common.async.ThreadUtils;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 //import io.reactivestreams.functions.Consumer;
@@ -69,8 +66,8 @@ public class LogUtils
 	 * @param arguments
 	 * 	the arguments
 	 */
-	public static final void log_( String format ,
-	                               Object... arguments )
+	public static final void log( String format ,
+	                              Object... arguments )
 		{
 		logger_.info( format , arguments );
 		}
@@ -85,8 +82,8 @@ public class LogUtils
 	 * @param arguments
 	 * 	the arguments
 	 */
-	public static final void print_( String format ,
-	                                 Object... arguments )
+	public static final void print( String format ,
+	                                Object... arguments )
 		{
 		var tuple = Optional.ofNullable( MessageFormatter.arrayFormat( format , arguments ) );
 		
@@ -108,8 +105,8 @@ public class LogUtils
 	 * @param arguments
 	 * 	the arguments
 	 */
-	public static final void logAtWarning_( String format ,
-	                                        Object... arguments )
+	public static final void logAtWarning( String format ,
+	                                       Object... arguments )
 		{
 		logger_.warn( format , arguments );
 		}
@@ -124,8 +121,8 @@ public class LogUtils
 	 * @param arguments
 	 * 	the arguments
 	 */
-	public static final void logAtError_( String format ,
-	                                      Object... arguments )
+	public static final void logAtError( String format ,
+	                                     Object... arguments )
 		{
 		logger_.error( format , arguments );
 		}
@@ -218,7 +215,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		print_( FORMAT_IN_ , Thread.currentThread() , message == null ? "printConsumer" : message , o );
+		print( FORMAT_IN_ , Thread.currentThread() , message == null ? "printConsumer" : message , o );
 		};
 		}
 	
@@ -255,7 +252,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		print_( FORMAT_IN2_ , Thread.currentThread() , message == null ? "printBiConsumer" : message , a , b );
+		print( FORMAT_IN2_ , Thread.currentThread() , message == null ? "printBiConsumer" : message , a , b );
 		};
 		}
 	
@@ -297,7 +294,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		print_( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "printFunction" : message , o , returnObject );
+		print( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "printFunction" : message , o , returnObject );
 		return returnObject;
 		};
 		}
@@ -344,7 +341,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		print_( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "printBiFunction" : message , a , b , returnObject );
+		print( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "printBiFunction" : message , a , b , returnObject );
 		return returnObject;
 		};
 		}
@@ -386,7 +383,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		print_( FORMAT_IN_ , Thread.currentThread() , message == null ? "printUnaryOperator" : message , o );
+		print( FORMAT_IN_ , Thread.currentThread() , message == null ? "printUnaryOperator" : message , o );
 		return o;
 		};
 		}
@@ -425,7 +422,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		print_( FORMAT_OUT_ , Thread.currentThread() , message == null ? "printSupplier" : message , returnObject );
+		print( FORMAT_OUT_ , Thread.currentThread() , message == null ? "printSupplier" : message , returnObject );
 		return returnObject;
 		};
 		}
@@ -463,7 +460,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		print_( FORMAT_ , Thread.currentThread() , message == null ? "printRunnable" : message );
+		print( FORMAT_ , Thread.currentThread() , message == null ? "printRunnable" : message );
 		};
 		}
 	
@@ -509,7 +506,7 @@ public class LogUtils
 	 */
 	public static void print( String message )
 		{
-		print_( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "print" : message );
+		print( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "print" : message );
 		}
 	
 	
@@ -538,7 +535,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		print_( FORMAT_IN_ , Thread.currentThread() , "printConsumerWrapper" , o );
+		print( FORMAT_IN_ , Thread.currentThread() , "printConsumerWrapper" , o );
 		consumer.accept( o );
 		};
 		}
@@ -561,7 +558,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		print_( FORMAT_IN2_ , Thread.currentThread() , "printBiConsumerWrapper" , a , b );
+		print( FORMAT_IN2_ , Thread.currentThread() , "printBiConsumerWrapper" , a , b );
 		consumer.accept( a , b );
 		};
 		}
@@ -584,7 +581,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		print_( FORMAT_IN_ , Thread.currentThread() , "printFunctionWrapper" , o );
+		print( FORMAT_IN_ , Thread.currentThread() , "printFunctionWrapper" , o );
 		return function.apply( o );
 		};
 		}
@@ -609,7 +606,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		print_( FORMAT_IN2_ , Thread.currentThread() , "printBiFunctionWrapper" , a , b );
+		print( FORMAT_IN2_ , Thread.currentThread() , "printBiFunctionWrapper" , a , b );
 		return function.apply( a , b );
 		};
 		}
@@ -653,7 +650,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		print_( FORMAT_ , Thread.currentThread() , "printSupplierWrapper" );
+		print( FORMAT_ , Thread.currentThread() , "printSupplierWrapper" );
 		return supplier.get();
 		};
 		}
@@ -674,7 +671,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		print_( FORMAT_ , Thread.currentThread() , "printRunnableWrapper" );
+		print( FORMAT_ , Thread.currentThread() , "printRunnableWrapper" );
 		runnable.run();
 		};
 		}
@@ -701,7 +698,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		log_( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , o );
+		log( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtInfoConsumer" : message , o );
 		};
 		}
 	
@@ -738,7 +735,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		log_( FORMAT_IN2_ , Thread.currentThread() , message == null ? "logAtInfoBiConsumer" : message , a , b );
+		log( FORMAT_IN2_ , Thread.currentThread() , message == null ? "logAtInfoBiConsumer" : message , a , b );
 		};
 		}
 	
@@ -780,7 +777,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		log_( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtInfoFunction" : message , o , returnObject );
+		log( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtInfoFunction" : message , o , returnObject );
 		return returnObject;
 		};
 		}
@@ -827,7 +824,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		log_( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "logAtInfoBiFunction" : message , a , b , returnObject );
+		log( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "logAtInfoBiFunction" : message , a , b , returnObject );
 		return returnObject;
 		};
 		}
@@ -869,7 +866,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		log_( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtInfoUnaryOperator" : message , o );
+		log( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtInfoUnaryOperator" : message , o );
 		return o;
 		};
 		}
@@ -908,7 +905,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		log_( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtInfoSupplier" : message , returnObject );
+		log( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtInfoSupplier" : message , returnObject );
 		return returnObject;
 		};
 		}
@@ -946,7 +943,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		log_( FORMAT_ , Thread.currentThread() , message == null ? "logAtInfoRunnable" : message );
+		log( FORMAT_ , Thread.currentThread() , message == null ? "logAtInfoRunnable" : message );
 		};
 		}
 	
@@ -992,7 +989,7 @@ public class LogUtils
 	 */
 	public static void logAtInfo( String message )
 		{
-		log_( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtInfo" : message );
+		log( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtInfo" : message );
 		}
 	
 	
@@ -1021,7 +1018,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		log_( FORMAT_IN_ , Thread.currentThread() , "logAtInfoConsumerWrapper" , o );
+		log( FORMAT_IN_ , Thread.currentThread() , "logAtInfoConsumerWrapper" , o );
 		consumer.accept( o );
 		};
 		}
@@ -1044,7 +1041,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		log_( FORMAT_IN2_ , Thread.currentThread() , "logAtInfoBiConsumerWrapper" , a , b );
+		log( FORMAT_IN2_ , Thread.currentThread() , "logAtInfoBiConsumerWrapper" , a , b );
 		consumer.accept( a , b );
 		};
 		}
@@ -1067,7 +1064,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		log_( FORMAT_IN_ , Thread.currentThread() , "logAtInfoFunctionWrapper" , o );
+		log( FORMAT_IN_ , Thread.currentThread() , "logAtInfoFunctionWrapper" , o );
 		return function.apply( o );
 		};
 		}
@@ -1092,7 +1089,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		log_( FORMAT_IN2_ , Thread.currentThread() , "logAtInfoBiFunctionWrapper" , a , b );
+		log( FORMAT_IN2_ , Thread.currentThread() , "logAtInfoBiFunctionWrapper" , a , b );
 		return function.apply( a , b );
 		};
 		}
@@ -1136,7 +1133,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		log_( FORMAT_ , Thread.currentThread() , "logAtInfoSupplierWrapper" );
+		log( FORMAT_ , Thread.currentThread() , "logAtInfoSupplierWrapper" );
 		return supplier.get();
 		};
 		}
@@ -1157,7 +1154,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		log_( FORMAT_ , Thread.currentThread() , "logAtInfoRunnableWrapper" );
+		log( FORMAT_ , Thread.currentThread() , "logAtInfoRunnableWrapper" );
 		runnable.run();
 		};
 		}
@@ -1184,7 +1181,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtError_( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtErrorConsumer" : message , o );
+		logAtError( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtErrorConsumer" : message , o );
 		};
 		}
 	
@@ -1221,7 +1218,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		logAtError_( FORMAT_IN2_ , Thread.currentThread() , message == null ? "logAtErrorBiConsumer" : message , a , b );
+		logAtError( FORMAT_IN2_ , Thread.currentThread() , message == null ? "logAtErrorBiConsumer" : message , a , b );
 		};
 		}
 	
@@ -1263,7 +1260,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtError_( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtErrorFunction" : message , o , returnObject );
+		logAtError( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtErrorFunction" : message , o , returnObject );
 		return returnObject;
 		};
 		}
@@ -1310,7 +1307,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		logAtError_( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "logAtErrorBiFunction" : message , a , b , returnObject );
+		logAtError( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "logAtErrorBiFunction" : message , a , b , returnObject );
 		return returnObject;
 		};
 		}
@@ -1352,7 +1349,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtError_( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtErrorUnaryOperator" : message , o );
+		logAtError( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtErrorUnaryOperator" : message , o );
 		return o;
 		};
 		}
@@ -1391,7 +1388,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		logAtError_( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtErrorSupplier" : message , returnObject );
+		logAtError( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtErrorSupplier" : message , returnObject );
 		return returnObject;
 		};
 		}
@@ -1429,7 +1426,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		logAtError_( FORMAT_ , Thread.currentThread() , message == null ? "logAtErrorRunnable" : message );
+		logAtError( FORMAT_ , Thread.currentThread() , message == null ? "logAtErrorRunnable" : message );
 		};
 		}
 	
@@ -1474,7 +1471,7 @@ public class LogUtils
 	 */
 	public static void logAtError( String message )
 		{
-		logAtError_( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtError" : message );
+		logAtError( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtError" : message );
 		}
 	
 	
@@ -1503,7 +1500,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtError_( FORMAT_IN_ , Thread.currentThread() , "logAtErrorConsumerWrapper" , o );
+		logAtError( FORMAT_IN_ , Thread.currentThread() , "logAtErrorConsumerWrapper" , o );
 		consumer.accept( o );
 		};
 		}
@@ -1526,7 +1523,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		logAtError_( FORMAT_IN2_ , Thread.currentThread() , "logAtErrorBiConsumerWrapper" , a , b );
+		logAtError( FORMAT_IN2_ , Thread.currentThread() , "logAtErrorBiConsumerWrapper" , a , b );
 		consumer.accept( a , b );
 		};
 		}
@@ -1549,7 +1546,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtError_( FORMAT_IN_ , Thread.currentThread() , "logAtErrorFunctionWrapper" , o );
+		logAtError( FORMAT_IN_ , Thread.currentThread() , "logAtErrorFunctionWrapper" , o );
 		return function.apply( o );
 		};
 		}
@@ -1574,7 +1571,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		logAtError_( FORMAT_IN2_ , Thread.currentThread() , "logAtErrorBiFunctionWrapper" , a , b );
+		logAtError( FORMAT_IN2_ , Thread.currentThread() , "logAtErrorBiFunctionWrapper" , a , b );
 		return function.apply( a , b );
 		};
 		}
@@ -1618,7 +1615,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		logAtError_( FORMAT_ , Thread.currentThread() , "logAtErrorSupplierWrapper" );
+		logAtError( FORMAT_ , Thread.currentThread() , "logAtErrorSupplierWrapper" );
 		return supplier.get();
 		};
 		}
@@ -1639,7 +1636,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		logAtError_( FORMAT_ , Thread.currentThread() , "logAtErrorRunnableWrapper" );
+		logAtError( FORMAT_ , Thread.currentThread() , "logAtErrorRunnableWrapper" );
 		runnable.run();
 		};
 		}
@@ -1665,7 +1662,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtWarning_( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtWarningConsumer" : message , o );
+		logAtWarning( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtWarningConsumer" : message , o );
 		};
 		}
 	
@@ -1702,7 +1699,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		logAtWarning_( FORMAT_IN2_ , Thread.currentThread() , message == null ? "logAtWarningBiConsumer" : message , a , b );
+		logAtWarning( FORMAT_IN2_ , Thread.currentThread() , message == null ? "logAtWarningBiConsumer" : message , a , b );
 		};
 		}
 	
@@ -1744,7 +1741,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtWarning_( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtWarningFunction" : message , o , returnObject );
+		logAtWarning( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtWarningFunction" : message , o , returnObject );
 		return returnObject;
 		};
 		}
@@ -1791,7 +1788,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		logAtWarning_( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "logAtWarningBiFunction" : message , a , b , returnObject );
+		logAtWarning( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "logAtWarningBiFunction" : message , a , b , returnObject );
 		return returnObject;
 		};
 		}
@@ -1833,7 +1830,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtWarning_( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtWarningUnaryOperator" : message , o );
+		logAtWarning( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtWarningUnaryOperator" : message , o );
 		return o;
 		};
 		}
@@ -1872,7 +1869,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		logAtWarning_( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtWarningSupplier" : message , returnObject );
+		logAtWarning( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtWarningSupplier" : message , returnObject );
 		return returnObject;
 		};
 		}
@@ -1910,7 +1907,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		logAtWarning_( FORMAT_ , Thread.currentThread() , message == null ? "logAtWarningRunnable" : message );
+		logAtWarning( FORMAT_ , Thread.currentThread() , message == null ? "logAtWarningRunnable" : message );
 		};
 		}
 	
@@ -1955,7 +1952,7 @@ public class LogUtils
 	 */
 	public static void logAtWarning( String message )
 		{
-		logAtWarning_( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtWarning" : message );
+		logAtWarning( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtWarning" : message );
 		}
 	
 	
@@ -1984,7 +1981,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtWarning_( FORMAT_IN_ , Thread.currentThread() , "logAtWarningConsumerWrapper" , o );
+		logAtWarning( FORMAT_IN_ , Thread.currentThread() , "logAtWarningConsumerWrapper" , o );
 		consumer.accept( o );
 		};
 		}
@@ -2007,7 +2004,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		logAtWarning_( FORMAT_IN2_ , Thread.currentThread() , "logAtWarningBiConsumerWrapper" , a , b );
+		logAtWarning( FORMAT_IN2_ , Thread.currentThread() , "logAtWarningBiConsumerWrapper" , a , b );
 		consumer.accept( a , b );
 		};
 		}
@@ -2030,7 +2027,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtWarning_( FORMAT_IN_ , Thread.currentThread() , "logAtWarningFunctionWrapper" , o );
+		logAtWarning( FORMAT_IN_ , Thread.currentThread() , "logAtWarningFunctionWrapper" , o );
 		return function.apply( o );
 		};
 		}
@@ -2055,7 +2052,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		logAtWarning_( FORMAT_IN2_ , Thread.currentThread() , "logAtWarningBiFunctionWrapper" , a , b );
+		logAtWarning( FORMAT_IN2_ , Thread.currentThread() , "logAtWarningBiFunctionWrapper" , a , b );
 		return function.apply( a , b );
 		};
 		}
@@ -2099,7 +2096,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		logAtWarning_( FORMAT_ , Thread.currentThread() , "logAtWarningSupplierWrapper" );
+		logAtWarning( FORMAT_ , Thread.currentThread() , "logAtWarningSupplierWrapper" );
 		return supplier.get();
 		};
 		}
@@ -2120,7 +2117,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		logAtWarning_( FORMAT_ , Thread.currentThread() , "logAtWarningRunnableWrapper" );
+		logAtWarning( FORMAT_ , Thread.currentThread() , "logAtWarningRunnableWrapper" );
 		runnable.run();
 		};
 		}
@@ -2629,7 +2626,7 @@ public class LogUtils
 		{
 		return ( x ) ->
 		{
-		log_( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayUnaryOperator" : message , x , second );
+		log( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayUnaryOperator" : message , x , second );
 		ThreadUtils.delay( second );
 		return x;
 		};
@@ -2676,7 +2673,7 @@ public class LogUtils
 		{
 		return ( x ) ->
 		{
-		log_( FORMAT_INOUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunction" : message , x , returnObject , second );
+		log( FORMAT_INOUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunction" : message , x , returnObject , second );
 		ThreadUtils.delay( second );
 		return returnObject;
 		};
@@ -2730,7 +2727,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		log_( FORMAT_IN2OUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunction" : message , a , b , returnObject , second );
+		log( FORMAT_IN2OUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunction" : message , a , b , returnObject , second );
 		ThreadUtils.delay( second );
 		return returnObject;
 		};
@@ -2779,7 +2776,7 @@ public class LogUtils
 		{
 		return ( x ) ->
 		{
-		log_( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayConsumer" : message , x , second );
+		log( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayConsumer" : message , x , second );
 		ThreadUtils.delay( second );
 		};
 		}
@@ -2822,7 +2819,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		log_( FORMAT_IN2_DELAY_ , Thread.currentThread() , message == null ? "delayConsumer" : message , a , b , second );
+		log( FORMAT_IN2_DELAY_ , Thread.currentThread() , message == null ? "delayConsumer" : message , a , b , second );
 		ThreadUtils.delay( second );
 		};
 		}
@@ -2868,7 +2865,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		log_( FORMAT_OUT_DELAY_ , Thread.currentThread() , message == null ? "delaySupplier" : message , passThought , second );
+		log( FORMAT_OUT_DELAY_ , Thread.currentThread() , message == null ? "delaySupplier" : message , passThought , second );
 		ThreadUtils.delay( second );
 		return passThought;
 		};
@@ -2913,7 +2910,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		log_( FORMAT_DELAY_ , Thread.currentThread() , message == null ? "delayRunnable" : message , second );
+		log( FORMAT_DELAY_ , Thread.currentThread() , message == null ? "delayRunnable" : message , second );
 		ThreadUtils.delay( second );
 		};
 		}
@@ -2966,7 +2963,7 @@ public class LogUtils
 		return () ->
 		{
 		
-		log_( FORMAT_OUT_DELAY_ , Thread.currentThread() , message == null ? "delaySupplierWithError" : message , passThought , second );
+		log( FORMAT_OUT_DELAY_ , Thread.currentThread() , message == null ? "delaySupplierWithError" : message , passThought , second );
 		ThreadUtils.delay( second );
 		if( passThought.equals( errValueForCompare ) )
 			{
@@ -2998,7 +2995,7 @@ public class LogUtils
 		{
 		return ( x ) ->
 		{
-		log_( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayUnaryOperatorWithError" : message , x , second );
+		log( FORMAT_IN_DELAY_ , Thread.currentThread() , message == null ? "delayUnaryOperatorWithError" : message , x , second );
 		ThreadUtils.delay( second );
 		if( x.equals( errValueForCompare ) )
 			{
@@ -3035,7 +3032,7 @@ public class LogUtils
 		{
 		return ( x ) ->
 		{
-		log_( FORMAT_INOUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunctionWithError" : message , x , returnObject , second );
+		log( FORMAT_INOUT_DELAY_ , Thread.currentThread() , message == null ? "delayFunctionWithError" : message , x , returnObject , second );
 		ThreadUtils.delay( second );
 		if( x.equals( errValueForCompare ) )
 			{
@@ -3067,7 +3064,7 @@ public class LogUtils
 	 */
 	public static <E> E defaultDelayUnaryOperator( E object )
 		{
-		log_( FORMAT_INOUT_DELAY_ , Thread.currentThread() , "defaultDelayUnaryOperator" , object , object , DEFAULT_DELAY_ );
+		log( FORMAT_INOUT_DELAY_ , Thread.currentThread() , "defaultDelayUnaryOperator" , object , object , DEFAULT_DELAY_ );
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		return object;
 		}
@@ -3084,7 +3081,7 @@ public class LogUtils
 	 */
 	public static <E> void defaultDelayConsumer( E object )
 		{
-		log_( FORMAT_IN_DELAY_ , Thread.currentThread() , "defaultDelayConsumer" , object , DEFAULT_DELAY_ );
+		log( FORMAT_IN_DELAY_ , Thread.currentThread() , "defaultDelayConsumer" , object , DEFAULT_DELAY_ );
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		
 		}
@@ -3106,7 +3103,7 @@ public class LogUtils
 	public static <E, F> void defaultDelayBiConsumer( E left ,
 	                                                  F right )
 		{
-		log_( FORMAT_IN2_DELAY_ , Thread.currentThread() , "defaultDelayBiConsumer" , left , right , DEFAULT_DELAY_ );
+		log( FORMAT_IN2_DELAY_ , Thread.currentThread() , "defaultDelayBiConsumer" , left , right , DEFAULT_DELAY_ );
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		
 		}
@@ -3121,7 +3118,7 @@ public class LogUtils
 	 */
 	public static <E> void defaultDelayRunnable()
 		{
-		log_( FORMAT_DELAY_ , Thread.currentThread() , "defaultDelayRunnable" , DEFAULT_DELAY_ );
+		log( FORMAT_DELAY_ , Thread.currentThread() , "defaultDelayRunnable" , DEFAULT_DELAY_ );
 		ThreadUtils.delay( DEFAULT_DELAY_ );
 		}
 	
