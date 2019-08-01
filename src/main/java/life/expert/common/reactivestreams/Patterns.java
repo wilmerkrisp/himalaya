@@ -80,6 +80,95 @@ import static cyclops.control.Trampoline.done;
 public final class Patterns
 	{
 	
+	//<editor-fold desc="gently try to flux">
+	
+	/**
+	 * Mono from try. Try with null inside transforms to empty event
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param tryObject
+	 * 	the try object
+	 *
+	 * @return the mono
+	 */
+	public static <T> Mono<T> monoFromNullableTry( Try<T> tryObject )
+		{
+		if( tryObject == null )
+			{
+			return error( new NullPointerException( "Input argument Try-object is null" ) );
+			}
+		
+		return tryObject.map( Mono::justOrEmpty )
+		                .getOrElseGet( Mono::error );
+		}
+	
+	/**
+	 * Mono from try. Try with null inside transforms to error event
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param tryObject
+	 * 	the try object
+	 *
+	 * @return the mono
+	 */
+	public static <T> Mono<T> monoFromTry( Try<T> tryObject )
+		{
+		if( tryObject == null )
+			{
+			return error( new NullPointerException( "Input argument Try-object is null" ) );
+			}
+		
+		return tryObject.map( Mono::just )
+		                .getOrElseGet( Mono::error );
+		}
+	
+	/**
+	 * Flux from  try. Try with null inside transforms to empty event
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param tryObject
+	 * 	the try object
+	 *
+	 * @return the flux
+	 */
+	public static <T> Flux<T> fluxFromNullableTry( Try<T> tryObject )
+		{
+		if( tryObject == null )
+			{
+			return Flux.error( new NullPointerException( "Input argument Try-object is null" ) );
+			}
+		
+		return tryObject.map( Mono::justOrEmpty )
+		                .map( Mono::flux )
+		                .getOrElseGet( Flux::error );
+		}
+	
+	/**
+	 * Flux from try.  Try with null inside transforms to error event
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param tryObject
+	 * 	the try object
+	 *
+	 * @return the flux
+	 */
+	public static <T> Flux<T> fluxFromTry( Try<T> tryObject )
+		{
+		if( tryObject == null )
+			{
+			return Flux.error( new NullPointerException( "Input argument Try-object is null" ) );
+			}
+		
+		return tryObject.map( Flux::just )
+		                .getOrElseGet( Flux::error );
+		}
+	
+	//</editor-fold>
+	
 	//<editor-fold desc="reactor parallel flows">
 	
 	/**

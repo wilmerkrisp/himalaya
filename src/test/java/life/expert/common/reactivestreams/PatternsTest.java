@@ -291,6 +291,10 @@ o.subscribe( logAtInfoConsumer( "NEXT" ) , logAtInfoConsumer( "ERROR" ) , logAtI
 			
 		}
 	
+	
+	
+	
+	
 	//
 	//	@Test
 	//	void checkArgumentTest5()

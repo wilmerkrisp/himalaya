@@ -2338,8 +2338,7 @@ public final class CheckedUtils
 	 */
 	public static Function<? super Throwable,NullPointerException> nullPointerException( String description )
 		{
-		Objects.requireNonNull( description , "description is null" );
-		return ( err ) -> new NullPointerException( description );
+		return ( err ) -> new NullPointerException( description == null ? "" : description );
 		}
 	
 	/**
@@ -2352,8 +2351,7 @@ public final class CheckedUtils
 	 */
 	public static Function<? super Throwable,IllegalArgumentException> illegalArgumentException( String description )
 		{
-		Objects.requireNonNull( description , "description is null" );
-		return ( err ) -> new IllegalArgumentException( description , err );
+		return ( err ) -> new IllegalArgumentException(  description == null ? "" : description , err );
 		}
 	
 	/**
@@ -2366,8 +2364,7 @@ public final class CheckedUtils
 	 */
 	public static Function<? super Throwable,IllegalStateException> illegalStateException( String description )
 		{
-		Objects.requireNonNull( description , "description is null" );
-		return ( err ) -> new IllegalStateException( description , err );
+		return ( err ) -> new IllegalStateException(  description == null ? "" : description , err );
 		}
 	
 	//</editor-fold>

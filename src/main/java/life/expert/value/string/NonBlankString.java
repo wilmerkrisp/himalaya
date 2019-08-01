@@ -117,7 +117,7 @@ public final class NonBlankString
 	public static NonBlankString of( final String string )
 		{
 		//@formatter:off
-		Try<NonBlankString> try_ = Match( string ).of( Case( $( isNull() ) ,
+		Try<NonBlankString> try_ = Match( string.strip() ).of( Case( $( isNull() ) ,
                                          nullPointerFailure ( "string is marked non-null but is null" ) ) ,
                                    Case( $( String::isBlank ) ,
                                          illegalArgumentFailure( "string is marked non-blank but is blunk" )) ,
@@ -138,7 +138,7 @@ public final class NonBlankString
 	 */
 	public static Optional<NonBlankString> optionalOf( final String string )
 		{
-		return Optional.ofNullable( string )
+		return Optional.ofNullable( string.strip() )
 		               .filter( StringUtils::isNotBlank )
 		               .map( NonBlankString::new );
 		}
@@ -153,7 +153,7 @@ public final class NonBlankString
 	 */
 	public static Mono<NonBlankString> monoOf( final String string )
 		{
-		return justOrEmpty( string ).filter( StringUtils::isNotBlank )
+		return justOrEmpty( string.strip() ).filter( StringUtils::isNotBlank )
 		                            .map( NonBlankString::new )
 		                            .single();
 		}

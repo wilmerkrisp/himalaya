@@ -28,6 +28,10 @@ import static life.expert.common.function.NullableUtils.nullableFunction;
 import static reactor.core.publisher.Mono.*;
 import static reactor.core.publisher.Mono.justOrEmpty;
 
+import static io.vavr.API.*;                              //switch
+import static io.vavr.Predicates.*;                       //switch - case
+import static io.vavr.Patterns.*;                         //switch - case - success/failure
+
 /**
  * The type File utils.
  *
@@ -40,7 +44,7 @@ import static reactor.core.publisher.Mono.justOrEmpty;
  * 		                             .flatMap( FileUtils::createFileToMono )
  * 		                             .flatMap( FileUtils::writerFromPath );
  * 		new_file_flux.subscribe( w->w.write( dot ) , logAtErrorConsumer("ERROR") , logAtInfoRunnable("COMPLETE") );
- * }</pre>
+ * }*</pre>
  */
 @Slf4j
 @UtilityClass
@@ -48,6 +52,19 @@ public class FileUtils
 	{
 	
 	//<editor-fold desc="read file">
+	
+	/**
+	 * Get file as one string
+	 *
+	 * @param path
+	 * 	the path
+	 *
+	 * @return the mono with string or error event
+	 */
+	public static Mono<String> stringFromPath( Path path )
+		{
+		return justOrEmpty( unchecked( (Path p) -> Files.readString( p ) ).apply( path ) );
+		}
 	
 	/**
 	 * Lines from path flux.
@@ -93,7 +110,9 @@ public class FileUtils
 	/**
 	 * Write to path flux.
 	 *
-	 * <pre>{@code writeToPath( file ).subscribe( w->w.write( "dot" ) ); }</pre>
+	 * <pre>{@code
+	 * writeToPath( file ).subscribe( w->w.write( "dot" ) );
+	 * }*</pre>
 	 *
 	 * @param file
 	 * 	the file

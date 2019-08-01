@@ -63,7 +63,7 @@ class NonBlankStringTest
 	@Test
 	void monoOfTest()
 		{
-		String input = null;
+		String input = " ";
 		var f = justOrEmpty( input ).filter( StringUtils::isNotBlank )
 		                            .single()
 		                            .onErrorMap( illegalArgumentException( "Invalid param1" ) )

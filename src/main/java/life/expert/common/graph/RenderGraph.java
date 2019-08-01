@@ -96,7 +96,7 @@ public final class RenderGraph<N>
 	 */
 	public static <V> RenderGraph<V> graph( @NonNull Graph<V> graph )
 		{
-		return new RenderGraph<V>( RenderGraphDefaultStrategy.of( graph ) );
+		return new RenderGraph<V>( RenderGraphStrategy.DefaultStrategy.of( graph ) );
 		}
 	
 	/**
@@ -113,7 +113,7 @@ public final class RenderGraph<N>
 	 */
 	public static <V, E> RenderGraph<V> graph( @NonNull Network<V,E> graph )
 		{
-		return new RenderGraph<V>( RenderGraphNetworkStrategy.of( graph ) );
+		return new RenderGraph<V>( RenderGraphStrategy.NetworkStrategy.of( graph ) );
 		}
 	
 	/**
@@ -130,7 +130,7 @@ public final class RenderGraph<N>
 	 */
 	public static <V, I> RenderGraph<V> graph( @NonNull ValueGraph<V,I> graph )
 		{
-		return new RenderGraph<V>( RenderGraphValueStrategy.of( graph ) );
+		return new RenderGraph<V>( RenderGraphStrategy.ValueStrategy.of( graph ) );
 		}
 	
 	/**
