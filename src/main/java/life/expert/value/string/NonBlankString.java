@@ -32,6 +32,31 @@ import static io.vavr.Predicates.*;                       //switch - case
 //import io.vavr.collection.List;                         //immutable List
 //import com.google.common.collect.*;                     //ImmutableList
 
+import java.util.function.*;                            //producer supplier
+
+import static java.util.stream.Collectors.*;            //toList streamAPI
+import static java.util.function.Predicate.*;           //isEqual streamAPI
+
+import java.util.Optional;
+
+import static reactor.core.publisher.Mono.*;
+import static reactor.core.scheduler.Schedulers.*;
+//import static  reactor.function.TupleUtils.*; //reactor's tuple->R INTO func->R
+import static life.expert.common.function.TupleUtils.*; //vavr's tuple->R INTO func->R
+
+import static life.expert.common.async.LogUtils.*;        //logAtInfo
+import static life.expert.common.function.NullableUtils.*;//.map(nullableFunction)
+import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
+import static life.expert.common.reactivestreams.Preconditions.*; //reactive check
+import static life.expert.common.reactivestreams.Patterns.*;    //reactive helper functions
+import static life.expert.common.base.Objects.*;          //deepCopyOfObject
+
+import static io.vavr.API.*;                              //switch
+import static io.vavr.Predicates.*;                       //switch - case
+import static io.vavr.Patterns.*;                         //switch - case - success/failure
+import static cyclops.control.Trampoline.more;
+import static cyclops.control.Trampoline.done;
+
 //@Header@
 //--------------------------------------------------------------------------------
 //
@@ -41,22 +66,15 @@ import static io.vavr.Predicates.*;                       //switch - case
 //--------------------------------------------------------------------------------
 
 /**
- * simple immutable class: String
+ * simple immutable class: non blank and stripped String
  *
  * - pattern new-call
  * - not for inheritance
  *
  * <pre>{@code
- * //pattern new-call
- * 	  var  o = NonBlankString.of("Test");
- * 	  var o = NonBlankString.<String, String>builder().item1("f").build();
- * var b=o.compute();
- * }****</pre>
+ *      var s=NonBlankString.tryOf( goodString );
+ * }</pre>
  *
- *
- * Every constructor/fabric can raise the exceptions:
- * throws NullPointerException if argument nullable
- * throws IllegalArgumentException if argument empty
  */
 @Value
 @AllArgsConstructor( access = AccessLevel.PRIVATE )
@@ -67,7 +85,7 @@ public final class NonBlankString
 	{
 	
 	/**
-	 * item1
+	 * string
 	 *
 	 * -- SETTER --
 	 *
@@ -82,65 +100,58 @@ public final class NonBlankString
 	 */
 	private final String string;
 	
-	/*
-	pattern matching in vavr
-	
-	    - you need add static import to method with pattern matching
-	    import static life.expert.value.string.NonBlankStringPatterns.*;
-	*/
-	@Unapply
-	static Tuple1<String> NonBlankString( NonBlankString object )
-		{
-		return Tuple.of( object.getString() );
-		
-		}
-	
-	@Override
-	public int compareTo( NonBlankString o )
-		{
-		return ComparisonChain.start()
-		                      .compare( this.string , o.string )
-		                      .result();
-		}
-	
 	/**
-	 * Of non blank string.
+	 * Main fabric method for creating non blank string.
+	 *
+	 * @param string
+	 * 	the string
+	 *
+	 * @return the try with NonBlankString or with exception inside.
+	 */
+	public static Try<NonBlankString> tryOf( final String string )
+		{
+		//@formatter:off
+		return Match(string).of(
+				Case( $(isNull()) ,
+				      illegalArgumentFailure( "String must not be null." )),
+				Case( $( String::isBlank ) ,
+				      illegalArgumentFailure( "String must not be blank." )) ,
+				Case( $() ,
+				      s->Success( new NonBlankString(s.strip())) )
+	                       );
+		//@formatter:on
+		}
+	
+	/**<pre>
+	 * Classic fabric method for creating non blank string.
 	 *
 	 * @param string
 	 * 	the string
 	 *
 	 * @return the non blank string
 	 *
+	 * @throws IllegalArgumentException
+	 * 	if string non blank or nullable
+	 *
 	 * @deprecated please use pure functional methods #optionalOf #monoOf, without raise exceptions.
-	 */
+	</pre>*/
 	@Deprecated
 	public static NonBlankString of( final String string )
 		{
-		//@formatter:off
-		Try<NonBlankString> try_ = Match( string.strip() ).of( Case( $( isNull() ) ,
-                                         nullPointerFailure ( "string is marked non-null but is null" ) ) ,
-                                   Case( $( String::isBlank ) ,
-                                         illegalArgumentFailure( "string is marked non-blank but is blunk" )) ,
-                                   Case( $() ,
-                                          Success(  new NonBlankString( string ) ) ) );
-			//@formatter:on
-		
-		return try_.get();
+		return tryOf( string ).get();
 		}
 	
 	/**
-	 * Optional of optional.
+	 * Creating non blank string.
 	 *
 	 * @param string
 	 * 	the string
 	 *
-	 * @return the optional
+	 * @return the optional witn non blank string if success (or Optional.empty if exception)
 	 */
 	public static Optional<NonBlankString> optionalOf( final String string )
 		{
-		return Optional.ofNullable( string.strip() )
-		               .filter( StringUtils::isNotBlank )
-		               .map( NonBlankString::new );
+		return tryOf( string ).toJavaOptional();
 		}
 	
 	/**
@@ -153,9 +164,38 @@ public final class NonBlankString
 	 */
 	public static Mono<NonBlankString> monoOf( final String string )
 		{
-		return justOrEmpty( string.strip() ).filter( StringUtils::isNotBlank )
-		                            .map( NonBlankString::new )
-		                            .single();
+		return monoFromTry( tryOf( string ) );
+		}
+	
+	@Override
+	public int compareTo( NonBlankString o )
+		{
+		return ComparisonChain.start()
+		                      .compare( this.string , o.string )
+		                      .result();
+		}
+	
+	@Override
+	public String toString()
+		{
+		return this.string ;
+		}
+	
+	/**
+	 * pattern matching in vavr
+	 * - you need add static import to method with pattern matching
+	 * import static life.expert.value.string.NonBlankStringPatterns.*;
+	 *
+	 * @param object
+	 * 	the object
+	 *
+	 * @return the tuple 1
+	 */
+	@Unapply
+	public static Tuple1<String> NonBlankString( NonBlankString object )
+		{
+		return Tuple.of( object.getString() );
+		
 		}
 	
 	/////////////////////////////Builder/////////////////////////////
@@ -211,6 +251,11 @@ public final class NonBlankString
 			return NonBlankString.optionalOf( string );
 			}
 		
+		public Try<NonBlankString> buildTry()
+			{
+			return NonBlankString.tryOf( string );
+			}
+		
 		/**
 		 * Build mono mono.
 		 *
@@ -224,7 +269,7 @@ public final class NonBlankString
 		@Override
 		public String toString()
 			{
-			return "NonBlankString.NonBlankStringBuilder(string=" + this.string + ")";
+			return this.string ;
 			}
 		}
 	

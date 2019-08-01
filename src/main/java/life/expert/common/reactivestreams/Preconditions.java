@@ -4,6 +4,7 @@ package life.expert.common.reactivestreams;
 
 import io.vavr.CheckedConsumer;
 import io.vavr.CheckedFunction1;
+import io.vavr.control.Try;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,6 +12,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.function.*;
@@ -49,7 +51,7 @@ import static life.expert.common.reactivestreams.ForComprehension.*;
  * <pre>{@code
  *               Preconditions.compute();
  *               var s=Preconditions.MY_CONSTANT;
- * }****</pre>
+ * }*****</pre>
  */
 @UtilityClass
 @Slf4j
@@ -1252,4 +1254,273 @@ public final class Preconditions
 		}
 	//</editor-fold>
 	
+	//<editor-fold desc="error utils Flux">
+	
+	/**
+	 * Alias for  Flux.error(new NullPointerException())
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Flux}.
+	 *
+	 * @return Flux with error event.
+	 */
+	public static <T> Flux<T> nullPointerError()
+		{
+		return Flux.error( new NullPointerException() );
+		}
+	
+	 
+	
+	/**
+	 * Alias for  Flux.error(new NullPointerException(description))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Flux}.
+	 * @param description
+	 * 	the description
+	 *
+	 * @return Flux with error event.
+	 */
+	
+	public static <T> Flux<T> nullPointerError( String description )
+		{
+		return Flux.error( new NullPointerException( description ) );
+		}
+	
+	/**
+	 * Alias for  Flux.error(new IllegalArgumentException())
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Flux}.
+	 *
+	 * @return Flux with error event.
+	 */
+	
+	public static <T> Flux<T> illegalArgumentError()
+		{
+		return Flux.error( new IllegalArgumentException() );
+		}
+	
+	/**
+	 * Alias for  Flux.error(new IllegalArgumentException(description))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Flux}.
+	 * @param description
+	 * 	the description
+	 *
+	 * @return Flux with error event.
+	 */
+	
+	public static <T> Flux<T> illegalArgumentError( String description )
+		{
+		return Flux.error( new IllegalArgumentException( description ) );
+		}
+	
+	/**
+	 * Alias for  Flux.error(new IllegalArgumentException(description,cause))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Flux}.
+	 * @param description
+	 * 	the description
+	 * @param cause
+	 * 	the cause
+	 *
+	 * @return Flux with error event.
+	 */
+	
+	public static <T> Flux<T> illegalArgumentError( String description ,
+	                                                Throwable cause )
+		{
+		return Flux.error( new IllegalArgumentException( description , cause ) );
+		}
+	
+	/**
+	 * Alias for  Flux.error(new IllegalStateException())
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Flux}.
+	 *
+	 * @return Flux with error event.
+	 */
+	
+	public static <T> Flux<T> illegalStateError()
+		{
+		return Flux.error( new IllegalStateException() );
+		}
+	
+	/**
+	 * Alias for  Flux.error(new IllegalStateException(description))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Flux}.
+	 * @param description
+	 * 	the description
+	 *
+	 * @return Flux with error event.
+	 */
+	
+	public static <T> Flux<T> illegalStateError( String description )
+		{
+		return Flux.error( new IllegalStateException( description ) );
+		}
+	
+	/**
+	 * Alias for  Flux.error(new IllegalStateException(description,cause))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Flux}.
+	 * @param description
+	 * 	the description
+	 * @param cause
+	 * 	the cause
+	 *
+	 * @return Flux with error event.
+	 */
+	
+	public static <T> Flux<T> illegalStateError( String description ,
+	                                             Throwable cause )
+		{
+		return Flux.error( new IllegalStateException( description , cause ) );
+		}
+	
+	//</editor-fold>
+	
+	
+	
+	
+	//<editor-fold desc="error utils Mono">
+	
+	
+	
+	/**
+	 * Alias for Mono.error(new NullPointerException())
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Mono}.
+	 *
+	 * @return Mono with error event.
+	 */
+	
+	public static <T> Mono<T> nullPointerMonoError()
+		{
+		return error( new NullPointerException() );
+		}
+	
+	/**
+	 * Alias for  Mono.error(new NullPointerException(description))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Mono}.
+	 * @param description
+	 * 	the description
+	 *
+	 * @return Mono with error event.
+	 */
+	
+	public static <T> Mono<T> nullPointerMonoError( String description )
+		{
+		return Mono.error( new NullPointerException( description ) );
+		}
+	
+	/**
+	 * Alias for  Mono.error(new IllegalArgumentException())
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Mono}.
+	 *
+	 * @return Mono with error event.
+	 */
+	
+	public static <T> Mono<T> illegalArgumentMonoError()
+		{
+		return Mono.error( new IllegalArgumentException() );
+		}
+	
+	/**
+	 * Alias for  Mono.error(new IllegalArgumentException(description))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Mono}.
+	 * @param description
+	 * 	the description
+	 *
+	 * @return Mono with error event.
+	 */
+	
+	public static <T> Mono<T> illegalArgumentMonoError( String description )
+		{
+		return Mono.error( new IllegalArgumentException( description ) );
+		}
+	
+	/**
+	 * Alias for  Mono.error(new IllegalArgumentException(description,cause))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Mono}.
+	 * @param description
+	 * 	the description
+	 * @param cause
+	 * 	the cause
+	 *
+	 * @return Mono with error event.
+	 */
+	
+	public static <T> Mono<T> illegalArgumentMonoError( String description ,
+	                                                Throwable cause )
+		{
+		return Mono.error( new IllegalArgumentException( description , cause ) );
+		}
+	
+	/**
+	 * Alias for  Mono.error(new IllegalStateException())
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Mono}.
+	 *
+	 * @return Mono with error event.
+	 */
+	
+	public static <T> Mono<T> illegalStateMonoError()
+		{
+		return Mono.error( new IllegalStateException() );
+		}
+	
+	/**
+	 * Alias for  Mono.error(new IllegalStateException(description))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Mono}.
+	 * @param description
+	 * 	the description
+	 *
+	 * @return Mono with error event.
+	 */
+	
+	public static <T> Mono<T> illegalStateMonoError( String description )
+		{
+		return Mono.error( new IllegalStateException( description ) );
+		}
+	
+	/**
+	 * Alias for  Mono.error(new IllegalStateException(description,cause))
+	 *
+	 * @param <T>
+	 * 	Component type of the {@code Mono}.
+	 * @param description
+	 * 	the description
+	 * @param cause
+	 * 	the cause
+	 *
+	 * @return Mono with error event.
+	 */
+	
+	public static <T> Mono<T> illegalStateMonoError( String description ,
+	                                             Throwable cause )
+		{
+		return Mono.error( new IllegalStateException( description , cause ) );
+		}
+	
+	//</editor-fold>
 	}
