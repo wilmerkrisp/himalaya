@@ -37,10 +37,9 @@ import static reactor.core.publisher.Mono.just;
 //--------------------------------------------------------------------------------
 
 /**
- * the class allows you to mark some vertices or edges of the graph when outputting to a .dot file
- *
- * - pattern new-call
- * - not for inheritance
+ * The class allows you to mark some vertices or edges of the graph when outputting to a .dot file
+ * Builder pattern.
+
  *
  * <pre>{@code
  * MutableGraph<String> g = GraphBuilder.undirected()
@@ -261,9 +260,9 @@ public final class RenderGraph<N>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<N> log()
+	public RenderGraph<N> buildToLog()
 		{
-		LogUtils.log( renderToString() );
+		LogUtils.log( buildToString() );
 		return this;
 		}
 	
@@ -272,7 +271,7 @@ public final class RenderGraph<N>
 	 *
 	 * @return the string
 	 */
-	public String renderToString()
+	public String buildToString()
 		{
 		return graph.renderToString( markNodes , markEdges );
 		}
@@ -285,9 +284,9 @@ public final class RenderGraph<N>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<N> renderToFile( String fileName )
+	public RenderGraph<N> buildToFile( String fileName )
 		{
-		var dot = renderToString();
+		var dot = buildToString();
 		
 		var new_file_flux = just( DOT_OUTPUT_FOLDER + fileName )
 			                    //.log( "debug", Level.FINE, SignalType.ON_NEXT )
@@ -303,13 +302,13 @@ public final class RenderGraph<N>
 	 *
 	 * @return the render graph
 	 */
-	public RenderGraph<N> renderToFile()
+	public RenderGraph<N> buildToFile()
 		{
 		
 		var filename_with_datetime = String.format( "%d.dot" , Instant.now()
 		                                                              .toEpochMilli() );
 		//var filename_with_counter = String.format( "%d.dot" , ++file_name_counter_ );
-		return renderToFile( filename_with_datetime );
+		return buildToFile( filename_with_datetime );
 		}
 		
 	}

@@ -67,13 +67,31 @@ import static cyclops.control.Trampoline.done;
 //
 //--------------------------------------------------------------------------------
 
-/**
+/**<pre>
  * auxiliary static functions with arguments - several Mono
  *
  * - functional for-comprehension pattern for reactive flows
  * - required to convert a null value returned by a function to an empty flow event
  * - at the first null value returned, the chain of nested calls stops
- */
+ *
+ * - how to use for-comprehension: suppose that you need cycle with inner cycle, like,
+ * 1) imperative variant:
+ *
+ *      for i
+ *              for j
+ *                      someFunc(i,j)
+ *
+ * 2) pure reactive variant:
+ *
+ *      Flux1.flatMap(i->Flux2.map(j->someFunc(i,j)))
+ *
+ * 3) for-comprehension variant:
+ *
+ *      For(flux1,flux2).yield(someFunc(i,j))
+ *
+ *
+ *
+ </pre>*/
 @UtilityClass
 @Slf4j
 
@@ -998,6 +1016,60 @@ public final class Patterns
 			}
 			
 		}
+	//</editor-fold>
+	
+	//<editor-fold desc="simple for iterators">
+	
+	/**
+	 * Range of Integers from start to end, even in reverse order.
+	 * Borders inclusive.
+	 *
+	 * @param start
+	 * 	the start
+	 * @param end
+	 * 	the end
+	 *
+	 * @return the flux
+	 */
+	public static Flux<Integer> intRange( final int start ,
+	                        final int end )
+		{
+		boolean reverse = start > end;
+		return Flux.generate( () -> start , ( i , f ) ->
+		{
+		f.next( i );
+		if( i == end )
+			f.complete();
+		
+		return reverse ? i - 1 : i + 1;
+		} );
+		}
+	
+	/**
+	 *  Range of Longs from start to end, even in reverse order.
+	 *  Borders inclusive.
+	 *
+	 * @param start
+	 * 	the start
+	 * @param end
+	 * 	the end
+	 *
+	 * @return the flux
+	 */
+	public static Flux<Long> longRange( final long start ,
+	                      final long end )
+		{
+		boolean reverse = start > end;
+		return Flux.generate( () -> start , ( i , f ) ->
+		{
+		f.next( i );
+		if( i == end )
+			f.complete();
+		
+		return reverse ? i - 1 : i + 1;
+		} );
+		}
+	
 	//</editor-fold>
 	
 	}

@@ -19,7 +19,8 @@ import static java.util.stream.Collectors.toList;
 import static life.expert.common.async.LogUtils.logAtError;
 
 /**
- * allows you to mark elements of a collection (for example, mark one of the elements with an asterisk) and output such a collection as a string
+ * Allows you to mark elements of a collection (for example, mark one of the elements with an asterisk) and output such a collection as a string.
+ * Builder pattern.
  *
  * <pre>{@code RenderCollection.collection( sorted_list )
  * 	            .markElement( c , "*" )
@@ -176,9 +177,9 @@ public class RenderCollection<T>
 	 *
 	 * @return the render collection
 	 */
-	public RenderCollection<T> log()
+	public RenderCollection<T> buildToLog()
 		{
-		LogUtils.log( renderToString() );
+		LogUtils.log( buildToString() );
 		return this;
 		}
 	
@@ -187,7 +188,7 @@ public class RenderCollection<T>
 	 *
 	 * @return the string
 	 */
-	public String renderToString()
+	public String buildToString()
 		{
 		List<String> list = collection.stream()
 		                              .map( i -> "" + i )
