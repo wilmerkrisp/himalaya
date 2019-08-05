@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import io.vavr.CheckedFunction2;
 import io.vavr.Function2;
+import io.vavr.Tuple;
 import io.vavr.control.Try;
 import life.expert.value.string.NonBlankString;
 import lombok.NonNull;//@NOTNULL
@@ -26,6 +27,7 @@ import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
 import org.apache.commons.lang3.StringUtils;            //isNotBlank
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.util.function.*;                            //producer supplier
 
@@ -37,6 +39,8 @@ import java.util.Optional;
 import static reactor.core.publisher.Mono.*;
 import static reactor.core.scheduler.Schedulers.*;
 import static life.expert.common.async.LogUtils.*;        //logAtInfo
+import static life.expert.common.reactivestreams.Patterns.*;
+import static life.expert.common.reactivestreams.ForComprehension.*;
 import static life.expert.common.function.NullableUtils.*;//.map(nullableFunction)
 import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
 import static life.expert.common.reactivestreams.Preconditions.*; //reactive check
@@ -44,6 +48,21 @@ import static life.expert.common.reactivestreams.Preconditions.*; //reactive che
 import static life.expert.common.base.Objects.*;          //deepCopyOfObject
 
 import static io.vavr.API.*;                              //switch
+
+import static io.vavr.API.$;                            // pattern matching
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+import static io.vavr.API.CheckedFunction;//checked functions
+import static io.vavr.API.unchecked;    //checked->unchecked
+import static io.vavr.API.Function;     //lambda->Function3
+import static io.vavr.API.Tuple;
+import static io.vavr.API.Try;          //Try
+import static io.vavr.API.Failure;
+import static io.vavr.API.Success;
+import static io.vavr.API.Left;         //Either
+import static io.vavr.API.Right;
+
+
 import static io.vavr.Predicates.*;                       //switch - case
 import static io.vavr.Patterns.*;                         //switch - case - success/failure
 import static cyclops.control.Trampoline.more;
@@ -67,9 +86,9 @@ class ForComprehensionTest
 	@BeforeEach
 	void setUp()
 		{
-		
 		}
 	
+	//<editor-fold desc="helper functions for testing">
 	Flux<String> excflux( String message )
 		{
 		log( "excFlux: " + message );
@@ -113,6 +132,7 @@ class ForComprehensionTest
 		log( "emptyFunc: " + message );
 		return null;
 		}
+	//</editor-fold>
 	
 	//<editor-fold desc="error event functions">
 	
@@ -261,6 +281,20 @@ class ForComprehensionTest
 	
 	//</editor-fold>
 	
-	
+	//<editor-fold desc="Flux for comprehension testing">
+	@Test
+	void For_flux()
+		{
+		var f1  = range( 1 , 10 );
+		var f2  = range( 11 , 20 );
+		var rez = For( f1 , f2 ).yield( Tuple::of );
+		//rez.subscribe( logAtInfoConsumer("NEXT") , logAtErrorConsumer("ERROR") , logAtInfoRunnable("COMPLETE") );
+		
+		StepVerifier.create( rez )
+		            .expectNextCount( 100 )
+		            .expectComplete()
+		            .verify();
+		}
+	//</editor-fold>
 	
 	}
