@@ -2,8 +2,6 @@ package life.expert.value.string;
 
 
 
-import io.vavr.control.Try;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,13 +10,11 @@ import org.junit.jupiter.api.Test;
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 
 import org.apache.commons.lang3.StringUtils;            //isNotBlank
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.SignalType;
 import reactor.test.StepVerifier;
 
 import java.util.logging.Level;
 
-import static io.vavr.API.Success;
 import static reactor.core.publisher.Mono.*;
 import static life.expert.common.async.LogUtils.*;        //logAtInfo
 import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
@@ -55,37 +51,37 @@ class NonBlankStringTest
 	void tryOfTest()
 		{
 		
-		assert NonBlankString.tryOf( GOOD_STRING )
-		                     .get()
-		                     .toString()
-		                     .equals( STRIPPED_STRING );
+		assert SolidString.tryOf( GOOD_STRING )
+		                  .get()
+		                  .toString()
+		                  .equals( STRIPPED_STRING );
 		
-		assert NonBlankString.tryOf( BLANK_STRING )
-		                     .toString()
-		                     .equals( STRING_IS_BLANK_FAILURE );
+		assert SolidString.tryOf( BLANK_STRING )
+		                  .toString()
+		                  .equals( STRING_IS_BLANK_FAILURE );
 		
-		assert NonBlankString.tryOf( NULL_STRING )
-		                     .toString()
-		                     .equals( STRING_IS_NULL_FAILURE );
+		assert SolidString.tryOf( NULL_STRING )
+		                  .toString()
+		                  .equals( STRING_IS_NULL_FAILURE );
 		
-		//log( NonBlankString.tryOf( NULL_STRING ).toString() );
+		//log( SolidString.tryOf( NULL_STRING ).toString() );
 		}
 	
 	@Test
 	void ofTest()
 		{
-		NonBlankString.of( GOOD_STRING )
-		              .toString()
-		              .equals( STRIPPED_STRING );
+		SolidString.of( GOOD_STRING )
+		           .toString()
+		           .equals( STRIPPED_STRING );
 		
 		Assertions.assertThrows( IllegalArgumentException.class , () ->
 		{
-		NonBlankString.of( BLANK_STRING );
+		SolidString.of( BLANK_STRING );
 		} );
 		
 		Assertions.assertThrows( IllegalArgumentException.class , () ->
 		{
-		NonBlankString.of( NULL_STRING );
+		SolidString.of( NULL_STRING );
 		} );
 		
 		}
@@ -93,31 +89,31 @@ class NonBlankStringTest
 	@Test
 	void optionalOfTest()
 		{
-		assert NonBlankString.optionalOf( GOOD_STRING )
-		                     .get()
-		                     .toString()
-		                     .equals( STRIPPED_STRING );
+		assert SolidString.optionalOf( GOOD_STRING )
+		                  .get()
+		                  .toString()
+		                  .equals( STRIPPED_STRING );
 		
-		assert NonBlankString.optionalOf( BLANK_STRING ).isEmpty();
+		assert SolidString.optionalOf( BLANK_STRING ).isEmpty();
 		
 		
-		assert NonBlankString.optionalOf( NULL_STRING ).isEmpty();
+		assert SolidString.optionalOf( NULL_STRING ).isEmpty();
 		
 		}
 	
 	@Test
 	void monoOfTest()
 		{
-		StepVerifier.create( NonBlankString.monoOf( GOOD_STRING ) )
+		StepVerifier.create( SolidString.monoOf( GOOD_STRING ) )
 		            .expectNextCount( 1 )
 		            .expectComplete()
 		            .verify();
 		
-		StepVerifier.create( NonBlankString.monoOf( BLANK_STRING ) )
+		StepVerifier.create( SolidString.monoOf( BLANK_STRING ) )
 		            .expectError()
 		            .verify();
 		
-		StepVerifier.create( NonBlankString.monoOf( NULL_STRING ) )
+		StepVerifier.create( SolidString.monoOf( NULL_STRING ) )
 		            .expectError()
 		            .verify();
 		
