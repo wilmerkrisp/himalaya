@@ -10,7 +10,6 @@ package life.expert.value.string;
 //                                            Wilmer Krisp 2019/02/05
 //--------------------------------------------------------------------------------------------------------
 
-
 import io.vavr.Tuple1;
 import io.vavr.control.Try;
 import lombok.AccessLevel;
@@ -26,12 +25,10 @@ import com.google.common.collect.ComparisonChain;
 
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 
-import org.apache.commons.lang3.StringUtils;            //isNotBlank
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
-import static reactor.core.publisher.Mono.*;
 import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
 
 import static io.vavr.API.*;                              //switch
@@ -41,49 +38,27 @@ import static io.vavr.Predicates.*;                       //switch - case
 //import io.vavr.collection.List;                         //immutable List
 //import com.google.common.collect.*;                     //ImmutableList
 
-import java.util.function.*;                            //producer supplier
-
-import static java.util.stream.Collectors.*;            //toList streamAPI
-import static java.util.function.Predicate.*;           //isEqual streamAPI
-
-import java.util.Optional;
-
-import static reactor.core.publisher.Mono.*;
-import static reactor.core.scheduler.Schedulers.*;
 //import static  reactor.function.TupleUtils.*; //reactor's tuple->R INTO func->R
-import static life.expert.common.function.TupleUtils.*; //vavr's tuple->R INTO func->R
 
-import static life.expert.common.async.LogUtils.*;        //logAtInfo
-import static life.expert.common.function.NullableUtils.*;//.map(nullableFunction)
-import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
-import static life.expert.common.reactivestreams.Preconditions.*; //reactive check
 import static life.expert.common.reactivestreams.Patterns.*;    //reactive helper functions
-import static life.expert.common.base.Objects.*;          //deepCopyOfObject
-
-import static io.vavr.API.*;                              //switch
-import static io.vavr.Predicates.*;                       //switch - case
-import static io.vavr.Patterns.*;                         //switch - case - success/failure
-import static cyclops.control.Trampoline.more;
-import static cyclops.control.Trampoline.done;
-
 
 /**
- * simple immutable class: non blank and stripped String
+ * Simple immutable String holder class
+ * Class invariant: non blank and stripped String
  *
  * - pattern new-call
  * - not for inheritance
  *
  * <pre>{@code
- *      var s=NonBlankString.tryOf( goodString );
- * }</pre>
- *
+ *      var s=SolidString.tryOf( goodString );
+ * }*</pre>
  */
 @Value
 @AllArgsConstructor( access = AccessLevel.PRIVATE )
 @Slf4j
 @Patterns
-public final class NonBlankString
-	implements Comparable<NonBlankString>
+public final class SolidString
+	implements Comparable<SolidString>
 	{
 	
 	/**
@@ -108,9 +83,9 @@ public final class NonBlankString
 	 * @param string
 	 * 	the string
 	 *
-	 * @return the try with NonBlankString or with exception inside.
+	 * @return the try with SolidString or with exception inside.
 	 */
-	public static Try<NonBlankString> tryOf( final String string )
+	public static Try<SolidString> tryOf( final String string )
 		{
 		//@formatter:off
 		return Match(string).of(
@@ -119,26 +94,22 @@ public final class NonBlankString
 				Case( $( String::isBlank ) ,
 				      illegalArgumentFailure( "String must not be blank." )) ,
 				Case( $() ,
-				      s->Success( new NonBlankString(s.strip())) )
+				      s->Success( new SolidString(s.strip())) )
 	                       );
 		//@formatter:on
 		}
 	
-	/**<pre>
+	/**
+	 * <pre>
 	 * Classic fabric method for creating non blank string.
 	 *
-	 * @param string
-	 * 	the string
-	 *
+	 * @param string        the string
 	 * @return the non blank string
-	 *
-	 * @throws IllegalArgumentException
-	 * 	if string non blank or nullable
-	 *
-	 * @deprecated please use pure functional methods #optionalOf #monoOf, without raise exceptions.
-	</pre>*/
+	 * @throws IllegalArgumentException        if string non blank or nullable
+	 * @deprecated please use pure functional methods #optionalOf #monoOf, without raise exceptions. </pre>
+	 */
 	@Deprecated
-	public static NonBlankString of( final String string )
+	public static SolidString of( final String string )
 		{
 		return tryOf( string ).get();
 		}
@@ -151,7 +122,7 @@ public final class NonBlankString
 	 *
 	 * @return the optional witn non blank string if success (or Optional.empty if exception)
 	 */
-	public static Optional<NonBlankString> optionalOf( final String string )
+	public static Optional<SolidString> optionalOf( final String string )
 		{
 		return tryOf( string ).toJavaOptional();
 		}
@@ -164,13 +135,13 @@ public final class NonBlankString
 	 *
 	 * @return the mono
 	 */
-	public static Mono<NonBlankString> monoOf( final String string )
+	public static Mono<SolidString> monoOf( final String string )
 		{
 		return monoFromTry( tryOf( string ) );
 		}
 	
 	@Override
-	public int compareTo( NonBlankString o )
+	public int compareTo( SolidString o )
 		{
 		return ComparisonChain.start()
 		                      .compare( this.string , o.string )
@@ -180,7 +151,7 @@ public final class NonBlankString
 	@Override
 	public String toString()
 		{
-		return this.string ;
+		return this.string;
 		}
 	
 	/**
@@ -194,7 +165,7 @@ public final class NonBlankString
 	 * @return the tuple 1
 	 */
 	@Unapply
-	public static Tuple1<String> NonBlankString( NonBlankString object )
+	public static Tuple1<String> SolidString( SolidString object )
 		{
 		return Tuple.of( object.getString() );
 		
@@ -205,13 +176,14 @@ public final class NonBlankString
 	/**
 	 * The type Non blank string builder.
 	 */
-	public static class NonBlankStringBuilder
+	public static class SolidStringBuilder
 		{
 		
-		private String string;
+		private StringBuilder string = new StringBuilder();
 		
-		NonBlankStringBuilder()
+		SolidStringBuilder()
 			{
+			
 			}
 		
 		/**
@@ -222,10 +194,10 @@ public final class NonBlankString
 		 *
 		 * @return item1 the item1
 		 */
-		public NonBlankStringBuilder string( final String string )
+		public SolidStringBuilder append( final String string )
 			{
 			
-			this.string = string;
+			this.string.append( string );
 			return this;
 			}
 		
@@ -237,10 +209,10 @@ public final class NonBlankString
 		 * @deprecated please use pure functional methods #buildOptional #buildMono, without raise exceptions.
 		 */
 		@Deprecated
-		public NonBlankString build()
+		public SolidString build()
 			{
 			
-			return NonBlankString.of( string );
+			return SolidString.of( string.toString() );
 			}
 		
 		/**
@@ -248,14 +220,19 @@ public final class NonBlankString
 		 *
 		 * @return the optional
 		 */
-		public Optional<NonBlankString> buildOptional()
+		public Optional<SolidString> buildOptional()
 			{
-			return NonBlankString.optionalOf( string );
+			return SolidString.optionalOf( string.toString() );
 			}
 		
-		public Try<NonBlankString> buildTry()
+		/**
+		 * Build try try.
+		 *
+		 * @return the try
+		 */
+		public Try<SolidString> buildTry()
 			{
-			return NonBlankString.tryOf( string );
+			return SolidString.tryOf( string.toString() );
 			}
 		
 		/**
@@ -263,15 +240,15 @@ public final class NonBlankString
 		 *
 		 * @return the mono
 		 */
-		public Mono<NonBlankString> buildMono()
+		public Mono<SolidString> buildMono()
 			{
-			return NonBlankString.monoOf( string );
+			return SolidString.monoOf( string.toString() );
 			}
 		
 		@Override
 		public String toString()
 			{
-			return this.string ;
+			return this.string.toString();
 			}
 		}
 	
@@ -281,9 +258,9 @@ public final class NonBlankString
 	 * @return the non blank string builder
 	 */
 	//
-	public static NonBlankStringBuilder builder()
+	public static SolidStringBuilder builder()
 		{
-		return new NonBlankStringBuilder();
+		return new SolidStringBuilder();
 		}
 	
 	/**
@@ -291,9 +268,9 @@ public final class NonBlankString
 	 *
 	 * @return the non blank string builder
 	 */
-	public NonBlankStringBuilder toBuilder()
+	public SolidStringBuilder toBuilder()
 		{
-		return new NonBlankStringBuilder().string( this.string );
+		return new SolidStringBuilder().append( this.string.toString() );
 		}
 		
 	}

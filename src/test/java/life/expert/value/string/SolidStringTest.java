@@ -32,7 +32,7 @@ import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoole
 //
 //--------------------------------------------------------------------------------
 @Slf4j
-class NonBlankStringTest
+class SolidStringTest
 	{
 	
 	private static final String GOOD_STRING = " str ";

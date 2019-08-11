@@ -90,9 +90,12 @@ import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoole
  *
  * 2) second group of functions, like For(flux1,flux2).yield(func)
  *    A shortcut for  {@code flux1.flatMap( i->flux2.map(j->func(i,j)) ) }  what means
- *    {@code    for i
+ *        for i
  *              for j
- *                   func(i,j)}
+ *                   func(i,j)
+ *
+ *     {@code For( range( 1 , 3 ) , range( 1 , 3 ) ).yield( logAtInfoBiFunction("") )
+ *                                       .subscribe();}
  *
  *
  * </pre>
