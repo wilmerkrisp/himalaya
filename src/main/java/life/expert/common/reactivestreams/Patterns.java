@@ -65,26 +65,19 @@ import static cyclops.control.Trampoline.done;
  * <pre>
  * auxiliary static functions with arguments - several Mono
  *
- * - functional for-comprehension pattern for reactive flows
- * - required to convert a null value returned by a function to an empty flow event
- * - at the first null value returned, the chain of nested calls stops
+ *      1) Gently convert Vavr's Try to Reactor's Flux
+ *              Mono<T> monoFromNullableTry( Try<T> tryObject )
+ *              Mono<T> monoFromTry( Try<T> tryObject )
+ *              Flux<T> fluxFromNullableTry( Try<T> tryObject )
+ *              Flux<T> fluxFromTry( Try<T> tryObject )
  *
- * - how to use for-comprehension: suppose that you need cycle with inner cycle, like,
- * 1) imperative variant:
+ *      2) Range of Integers from start to end, even in reverse order.
+ *              Flux<Integer> range( final int start , final int end )
+ *              Flux<Long> longRange( final long start , final long end )
  *
- *      for i
- *              for j
- *                      someFunc(i,j)
- *
- * 2) pure reactive variant:
- *
- *      Flux1.flatMap(i-&gt;Flux2.map(j-&gt;someFunc(i,j)))
- *
- * 3) for-comprehension variant:
- *
- *      For(flux1,flux2).yield(someFunc(i,j))
- *
- *
+ *      3) Indexed (with Integer or Long) elements of Flux. Wrap element with index into Tuple2
+ *              Flux<Tuple2<Integer,E>> indexed( Flux<E> flux )
+ *              Flux<Tuple2<Long,E>> longIndexed( Flux<E> flux )
  *
  * </pre>
  */

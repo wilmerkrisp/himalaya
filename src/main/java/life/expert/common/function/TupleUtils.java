@@ -31,6 +31,8 @@ import java.util.function.Predicate;
  * <pre>
  *  Hepler functions for  conversions Vavr's tuple-result into (a,b..)-result
  *  Utils is insired by  TupleUtils from io.projectreactor.addons:reactor-extra
+ *  Unlike the library, they allow you to contain null values, which allows you to take input values of methods
+ *  and check them later with the Flux.error event (not raise exception as in reactor-extra  )
  *
  * Preconditions: none
  * Postconditions: none

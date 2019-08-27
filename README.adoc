@@ -6,10 +6,247 @@ You can find the library in
 https://mvnrepository.com/artifact/life.expert/himalaya[Maven Central]
 
 Add library in Gradle:
-[source,groovie]
+[source,groovy]
 dependencies {
     implementation 'life.expert:himalaya:1.0.51'
     }
+
+=== Simple value-classes for preconditions
+* Simple immutable String holder class, `SolidString` non blank and stripped String
+* Simple value-object `PositiveLong` long and `PositiveInteger` integer wrapper ,value &gt; 0
+* `life.expert.value.numeric` "quantity" Analysis pattern (amount,unit) with rounding functions based on Long or BigDecimal implementations
+
+=== For-comprehension pattern for Spring Reactor
+
+* A shortcut for   `flux1.flatMap( i->flux2.map(j->func(i,j)) )` what means
+[source,java]
+        for i in 1..3
+              for j in 1..3
+                   func(i,j)
+
+     For( range( 1 , 3 ) , range( 1 , 3 ) ).yield( logAtInfoBiFunction("") )
+                                       .subscribe();
+
+* For(flux,func1,func) take result of func1 and put in on the input fo func2
+[source,java]
+        flux>=result1
+        func1(result1)=>result2
+        func2(result2)=>output result (as Publisher)
+
+** A shortcut for  `ts.flatMap(f)` which allows us to write real for-comprehensions using  `For(...).yield(...)`
+[source,java]
+ 	 For(getPersons(), person -&gt;
+ 	        For(person.getTweets(), tweet -&gt;
+ 	                For(tweet.getReplies())
+ 	                        .yield(reply -&gt; person + ", " + tweet + ", " + reply)));
+
+    For(getPersons(),getTweets(),getReplies())
+
+
+=== Some helper functions for Spring Reactor
+      * Gently convert Vavr's Try to Reactor's Flux
+[source,java]
+              Mono<T> monoFromNullableTry( Try<T> tryObject )
+              Mono<T> monoFromTry( Try<T> tryObject )
+              Flux<T> fluxFromNullableTry( Try<T> tryObject )
+              Flux<T> fluxFromTry( Try<T> tryObject )
+
+      * Range of Integers from start to end, even in reverse order.
+[source,java]
+              Flux<Integer> range( final int start , final int end )
+              Flux<Long> longRange( final long start , final long end )
+
+      * Indexed (with Integer or Long) elements of Flux. Wrap element with index into Tuple2
+[source,java]
+              Flux<Tuple2<Integer,E>> indexed( Flux<E> flux )
+              Flux<Tuple2<Long,E>> longIndexed( Flux<E> flux )
+
+* aliases for Flux.error
+[source,java]
+nullPointerError.. == Flux.error( new NullPointerException(..) )
+illegalArgumentError.. == Flux.error( new IllegalArgumentException(..) )
+illegalStateError.. == Flux.error( new IllegalStateException(..) )
+
+=== Hepler functions for  conversions Vavr's tuple-result into (a,b..)-result
+* Utils is insired by  TupleUtils from io.projectreactor.addons:reactor-extra.
+* Unlike the library, they allow you to contain null values, which allows you to take input values of methods and check them later with the Flux.error event (not raise exception as in reactor-extra  )
+[source,java]
+----
+//consumers
+Consumer<Tuple2<T1,T2>> consumer( BiConsumer<T1,T2> consumer )
+...
+Consumer<Tuple8<T1,T2,T3,T4,T5,T6,T7,T8>> consumer( Consumer8<T1,T2,T3,T4,T5,T6,T7,T8> consumer )
+
+// functions
+Function<Tuple2<T1,T2>,R> function( BiFunction<T1,T2,R> function )
+...
+Function<Tuple8<T1,T2,T3,T4,T5,T6,T7,T8>,R> function( Function8<T1,T2,T3,T4,T5,T6,T7,T8,R> function )
+
+//  predicates
+Predicate<Tuple2<T1,T2>> predicate( BiPredicate<T1,T2> predicate )
+...
+Predicate<Tuple8<T1,T2,T3,T4,T5,T6,T7,T8>> predicate( Predicate8<T1,T2,T3,T4,T5,T6,T7,T8> predicate )
+----
+
+* Usages examples
+[source,java]
+map(tuple -> {
+String firstName = tuple.getT1();
+String lastName = tuple.getT2();
+String address = tuple.getT3();
+  return new Customer(firstName, lastName, address);
+});
+
+Can be instead written as
+[source,java]
+ map(TupleUtils.function(Customer::new));
+
+
+
+
+
+===  Functional interfaces missing in other functional libraries, for example, you can
+* aliases for Try error
+[source,java]
+nullPointerFailure == Try.failure( new NullPointerException(..
+illegalArgumentFailure == Try.failure( new IllegalArgumentException(
+illegalStateFailure == Try.failure( new IllegalStateException(
+
+
+
+* checked  consumer -> Optional conversions
+[source,java]
+Function<T,Optional<Boolean>> consumerToOptional( CheckedConsumer<? super T> consumer )
+BiFunction<T1,T2,Optional<Boolean>> biConsumerToOptional( CheckedBiConsumer<? super T1,? super T2> consumer )
+Function3<T1,T2,T3,Optional<Boolean>> consumer3ToOptional( CheckedConsumer3<? super T1,? super T2,? super T3> consumer )
+...
+Function8<T1,T2,T3,T4,T5,T6,T7,T8,Optional<Boolean>> consumer8ToOptional( CheckedConsumer8<? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8> consumer )
+
+* checked consumer -> Try conversions
+[source,java]
+Function<T,Try<Boolean>> consumerToTry( CheckedConsumer<? super T> consumer )
+...
+Function8<T1,T2,T3,T4,T5,T6,T7,T8,Try<Boolean>> consumer8ToTry( CheckedConsumer8<? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8> consumer )
+
+* checked consumer -> Boolean
+[source,java]
+Function<T,Boolean> consumerToBoolean( CheckedConsumer<T> consumer )
+...
+Function8<T1,T2,T3,T4,T5,T6,T7,T8,Boolean> consumer8ToBoolean( CheckedConsumer8<? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8> consumer )
+
+* checked consumer  -> Mono conversions
+[source,java]
+Function<T,Mono<Boolean>> consumerToMono( CheckedConsumer<T> consumer )
+...
+Function8<T1,T2,T3,T4,T5,T6,T7,T8,Mono<Boolean>> consumer8ToMono( CheckedConsumer8<? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8> consumer )
+
+* checked runnable  -> Optional
+[source,java]
+Function<T,Optional<Boolean>> runnableToOptional( CheckedRunnable runnable )
+
+* checked runnable to Try
+[source,java]
+Function<T,Try<Boolean>> runnableToTry( CheckedRunnable runnable )
+
+* checked runnable -> Boolean
+[source,java]
+ Function<T,Boolean> runnableToBoolean( CheckedRunnable runnable )
+
+* checked Runnable -> Mono
+[source,java]
+ Function<T,Mono<Boolean>> runnableToMono( CheckedRunnable runnable )
+
+* checked -> unchecked
+[source,java]
+ Consumer<T> uncheckedConsumer( CheckedConsumer<T> consumer )
+ ...
+Consumer8<T1,T2,T3,T4,T5,T6,T7,T8> uncheckedConsumer8( CheckedConsumer8<T1,T2,T3,T4,T5,T6,T7,T8> consumer )
+
+* checked->unchecked  runnable,supplier,function
+[source,java]
+Runnable uncheckedRunnable( CheckedRunnable runnable )
+Supplier<E> uncheckedSupplier( CheckedFunction0<E> supplier )
+Function<T,R> uncheckedFunction( CheckedFunction1<T,R> f )
+
+* checked->unchecked predicate
+[source,java]
+Predicate<T> uncheckedPredicate( CheckedPredicate<T> f )
+...
+Predicate8<T1,T2,T3,T4,T5,T6,T7,T8> uncheckedPredicate8( CheckedPredicate8<T1,T2,T3,T4,T5,T6,T7,T8> f )
+
+* checked->unchecked consumer
+[source,java]
+Consumer<T> uncheckedConsumer( CheckedConsumer<T> consumer ..
+...
+Consumer8<T1,T2,T3,T4,T5,T6,T7,T8> uncheckedConsumer8( CheckedConsumer8<T1,T2,T3,T4,T5,T6,T7,T8> consumer
+
+
+
+* wraps the null value returned by the function into an empty flow event
+[source,java]
+Function<T,Mono<R>> nullableFunction( Function<T,R> function )
+BiFunction<T1,T2,Mono<R>> nullableBiFunction( BiFunction<T1,T2,R> function )
+Function3<T1,T2,T3,Mono<R>> nullableFunction3( Function3<T1,T2,T3,R> function )
+Function4<T1,T2,T3,T4,Mono<R>> nullableFunction4( Function4<T1,T2,T3,T4,R> function )
+Function5<T1,T2,T3,T4,T5,Mono<R>> nullableFunction5( Function5<T1,T2,T3,T4,T5,R> function )
+Function6<T1,T2,T3,T4,T5,T6,Mono<R>> nullableFunction6( Function6<T1,T2,T3,T4,T5,T6,R> function )
+Function7<T1,T2,T3,T4,T5,T6,T7,Mono<R>> nullableFunction7( Function7<T1,T2,T3,T4,T5,T6,T7,R> function )
+Function8<T1,T2,T3,T4,T5,T6,T7,T8,Mono<R>> nullableFunction8( Function8<T1,T2,T3,T4,T5,T6,T7,T8,R> function )
+Supplier<Mono<R>> nullableSupplier( Supplier<R> supplier )
+
+== Log shortcuts
+* print output function/consumer/operator/supplier/runnable
+[source,java]
+Consumer<E> printConsumer( String message )
+BiConsumer<E,F> printBiConsumer( String message )
+Function<T,R> printFunction( String message , R returnObject )
+BiFunction<T,U,R> printBiFunction( String message , R returnObject )
+UnaryOperator<E> printUnaryOperator( String message )
+Supplier<E> printSupplier( String message ,  E returnObject )
+Runnable printRunnable( String message )
+
+* log output function/consumer/operator/supplier/runnable
+[source,java]
+Consumer<E> logConsumer( String message )
+BiConsumer<E,F> logBiConsumer( String message )
+Function<T,R> logFunction( String message , R returnObject )
+BiFunction<T,U,R> logBiFunction( String message , R returnObject )
+UnaryOperator<E> logUnaryOperator( String message )
+Supplier<E> logSupplier( String message ,  E returnObject )
+Runnable logRunnable( String message )
+
+
+* print wrappers (for example consumer->consumer but with printing consumer's input arguments)
+[source,java]
+Consumer<E> printConsumerWrapper( Consumer<E> consumer )
+Function<T,R> printFunctionWrapper( Function<T,R> function )
+Supplier<E> printSupplierWrapper( Supplier<E> supplier )
+Runnable printRunnableWrapper( Runnable runnable )
+
+* log wrappers (for example consumer->consumer but with logging consumer's input arguments)
+[source,java]
+Consumer<E> logConsumerWrapper( Consumer<E> consumer )
+Function<T,R> logFunctionWrapper( Function<T,R> function )
+Supplier<E> logSupplierWrapper( Supplier<E> supplier )
+Runnable logRunnableWrapper( Runnable runnable )
+UnaryOperator<E> logUnaryOperator( String message )
+
+* static print and log
+[source,java]
+print( String format , Object... arguments )
+log( String format , Object... arguments )
+logAtWarning( String format ,Object... arguments )
+logAtError( String format , Object... arguments )
+logAtDebug( String format , Object... arguments )
+
+* Delayed  function/consumer/operator/supplier/runnable , for delay uses ThreadUtils.delay( seconds )
+[source,java]
+UnaryOperator<E> delayUnaryOperator( String message ..
+Function<T,R> delayFunction( String message , R returnObject ,  long second )
+Consumer<E> delayConsumer( String message , long second )
+Supplier<E> delaySupplier( String message , E passThought ,  long second )
+ Runnable delayRunnable( String message , long second )
+
 
 == LIBRARY DEVELOPER NOTES
 

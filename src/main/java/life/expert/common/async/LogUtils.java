@@ -111,8 +111,8 @@ public class LogUtils
 	 * @param arguments
 	 * 	the arguments
 	 */
-	public static final void logAtDebug_( String format ,
-	                                      Object... arguments )
+	public static final void logAtDebug( String format ,
+	                                     Object... arguments )
 		{
 		logger_.debug( format , arguments );
 		}
@@ -1891,7 +1891,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtDebug_( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtDebugConsumer" : message , o );
+		logAtDebug( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtDebugConsumer" : message , o );
 		};
 		}
 	
@@ -1924,7 +1924,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		logAtDebug_( FORMAT_IN2_ , Thread.currentThread() , message == null ? "logAtDebugBiConsumer" : message , a , b );
+		logAtDebug( FORMAT_IN2_ , Thread.currentThread() , message == null ? "logAtDebugBiConsumer" : message , a , b );
 		};
 		}
 	
@@ -1962,7 +1962,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtDebug_( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtDebugFunction" : message , o , returnObject );
+		logAtDebug( FORMAT_INOUT_ , Thread.currentThread() , message == null ? "logAtDebugFunction" : message , o , returnObject );
 		return returnObject;
 		};
 		}
@@ -2005,7 +2005,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		logAtDebug_( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "logAtDebugBiFunction" : message , a , b , returnObject );
+		logAtDebug( FORMAT_IN2OUT_ , Thread.currentThread() , message == null ? "logAtDebugBiFunction" : message , a , b , returnObject );
 		return returnObject;
 		};
 		}
@@ -2043,7 +2043,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtDebug_( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtDebugUnaryOperator" : message , o );
+		logAtDebug( FORMAT_IN_ , Thread.currentThread() , message == null ? "logAtDebugUnaryOperator" : message , o );
 		return o;
 		};
 		}
@@ -2078,7 +2078,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		logAtDebug_( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtDebugSupplier" : message , returnObject );
+		logAtDebug( FORMAT_OUT_ , Thread.currentThread() , message == null ? "logAtDebugSupplier" : message , returnObject );
 		return returnObject;
 		};
 		}
@@ -2112,7 +2112,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		logAtDebug_( FORMAT_ , Thread.currentThread() , message == null ? "logAtDebugRunnable" : message );
+		logAtDebug( FORMAT_ , Thread.currentThread() , message == null ? "logAtDebugRunnable" : message );
 		};
 		}
 	
@@ -2151,7 +2151,7 @@ public class LogUtils
 	 */
 	public static void logAtDebug( String message )
 		{
-		logAtDebug_( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtDebug" : message );
+		logAtDebug( FORMAT_ , Thread.currentThread() , message == null || message.isBlank() ? "logAtDebug" : message );
 		}
 	
 	/**
@@ -2176,7 +2176,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtDebug_( FORMAT_IN_ , Thread.currentThread() , "logAtDebugConsumerWrapper" , o );
+		logAtDebug( FORMAT_IN_ , Thread.currentThread() , "logAtDebugConsumerWrapper" , o );
 		consumer.accept( o );
 		};
 		}
@@ -2197,7 +2197,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		logAtDebug_( FORMAT_IN2_ , Thread.currentThread() , "logAtDebugBiConsumerWrapper" , a , b );
+		logAtDebug( FORMAT_IN2_ , Thread.currentThread() , "logAtDebugBiConsumerWrapper" , a , b );
 		consumer.accept( a , b );
 		};
 		}
@@ -2218,7 +2218,7 @@ public class LogUtils
 		{
 		return ( o ) ->
 		{
-		logAtDebug_( FORMAT_IN_ , Thread.currentThread() , "logAtDebugFunctionWrapper" , o );
+		logAtDebug( FORMAT_IN_ , Thread.currentThread() , "logAtDebugFunctionWrapper" , o );
 		return function.apply( o );
 		};
 		}
@@ -2241,7 +2241,7 @@ public class LogUtils
 		{
 		return ( a , b ) ->
 		{
-		logAtDebug_( FORMAT_IN2_ , Thread.currentThread() , "logAtDebugBiFunctionWrapper" , a , b );
+		logAtDebug( FORMAT_IN2_ , Thread.currentThread() , "logAtDebugBiFunctionWrapper" , a , b );
 		return function.apply( a , b );
 		};
 		}
@@ -2282,7 +2282,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		logAtDebug_( FORMAT_ , Thread.currentThread() , "logAtDebugSupplierWrapper" );
+		logAtDebug( FORMAT_ , Thread.currentThread() , "logAtDebugSupplierWrapper" );
 		return supplier.get();
 		};
 		}
@@ -2301,7 +2301,7 @@ public class LogUtils
 		{
 		return () ->
 		{
-		logAtDebug_( FORMAT_ , Thread.currentThread() , "logAtDebugRunnableWrapper" );
+		logAtDebug( FORMAT_ , Thread.currentThread() , "logAtDebugRunnableWrapper" );
 		runnable.run();
 		};
 		}
