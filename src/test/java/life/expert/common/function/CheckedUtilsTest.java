@@ -182,8 +182,13 @@ class CheckedUtilsTest
 		                                                            } , elastic() , "vovan" ) );
 		//  .onErrorContinue !НЕ РАБОТАЕТ ТК применимо только к ограниченному набору операторов
 		
-		b.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
-		ThreadUtils.delay( 20 );
+		//		b.as( StepVerifier::create )
+		//		 .expectError()
+		//		 .verify();
+		// .verifyError();
+		
+		b.subscribe( printConsumer( "NEXTT" ) , printConsumer( "ERRORR" ) , printRunnable( "COMPLETEE" ) );
+		//ThreadUtils.delay( 20 );
 		}
 		
 	}

@@ -16,21 +16,25 @@
  * </pre>
  */
 
-module life.expert {
+open module life.expert {
 
 exports life.expert.common.async;
 exports life.expert.common.base;
+exports life.expert.common.collect;
 exports life.expert.common.function;
+exports life.expert.common.graph;
 exports life.expert.common.io;
 exports life.expert.common.reactivestreams;
-exports life.expert.common.collect;
-exports life.expert.common.graph;
-exports life.expert.value.string;
+
+
+
 exports life.expert.value.numeric.amount;
 exports life.expert.value.numeric.context;
 exports life.expert.value.numeric.operators;
 exports life.expert.value.numeric.unit;
 exports life.expert.value.numeric.utils;
+
+exports life.expert.value.string;
 
 //exports himalaya.extensions.java.lang.String;
 
@@ -62,13 +66,14 @@ requires transitive org.jetbrains.annotations;
 requires com.google.common;
 requires org.apache.commons.lang3;
 
-requires transitive io.vavr;
-requires static io.vavr.match;
 
 requires gson;
 requires transitive cyclops;
 requires error.prone.annotations;
 requires org.apache.commons.io;
+
+requires transitive vavr;
+requires static vavr.match;
 
 //requires manifold.ext;
 

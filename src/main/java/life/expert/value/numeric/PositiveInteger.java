@@ -84,7 +84,7 @@ public final class PositiveInteger
 	 * @return long
 	 * 	the int primitive value
 	 */
-	@NonNull private final int integer;
+	 private final int integer;
 	
 	/**
 	 * Classic factory method.

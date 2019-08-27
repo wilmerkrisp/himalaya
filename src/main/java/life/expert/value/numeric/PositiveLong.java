@@ -81,7 +81,7 @@ public final class PositiveLong
 	 * @return long
 	 * 	the long primitive value
 	 */
-	@NonNull private final long longNumber;
+	 private final long longNumber;
 	
 	/**
 	 * Classic factory method.
