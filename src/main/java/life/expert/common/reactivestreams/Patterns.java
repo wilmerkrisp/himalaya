@@ -66,18 +66,18 @@ import static cyclops.control.Trampoline.done;
  * auxiliary static functions with arguments - several Mono
  *
  *      1) Gently convert Vavr's Try to Reactor's Flux
- *              Mono<T> monoFromNullableTry( Try<T> tryObject )
- *              Mono<T> monoFromTry( Try<T> tryObject )
- *              Flux<T> fluxFromNullableTry( Try<T> tryObject )
- *              Flux<T> fluxFromTry( Try<T> tryObject )
+ *              monoFromNullableTry
+ *              monoFromTry
+ *              fluxFromNullableTry
+ *              fluxFromTry
  *
  *      2) Range of Integers from start to end, even in reverse order.
- *              Flux<Integer> range( final int start , final int end )
- *              Flux<Long> longRange( final long start , final long end )
+ *             range( final int start , final int end )
+ *             longRange( final long start , final long end )
  *
  *      3) Indexed (with Integer or Long) elements of Flux. Wrap element with index into Tuple2
- *              Flux<Tuple2<Integer,E>> indexed( Flux<E> flux )
- *              Flux<Tuple2<Long,E>> longIndexed( Flux<E> flux )
+ *              indexed
+ *              longIndexed
  *
  * </pre>
  */
