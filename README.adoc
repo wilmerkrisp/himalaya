@@ -51,6 +51,12 @@ dependencies {
               Flux<T> fluxFromNullableTry( Try<T> tryObject )
               Flux<T> fluxFromTry( Try<T> tryObject )
 
+
+* Gently convert Reactor's Flux to Vavr's Try
+[source,java]
+              Try<T> tryFromFlux( Flux<T> flux )
+              Try<T> tryFromMono( Mono<T> mono )
+
       * Range of Integers from start to end, even in reverse order.
 [source,java]
               Flux<Integer> range( final int start , final int end )

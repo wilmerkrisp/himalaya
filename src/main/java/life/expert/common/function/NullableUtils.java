@@ -84,7 +84,6 @@ public final class NullableUtils
 	 */
 	public static <T, R> Function<T,Mono<R>> nullableFunction( Function<T,R> function )
 		{
-		//return t -> Mono.fromSupplier( () -> function.apply( t ) );
 		return t -> fromSupplier( () -> function.apply( t ) );
 		}
 	

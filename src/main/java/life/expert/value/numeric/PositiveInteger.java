@@ -2,11 +2,11 @@ package life.expert.value.numeric;
 
 
 
+import life.expert.common.function.TupleUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import lombok.NonNull;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple1;
@@ -28,12 +28,7 @@ import com.google.common.collect.ComparisonChain;
 
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 
-import java.util.Optional;
-
 //import static  reactor.function.TupleUtils.*; //reactor's tuple->R INTO func->R
-
-import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
-import static life.expert.common.reactivestreams.Patterns.*;    //reactive helper functions
 
 //import static io.vavr.API.*;                           //conflicts with my reactive For-comprehension
 
@@ -47,15 +42,19 @@ import static io.vavr.API.unchecked;    //checked->unchecked
 import static io.vavr.API.Function;     //lambda->Function3
 import static io.vavr.API.Tuple;
 
-import io.vavr.control.Try;                               //try
 import reactor.core.publisher.Mono;
 
-import static io.vavr.API.Success;
+import static reactor.core.publisher.Mono.*;
+//import static  reactor.function.TupleUtils.*; //reactor's tuple->R INTO func->R
+
+import static life.expert.common.reactivestreams.Preconditions.*; //reactive check
 
 /**
  * <pre> Simple value-object int wrapper.
  * Class invariant: value &gt; 0
  *
+ * *	- only the monoOf.. factory methods is allowed, because it allows you to lazily create objects only with a real subscription
+ *  *	- 'of' - factory method is prohibited because it is intended only for easy creation of objects in tests, please use pure functional methods monoOf.., without raise exceptions.
  *
  * Preconditions: none
  * Postconditions: none
@@ -84,83 +83,146 @@ public final class PositiveInteger
 	 * @return long
 	 * 	the int primitive value
 	 */
-	 private final int integer;
+	private final int number;
+	
+	/*
+       Other factories use this method to create an object.
+       He himself calls the private constructor to create the object.
+       * */
+	private static Mono<PositiveInteger> monoOf_( final int number )
+		{
+		return fromSupplier( () -> new PositiveInteger( number ) );
+		}
 	
 	/**
-	 * Classic factory method.
-	 * Not recomended with functional style because raise Exception.
+	 * Create PositiveInteger from integer
+	 * Only the monoOf.. factory methods is allowed, because it allows you to lazily create objects only with a real subscription
 	 *
 	 * @param number
 	 * 	the number
 	 *
-	 * @return the positive integer
+	 * @return the Mono with lazyli created object
+	 *
+	 * @implNote to create objects, this method calls the private factory monoOf_
+	 */
+	public static Mono<PositiveInteger> monoOf( final int number )
+		{
+		if( number < 1 )
+			return illegalArgumentMonoError( "Input argument must posititve >0 ." );
+		else
+			return monoOf_( number );
+		}
+	
+	/**
+	 * <pre>
+	 * Classic fabric method for creating positive number.
+	 * This factory method is prohibited because it is intended only for easy creation of objects in tests
+	 *
+	 * @param number the number
+	 * @return the always positive number
+	 * @throws IllegalArgumentException if number not positive
+	 * @deprecated please use pure functional methods monoOf.., without raise exceptions. </pre>
 	 */
 	@Deprecated
 	public static PositiveInteger of( final int number )
 		{
-		return tryOf( number ).get();
+		return monoOf( number ).block();
 		}
 	
 	/**
-	 * Factory method returns Vavr's Try.
+	 * Create PositiveInteger from Tuple
+	 * The method helps with conversion operations Tuple-&gt;PositiveInteger
 	 *
-	 * @param number
-	 * 	the int primitive value
+	 * @param tuple
+	 * 	the tuple
 	 *
-	 * @return the Try with PositiveInteger
+	 * @return the Mono with lazyli created object
 	 */
-	public static Try<PositiveInteger> tryOf( final int number )
+	public static Mono<PositiveInteger> monoOfTuple( Tuple1<Integer> tuple )
 		{
-		if( number < 1 )
-			return illegalArgumentFailure( "Input argument must posititve >0 ." );
+		if( tuple == null )
+			return illegalArgumentMonoError( "Input tuple must not be null." );
 		else
-			return Success( new PositiveInteger( number ) );
-			
+			return TupleUtils.function( PositiveInteger::monoOf )
+			                 .apply( tuple );
 		}
 	
 	/**
-	 * Factory method returns Optional.
+	 * Create PositiveInteger from Mono with Tuple inside
+	 * The method helps chaining flows together
 	 *
-	 * @param number
-	 * 	the int primitive value
+	 * @param tuple
+	 * 	the tuple
 	 *
-	 * @return the Optional  with PositiveInteger
+	 * @return the Mono with lazyli created object
 	 */
-	public static Optional<PositiveInteger> optionalOf( final int number )
+	public static Mono<PositiveInteger> monoOfMonoWithTuple( Mono<Tuple1<Integer>> tuple )
 		{
-		return tryOf( number ).toJavaOptional();
+		if( tuple == null )
+			return illegalArgumentMonoError( "Input Mono must not be null." );
+		else
+			return tuple.flatMap( PositiveInteger::monoOfTuple );
 		}
 	
 	/**
-	 * Factory method returns Reactor's Mono.
+	 * Create PositiveInteger from Mono with positive number inside
+	 * The method helps chaining flows together
 	 *
 	 * @param number
-	 * 	the int primitive value
+	 * 	the number
 	 *
-	 * @return Mono with PositiveInteger
+	 * @return the Mono with lazyli created object
 	 */
-	public static Mono<PositiveInteger> monoOf( final int number )
+	public static Mono<PositiveInteger> monoOfMono( Mono<Integer> number )
 		{
-		return monoFromTry( tryOf( number ) );
+		if( number == null )
+			return illegalArgumentMonoError( "Input Mono must not be null." );
+		else
+			return number.flatMap( PositiveInteger::monoOf );
 		}
 	
+	/**
+	 * Standard Copy Factory
+	 *
+	 * @param other
+	 * 	the other
+	 *
+	 * @return the Mono with lazyli created object
+	 *
+	 * @implNote to create objects, this method calls the private factory monoOf_
+	 */
+	public static Mono<PositiveInteger> copyOf( final PositiveInteger other )
+		{
+		return monoOf_( other.getNumber() );
+		}
+	
+	/**
+	 * pattern matching in vavr
+	 * - you need add static import to method with pattern matching
+	 * import static life.expert.value.string.NonBlankStringPatterns.*;
+	 *
+	 * @param object
+	 * 	the object
+	 *
+	 * @return the tuple 1
+	 */
 	@Unapply
 	static Tuple1<Integer> PositiveInteger( PositiveInteger object )
 		{
-		return Tuple.of( object.getInteger() );
+		return Tuple.of( object.getNumber() );
 		}
 	
 	@Override
 	public String toString()
 		{
-		return "" + this.integer;
+		return "" + this.number;
 		}
 	
 	@Override
 	public int compareTo( PositiveInteger o )
 		{
 		return ComparisonChain.start()
-		                      .compare( this.integer , o.integer )
+		                      .compare( this.number , o.number )
 		                      .result();
 		}
 	}

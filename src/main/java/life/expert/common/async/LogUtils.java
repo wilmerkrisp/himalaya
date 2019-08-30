@@ -43,6 +43,11 @@ public class LogUtils
 	/**
 	 * Log.
 	 *
+	 * <pre>
+	 *    log     (&quot;Hi {}.&quot;, &quot;there&quot;)
+	 *  log (&quot;Set {1,2,3} is not equal to {}.&quot;, &quot;1,2&quot;);
+	 * </pre>
+	 *
 	 * @param format
 	 * 	the format
 	 * @param arguments
@@ -56,6 +61,10 @@ public class LogUtils
 	
 	/**
 	 * Print.
+	 ** <pre>
+	 *    print     (&quot;Hi {}.&quot;, &quot;there&quot;)
+	 *  print (&quot;Set {1,2,3} is not equal to {}.&quot;, &quot;1,2&quot;);
+	 *  </pre>
 	 *
 	 * @param format
 	 * 	the format

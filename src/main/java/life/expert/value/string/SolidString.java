@@ -12,6 +12,7 @@ package life.expert.value.string;
 
 import io.vavr.Tuple1;
 import io.vavr.control.Try;
+import life.expert.common.function.TupleUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
@@ -42,16 +43,48 @@ import static io.vavr.Predicates.*;                       //switch - case
 
 import static life.expert.common.reactivestreams.Patterns.*;    //reactive helper functions
 
+import java.util.ResourceBundle;
+
+//import static life.expert.common.base.Preconditions.*;  //checkCollection
+
+import java.util.Optional;
+
+import static reactor.core.publisher.Mono.*;
+//import static  reactor.function.TupleUtils.*; //reactor's tuple->R INTO func->R
+
+import static life.expert.common.async.LogUtils.*;        //logAtInfo
+import static life.expert.common.reactivestreams.Preconditions.*; //reactive check
+
+//import static io.vavr.API.*;                           //conflicts with my reactive For-comprehension
+
+import static io.vavr.API.$;                            // pattern matching
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+//import static java.util.function.Predicate.*;           //isEqual streamAPI
+
+import static io.vavr.API.CheckedFunction;//checked functions
+import static io.vavr.API.unchecked;    //checked->unchecked
+import static io.vavr.API.Function;     //lambda->Function3
+import static io.vavr.API.Tuple;
+
+import reactor.core.publisher.Mono;
+
 /**
  * Simple immutable String holder class
  * Class invariant: non blank and stripped String
  *
  * - pattern new-call
  * - not for inheritance
+ 
+ *	- only the monoOf.. factory methods is allowed, because it allows you to lazily create objects only with a real subscription
+ *	- 'of' - factory method is prohibited because it is intended only for easy creation of objects in tests, please use pure functional methods monoOf.., without raise exceptions.
+ *
+ *
+ *
  *
  * <pre>{@code
  *      var s=SolidString.tryOf( goodString );
- * }*</pre>
+ * }******</pre>
  */
 @Value
 @AllArgsConstructor( access = AccessLevel.PRIVATE )
@@ -77,68 +110,153 @@ public final class SolidString
 	 */
 	private final String string;
 	
+	//	/**
+	//	 * Main fabric method for creating non blank string.
+	//	 *
+	//	 * @param string
+	//	 * 	the string
+	//	 *
+	//	 * @return the try with SolidString or with exception inside.
+	//	 */
+	//	public static Try<SolidString> tryOf( final String string )
+	//		{
+	//		//@formatter:off
+//		return Match(string).of(
+//				Case( $(isNull()) ,
+//				      illegalArgumentFailure( "String must not be null." )),
+//				Case( $( String::isBlank ) ,
+//				      illegalArgumentFailure( "String must not be blank." )) ,
+//				Case( $() ,
+//				      s->Success( new SolidString(s.strip())) )
+//	                       );
+//		//@formatter:on
+	//		}
+	
+	/*
+	Other factories use this method to create an object.
+	He himself calls the private constructor to create the object.
+	* */
+	private static Mono<SolidString> monoOf_( final String string )
+		{
+		return fromSupplier( () -> new SolidString( string ) );
+		}
+	
 	/**
-	 * Main fabric method for creating non blank string.
+	 * Create SolidString from String
+	 * Only the monoOf.. factory methods is allowed, because it allows you to lazily create objects only with a real subscription
 	 *
 	 * @param string
 	 * 	the string
 	 *
-	 * @return the try with SolidString or with exception inside.
+	 * @return the Mono with lazyli created object
+	 *
+	 * @implNote to create objects, this method calls the private factory monoOf_
 	 */
-	public static Try<SolidString> tryOf( final String string )
+	public static Mono<SolidString> monoOf( final String string )
 		{
-		//@formatter:off
-		return Match(string).of(
-				Case( $(isNull()) ,
-				      illegalArgumentFailure( "String must not be null." )),
-				Case( $( String::isBlank ) ,
-				      illegalArgumentFailure( "String must not be blank." )) ,
-				Case( $() ,
-				      s->Success( new SolidString(s.strip())) )
-	                       );
-		//@formatter:on
+		if( string == null )
+			return illegalArgumentMonoError( "String must not be null." );
+		else if( string.isBlank() )
+			return illegalArgumentMonoError( "String must not be blank." );
+		else
+			return monoOf_( string.strip() );
 		}
 	
 	/**
 	 * <pre>
 	 * Classic fabric method for creating non blank string.
+	 * This factory method is prohibited because it is intended only for easy creation of objects in tests
 	 *
-	 * @param string        the string
+	 * @param string the string
 	 * @return the non blank string
-	 * @throws IllegalArgumentException        if string non blank or nullable
-	 * @deprecated please use pure functional methods #optionalOf #monoOf, without raise exceptions. </pre>
+	 * @throws IllegalArgumentException if string non blank or nullable
+	 * @deprecated please use pure functional methods monoOf.., without raise exceptions. </pre>
 	 */
 	@Deprecated
 	public static SolidString of( final String string )
 		{
-		return tryOf( string ).get();
+		return monoOf( string ).block();
 		}
 	
 	/**
-	 * Creating non blank string.
+	 * Create SolidString from Tuple
+	 * The method helps with conversion operations Tuple-&gt;SolidString
+	 *
+	 * @param tuple
+	 * 	the tuple
+	 *
+	 * @return the Mono with lazyli created object
+	 */
+	public static Mono<SolidString> monoOfTuple( Tuple1<String> tuple )
+		{
+		if( tuple == null )
+			return illegalArgumentMonoError( "Input tuple must not be null." );
+		else
+			return TupleUtils.function( SolidString::monoOf )
+			                 .apply( tuple );
+		}
+	
+	/**
+	 * Create SolidString from Mono with Tuple inside
+	 * The method helps chaining flows together
+	 *
+	 * @param tuple
+	 * 	the tuple
+	 *
+	 * @return the Mono with lazyli created object
+	 */
+	public static Mono<SolidString> monoOfMonoWithTuple( Mono<Tuple1<String>> tuple )
+		{
+		if( tuple == null )
+			return illegalArgumentMonoError( "Input Mono must not be null." );
+		else
+			return tuple.flatMap( SolidString::monoOfTuple );
+		}
+	
+	/**
+	 * Create SolidString from Mono with String inside
+	 * The method helps chaining flows together
 	 *
 	 * @param string
 	 * 	the string
 	 *
-	 * @return the optional witn non blank string if success (or Optional.empty if exception)
+	 * @return the Mono with lazyli created object
 	 */
-	public static Optional<SolidString> optionalOf( final String string )
+	public static Mono<SolidString> monoOfMono( Mono<String> string )
 		{
-		return tryOf( string ).toJavaOptional();
+		if( string == null )
+			return illegalArgumentMonoError( "Input Mono must not be null." );
+		else
+			return string.flatMap( SolidString::monoOf );
 		}
 	
 	/**
-	 * Mono of mono.
+	 * Standard Copy Factory
 	 *
-	 * @param string
-	 * 	the string
+	 * @param other
+	 * 	the other
 	 *
-	 * @return the mono
+	 * @return the Mono with lazyli created object
+	 *
+	 * @implNote to create objects, this method calls the private factory monoOf_
 	 */
-	public static Mono<SolidString> monoOf( final String string )
+	public static Mono<SolidString> copyOf( final SolidString other )
 		{
-		return monoFromTry( tryOf( string ) );
+		return monoOf_( other.getString() );
 		}
+	
+	//	/**
+	//	 * Creating non blank string.
+	//	 *
+	//	 * @param string
+	//	 * 	the string
+	//	 *
+	//	 * @return the optional witn non blank string if success (or Optional.empty if exception)
+	//	 */
+	//	public static Optional<SolidString> optionalOf( final String string )
+	//		{
+	//		return tryOf( string ).toJavaOptional();
+	//		}
 	
 	@Override
 	public int compareTo( SolidString o )
@@ -213,26 +331,6 @@ public final class SolidString
 			{
 			
 			return SolidString.of( string.toString() );
-			}
-		
-		/**
-		 * Build optional optional.
-		 *
-		 * @return the optional
-		 */
-		public Optional<SolidString> buildOptional()
-			{
-			return SolidString.optionalOf( string.toString() );
-			}
-		
-		/**
-		 * Build try try.
-		 *
-		 * @return the try
-		 */
-		public Try<SolidString> buildTry()
-			{
-			return SolidString.tryOf( string.toString() );
 			}
 		
 		/**

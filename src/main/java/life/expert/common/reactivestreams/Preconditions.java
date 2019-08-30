@@ -10,10 +10,9 @@ package life.expert.common.reactivestreams;
 //                                            Wilmer Krisp 2019/02/05
 //--------------------------------------------------------------------------------------------------------
 
-
-import io.vavr.CheckedConsumer;
-import io.vavr.CheckedFunction1;
+import io.vavr.*;
 import io.vavr.control.Try;
+import life.expert.common.function.TupleUtils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,15 +23,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
-import reactor.function.*;
-import reactor.util.function.Tuple2;
-import reactor.util.function.Tuple3;
-import reactor.util.function.Tuple4;
-import reactor.util.function.Tuple5;
-import reactor.util.function.Tuple6;
-import reactor.util.function.Tuple7;
-import reactor.util.function.Tuple8;
-import reactor.util.function.Tuples;
 
 import java.util.function.*;                            //producer supplier
 
@@ -40,13 +30,76 @@ import static reactor.core.publisher.Mono.*;
 import static life.expert.common.async.LogUtils.*;        //logAtInfo
 import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
 
+import static java.text.MessageFormat.format;           //format string
+
+import java.util.ResourceBundle;
+
+import static com.google.common.base.Preconditions.*;   //checkArgument
+//import static life.expert.common.base.Preconditions.*;  //checkCollection
+import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
+
+import org.apache.commons.lang3.StringUtils;            //isNotBlank
+
+import java.util.function.*;                            //producer supplier
+
+import static java.util.stream.Collectors.*;            //toList streamAPI
+
+import java.util.Optional;
+
+import static reactor.core.publisher.Mono.*;
+import static reactor.core.scheduler.Schedulers.*;
+//import static  reactor.function.TupleUtils.*; //reactor's tuple->R INTO func->R
+import static life.expert.common.function.TupleUtils.*; //vavr's tuple->R INTO func->R
+
+import life.expert.value.string.*;
+import life.expert.value.numeric.*;
+
+import static life.expert.common.async.LogUtils.*;        //logAtInfo
+import static life.expert.common.function.NullableUtils.*;//.map(nullableFunction)
+import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
+import static life.expert.common.reactivestreams.Preconditions.*; //reactive check
+import static life.expert.common.reactivestreams.Patterns.*;    //reactive helper functions
+import static life.expert.common.base.Objects.*;          //deepCopyOfObject
+import static life.expert.common.reactivestreams.ForComprehension.*; //reactive for-comprehension
+
+import static cyclops.control.Trampoline.more;
+import static cyclops.control.Trampoline.done;
+
+//import static io.vavr.API.*;                           //conflicts with my reactive For-comprehension
+
+import static io.vavr.API.$;                            // pattern matching
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+import static io.vavr.Patterns.*;                         //switch - case - success/failure
+import static io.vavr.Predicates.*;                       //switch - case
+//import static java.util.function.Predicate.*;           //isEqual streamAPI
+
+import static io.vavr.API.CheckedFunction;//checked functions
+import static io.vavr.API.unchecked;    //checked->unchecked
+import static io.vavr.API.Function;     //lambda->Function3
+import static io.vavr.API.Tuple;
+
+import static io.vavr.API.Try;          //Try
+
+import io.vavr.control.Try;                               //try
+import reactor.function.*;
+import reactor.function.Function3;
+import reactor.function.Function4;
+import reactor.function.Function5;
+import reactor.function.Function6;
+import reactor.function.Function7;
+import reactor.function.Function8;
+import reactor.util.function.Tuples;
+
+import static io.vavr.API.Failure;
+import static io.vavr.API.Success;
+import static io.vavr.API.Left;         //Either
+import static io.vavr.API.Right;
 import static life.expert.common.reactivestreams.ForComprehension.*;
 
 //import java.util.List;                                  //usual list
 //import io.vavr.collection.List;                         //immutable List
 //import com.google.common.collect.*;                     //ImmutableList
-
-
 
 /**
  * service (static class)
@@ -65,6 +118,7 @@ public final class Preconditions
 	
 	/**
 	 * Checking  argument with predicate  (usual test for empty elements)
+	 * If argument is null then empty event
 	 * Wrap error as event
 	 *
 	 * @param <T>
@@ -76,46 +130,24 @@ public final class Preconditions
 	 * @param message
 	 * 	the message
 	 *
-	 * @return the mono
+	 * @return the mono with input argument
 	 */
 	public static <T> Mono<T> checkArgument( T argument ,
 	                                         Predicate<T> predicate ,
 	                                         String message )
 		{
-		//		Function<T,Mono<T>> check_argument = ( s ) -> just( s ).filter( predicate == null ? x -> false : predicate )
-		//		                                                       .single()
-		//		                                                       .onErrorMap( illegalArgumentException( message == null ? "Condition should evaluate to true" : message ) );
-		
-		//return checkNotNull( argument ).flatMap( check_argument );
-		
-		/*
-		Function<Mono<T>,Mono<T>> check_argument = s -> s.filter( predicate.or( x -> false ) )
-		                                                 .single()
-		                                                 .onErrorMap( illegalArgumentException( message.orElse( "Condition should evaluate to true")));
-		
-		 
-		
-	 
-		return checkNotNull( predicate , "Predicate should not be null" ).then( checkNotNull( argument ) ).For( check_argument );
-		
-		 */
-		/*      - filter event
-			- aproving that exactly one value (if void filtered -> generate error)
-		 *
-		 *
-		 * -  ошибка в методе2 не обрабатывается и выходит наверх, null значение не допускается
-		* */
-		var check_argument = justOrEmpty( argument ).filter( predicate == null ? x -> false : predicate )
-		                                            .single()
-		                                            .onErrorMap( illegalArgumentException( message ) );
-		
-		return checkNotNull( predicate , "Predicate should not be null" ).then( checkNotNull( argument ) )
-		                                                                 .then( check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( predicate.test( argument ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( argument );
 		}
 	
 	/**
 	 * Check argument and invoke some function.
-	 * Helper function when public method is wrapper for private.
+	 * Helper function when public method is wrapper for private
+	 * Result must not be null
 	 *
 	 * @param <T>
 	 * 	the type parameter
@@ -130,7 +162,7 @@ public final class Preconditions
 	 * @param function
 	 * 	the function
 	 *
-	 * @return the mono
+	 * @return the mono with transformed argument
 	 */
 	public static <T, R> Mono<R> checkArgumentAndMap( T argument ,
 	                                                  Predicate<T> predicate ,
@@ -142,7 +174,8 @@ public final class Preconditions
 		}
 	
 	/**
-	 * Checking 2 arguments with predicate  (usual test for empty elements)
+	 * Checking 2  arguments with predicate  (usual test for empty elements)
+	 * If argument is null then  event with Tuple(null..
 	 * Wrap error as event
 	 *
 	 * @param <T1>
@@ -165,16 +198,12 @@ public final class Preconditions
 	                                                          BiPredicate<T1,T2> predicate ,
 	                                                          String message )
 		{
-		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness1 = checkNotNull( argument1 );
-		var check_nullness2 = checkNotNull( argument2 );
-		var check_argument = fromSupplier( () -> Tuples.of( argument1 , argument2 ) ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 ) -> false : predicate ) )
-		                                                                             .single()
-		                                                                             .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness1 )
-		                      .flatMap( x -> check_nullness2 )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( predicate.test( argument1 , argument2 ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( Tuple.of( argument1 , argument2 ) );
 		}
 	
 	/**
@@ -230,19 +259,18 @@ public final class Preconditions
 	                                                          BiPredicate<T1,T2> predicate ,
 	                                                          String message )
 		{
-		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness  = checkNotNull( tuple );
-		
-		var check_argument = justOrEmpty( tuple ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 ) -> false : predicate ) )
-		                                         .single()
-		                                         .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( TupleUtils.predicate( predicate )
+		                      .test( tuple ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( tuple );
 		}
 	
 	/**
 	 * Checking 3 arguments with predicate  (usual test for empty elements)
+	 * * If argument is null then  event with Tuple(null..
 	 * Wrap error as event
 	 *
 	 * @param <T1>
@@ -271,17 +299,12 @@ public final class Preconditions
 	                                                                 String message )
 		{
 		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness1 = checkNotNull( argument1 );
-		var check_nullness2 = checkNotNull( argument2 );
-		var check_nullness3 = checkNotNull( argument3 );
-		var check_argument = fromSupplier( () -> Tuples.of( argument1 , argument2 , argument3 ) ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 , t3 ) -> false : predicate ) )
-		                                                                                         .single()
-		                                                                                         .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness1 )
-		                      .flatMap( x -> check_nullness2 )
-		                      .flatMap( x -> check_nullness3 )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( predicate.test( argument1 , argument2 , argument3 ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( Tuple.of( argument1 , argument2 , argument3 ) );
 		}
 	
 	/**
@@ -344,20 +367,18 @@ public final class Preconditions
 	                                                                 Predicate3<T1,T2,T3> predicate ,
 	                                                                 String message )
 		{
-		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness  = checkNotNull( tuple );
-		
-		var check_argument = justOrEmpty( tuple ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 , t3 ) -> false : predicate ) )
-		                                         .single()
-		                                         .onErrorMap( illegalArgumentException( message ) );
-		
-		return check_predicate.flatMap( x -> check_nullness )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( TupleUtils.predicate( predicate )
+		                      .test( tuple ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( tuple );
 		}
 	
 	/**
 	 * Checking 4 arguments with predicate  (usual test for empty elements)
+	 * * If argument is null then  event with Tuple(null..
 	 * Wrap error as event
 	 *
 	 * @param <T1>
@@ -390,20 +411,13 @@ public final class Preconditions
 	                                                                        Predicate4<T1,T2,T3,T4> predicate ,
 	                                                                        String message )
 		{
-		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness1 = checkNotNull( argument1 );
-		var check_nullness2 = checkNotNull( argument2 );
-		var check_nullness3 = checkNotNull( argument3 );
-		var check_nullness4 = checkNotNull( argument4 );
-		var check_argument = fromSupplier( () -> Tuples.of( argument1 , argument2 , argument3 , argument4 ) ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 , t3 , t4 ) -> false : predicate ) )
-		                                                                                                     .single()
-		                                                                                                     .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness1 )
-		                      .flatMap( x -> check_nullness2 )
-		                      .flatMap( x -> check_nullness3 )
-		                      .flatMap( x -> check_nullness4 )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( predicate.test( argument1 , argument2 , argument3 , argument4 ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( Tuple.of( argument1 , argument2 , argument3 , argument4 ) );
+			
 		}
 	
 	/**
@@ -473,19 +487,18 @@ public final class Preconditions
 	                                                                        Predicate4<T1,T2,T3,T4> predicate ,
 	                                                                        String message )
 		{
-		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness  = checkNotNull( tuple );
-		
-		var check_argument = justOrEmpty( tuple ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 , t3 , t4 ) -> false : predicate ) )
-		                                         .single()
-		                                         .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( TupleUtils.predicate( predicate )
+		                      .test( tuple ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( tuple );
 		}
 	
 	/**
 	 * Checking 5 arguments with predicate  (usual test for empty elements)
+	 * * If argument is null then  event with Tuple(null..
 	 * Wrap error as event
 	 *
 	 * @param <T1>
@@ -524,21 +537,12 @@ public final class Preconditions
 	                                                                               String message )
 		{
 		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness1 = checkNotNull( argument1 );
-		var check_nullness2 = checkNotNull( argument2 );
-		var check_nullness3 = checkNotNull( argument3 );
-		var check_nullness4 = checkNotNull( argument4 );
-		var check_nullness5 = checkNotNull( argument5 );
-		var check_argument = fromSupplier( () -> Tuples.of( argument1 , argument2 , argument3 , argument4 , argument5 ) ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 , t3 , t4 , t5 ) -> false : predicate ) )
-		                                                                                                                 .single()
-		                                                                                                                 .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness1 )
-		                      .flatMap( x -> check_nullness2 )
-		                      .flatMap( x -> check_nullness3 )
-		                      .flatMap( x -> check_nullness4 )
-		                      .flatMap( x -> check_nullness5 )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( predicate.test( argument1 , argument2 , argument3 , argument4 , argument5 ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( Tuple.of( argument1 , argument2 , argument3 , argument4 , argument5 ) );
 		}
 	
 	/**
@@ -615,20 +619,18 @@ public final class Preconditions
 	                                                                               Predicate5<T1,T2,T3,T4,T5> predicate ,
 	                                                                               String message )
 		{
-		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness  = checkNotNull( tuple );
-		
-		var check_argument = justOrEmpty( tuple ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 , t3 , t4 , t5 ) -> false : predicate ) )
-		                                         .single()
-		                                         .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness )
-		
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( TupleUtils.predicate( predicate )
+		                      .test( tuple ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( tuple );
 		}
 	
 	/**
 	 * Checking 6 arguments with predicate  (usual test for empty elements)
+	 * * If argument is null then  event with Tuple(null..
 	 * Wrap error as event
 	 *
 	 * @param <T1>
@@ -672,23 +674,12 @@ public final class Preconditions
 	                                                                                      String message )
 		{
 		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness1 = checkNotNull( argument1 );
-		var check_nullness2 = checkNotNull( argument2 );
-		var check_nullness3 = checkNotNull( argument3 );
-		var check_nullness4 = checkNotNull( argument4 );
-		var check_nullness5 = checkNotNull( argument5 );
-		var check_nullness6 = checkNotNull( argument6 );
-		var check_argument = fromSupplier( () -> Tuples.of( argument1 , argument2 , argument3 , argument4 , argument5 , argument6 ) ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 , t3 , t4 , t5 , t6 ) -> false : predicate ) )
-		                                                                                                                             .single()
-		                                                                                                                             .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness1 )
-		                      .flatMap( x -> check_nullness2 )
-		                      .flatMap( x -> check_nullness3 )
-		                      .flatMap( x -> check_nullness4 )
-		                      .flatMap( x -> check_nullness5 )
-		                      .flatMap( x -> check_nullness6 )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( predicate.test( argument1 , argument2 , argument3 , argument4 , argument5 , argument6 ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( Tuple.of( argument1 , argument2 , argument3 , argument4 , argument5 , argument6 ) );
 		}
 	
 	/**
@@ -772,19 +763,18 @@ public final class Preconditions
 	                                                                                      Predicate6<T1,T2,T3,T4,T5,T6> predicate ,
 	                                                                                      String message )
 		{
-		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness  = checkNotNull( tuple );
-		
-		var check_argument = justOrEmpty( tuple ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 , t3 , t4 , t5 , t6 ) -> false : predicate ) )
-		                                         .single()
-		                                         .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( TupleUtils.predicate( predicate )
+		                      .test( tuple ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( tuple );
 		}
 	
 	/**
 	 * Checking 7 arguments with predicate  (usual test for empty elements)
+	 * * If argument is null then  event with Tuple(null..
 	 * Wrap error as event
 	 *
 	 * @param <T1>
@@ -833,25 +823,12 @@ public final class Preconditions
 	                                                                                             String message )
 		{
 		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness1 = checkNotNull( argument1 );
-		var check_nullness2 = checkNotNull( argument2 );
-		var check_nullness3 = checkNotNull( argument3 );
-		var check_nullness4 = checkNotNull( argument4 );
-		var check_nullness5 = checkNotNull( argument5 );
-		var check_nullness6 = checkNotNull( argument6 );
-		var check_nullness7 = checkNotNull( argument7 );
-		var check_argument = fromSupplier( () -> Tuples.of( argument1 , argument2 , argument3 , argument4 , argument5 , argument6 , argument7 ) ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 , t3 , t4 , t5 , t6 , t7 ) -> false : predicate ) )
-		                                                                                                                                         .single()
-		                                                                                                                                         .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness1 )
-		                      .flatMap( x -> check_nullness2 )
-		                      .flatMap( x -> check_nullness3 )
-		                      .flatMap( x -> check_nullness4 )
-		                      .flatMap( x -> check_nullness5 )
-		                      .flatMap( x -> check_nullness6 )
-		                      .flatMap( x -> check_nullness7 )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( predicate.test( argument1 , argument2 , argument3 , argument4 , argument5 , argument6 , argument7 ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( Tuple.of( argument1 , argument2 , argument3 , argument4 , argument5 , argument6 , argument7 ) );
 		}
 	
 	/**
@@ -942,19 +919,18 @@ public final class Preconditions
 	                                                                                             Predicate7<T1,T2,T3,T4,T5,T6,T7> predicate ,
 	                                                                                             String message )
 		{
-		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness  = checkNotNull( tuple );
-		
-		var check_argument = justOrEmpty( tuple ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 , t3 , t4 , t5 , t6 , t7 ) -> false : predicate ) )
-		                                         .single()
-		                                         .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( TupleUtils.predicate( predicate )
+		                      .test( tuple ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( tuple );
 		}
 	
 	/**
 	 * Checking 8 arguments with predicate  (usual test for empty elements)
+	 * * If argument is null then  event with Tuple(null..
 	 * Wrap error as event
 	 *
 	 * @param <T1>
@@ -1007,28 +983,12 @@ public final class Preconditions
 	                                                                                                    Predicate8<T1,T2,T3,T4,T5,T6,T7,T8> predicate ,
 	                                                                                                    String message )
 		{
-		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness1 = checkNotNull( argument1 );
-		var check_nullness2 = checkNotNull( argument2 );
-		var check_nullness3 = checkNotNull( argument3 );
-		var check_nullness4 = checkNotNull( argument4 );
-		var check_nullness5 = checkNotNull( argument5 );
-		var check_nullness6 = checkNotNull( argument6 );
-		var check_nullness7 = checkNotNull( argument7 );
-		var check_nullness8 = checkNotNull( argument8 );
-		var check_argument = fromSupplier( () -> Tuples.of( argument1 , argument2 , argument3 , argument4 , argument5 , argument6 , argument7 , argument8 ) ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 , t3 , t4 , t5 , t6 , t7 , t8 ) -> false : predicate ) )
-		                                                                                                                                                     .single()
-		                                                                                                                                                     .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness1 )
-		                      .flatMap( x -> check_nullness2 )
-		                      .flatMap( x -> check_nullness3 )
-		                      .flatMap( x -> check_nullness4 )
-		                      .flatMap( x -> check_nullness5 )
-		                      .flatMap( x -> check_nullness6 )
-		                      .flatMap( x -> check_nullness7 )
-		                      .flatMap( x -> check_nullness8 )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( predicate.test( argument1 , argument2 , argument3 , argument4 , argument5 , argument6 , argument7 , argument8 ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( Tuple.of( argument1 , argument2 , argument3 , argument4 , argument5 , argument6 , argument7 , argument8 ) );
 		}
 	
 	/**
@@ -1126,15 +1086,13 @@ public final class Preconditions
 	                                                                                                    Predicate8<T1,T2,T3,T4,T5,T6,T7,T8> predicate ,
 	                                                                                                    String message )
 		{
-		
-		var check_predicate = checkNotNull( predicate , "Predicate should not be null" );
-		var check_nullness  = checkNotNull( tuple );
-		
-		var check_argument = justOrEmpty( tuple ).filter( TupleUtils.predicate( predicate == null ? ( t1 , t2 , t3 , t4 , t5 , t6 , t7 , t8 ) -> false : predicate ) )
-		                                         .single()
-		                                         .onErrorMap( illegalArgumentException( message ) );
-		return check_predicate.flatMap( x -> check_nullness )
-		                      .flatMap( x -> check_argument );
+		if( predicate == null )
+			return nullPointerMonoError( "Predicate must not be null" );
+		else if( !( TupleUtils.predicate( predicate )
+		                      .test( tuple ) ) )
+			return illegalArgumentMonoError( message );
+		else
+			return justOrEmpty( tuple );
 		}
 	
 	/**
@@ -1260,7 +1218,7 @@ public final class Preconditions
 	//<editor-fold desc="error utils Flux">
 	
 	/**
-	 * Alias for  Flux.error(new NullPointerException())
+	 * Only when subscription, lazily produce Flux.error with NullPointerException
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Flux}.
@@ -1269,13 +1227,11 @@ public final class Preconditions
 	 */
 	public static <T> Flux<T> nullPointerError()
 		{
-		return Flux.error( new NullPointerException() );
+		return Flux.defer( () -> Flux.error( new NullPointerException() ) );
 		}
 	
-	 
-	
 	/**
-	 * Alias for  Flux.error(new NullPointerException(description))
+	 * Only when subscription, lazily produce Flux.error with  NullPointerException(description))
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Flux}.
@@ -1287,11 +1243,11 @@ public final class Preconditions
 	
 	public static <T> Flux<T> nullPointerError( String description )
 		{
-		return Flux.error( new NullPointerException( description ) );
+		return Flux.defer( () -> Flux.error( new NullPointerException( description == null ? "" : description ) ) );
 		}
 	
 	/**
-	 * Alias for  Flux.error(new IllegalArgumentException())
+	 * Only when subscription, lazily produce Flux.error with  IllegalArgumentException()
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Flux}.
@@ -1301,11 +1257,11 @@ public final class Preconditions
 	
 	public static <T> Flux<T> illegalArgumentError()
 		{
-		return Flux.error( new IllegalArgumentException() );
+		return Flux.defer( () -> Flux.error( new IllegalArgumentException() ) );
 		}
 	
 	/**
-	 * Alias for  Flux.error(new IllegalArgumentException(description))
+	 * Only when subscription, lazily produce Flux.error with  IllegalArgumentException(description)
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Flux}.
@@ -1317,11 +1273,11 @@ public final class Preconditions
 	
 	public static <T> Flux<T> illegalArgumentError( String description )
 		{
-		return Flux.error( new IllegalArgumentException( description ) );
+		return Flux.defer( () -> Flux.error( new IllegalArgumentException( description == null ? "" : description ) ) );
 		}
 	
 	/**
-	 * Alias for  Flux.error(new IllegalArgumentException(description,cause))
+	 * Only when subscription, lazily produce Flux.error with IllegalArgumentException(description,cause)
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Flux}.
@@ -1336,11 +1292,11 @@ public final class Preconditions
 	public static <T> Flux<T> illegalArgumentError( String description ,
 	                                                Throwable cause )
 		{
-		return Flux.error( new IllegalArgumentException( description , cause ) );
+		return Flux.defer( () -> Flux.error( new IllegalArgumentException( description == null ? "" : description , cause ) ) );
 		}
 	
 	/**
-	 * Alias for  Flux.error(new IllegalStateException())
+	 * Only when subscription, lazily produce Flux.error with IllegalStateException()
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Flux}.
@@ -1350,11 +1306,11 @@ public final class Preconditions
 	
 	public static <T> Flux<T> illegalStateError()
 		{
-		return Flux.error( new IllegalStateException() );
+		return Flux.defer( () -> Flux.error( new IllegalStateException() ) );
 		}
 	
 	/**
-	 * Alias for  Flux.error(new IllegalStateException(description))
+	 * Only when subscription, lazily produce Flux.error with IllegalStateException(description)
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Flux}.
@@ -1366,11 +1322,11 @@ public final class Preconditions
 	
 	public static <T> Flux<T> illegalStateError( String description )
 		{
-		return Flux.error( new IllegalStateException( description ) );
+		return Flux.defer( () -> Flux.error( new IllegalStateException( description == null ? "" : description ) ) );
 		}
 	
 	/**
-	 * Alias for  Flux.error(new IllegalStateException(description,cause))
+	 * Only when subscription, lazily produce Flux.error with IllegalStateException(description,cause)
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Flux}.
@@ -1385,20 +1341,15 @@ public final class Preconditions
 	public static <T> Flux<T> illegalStateError( String description ,
 	                                             Throwable cause )
 		{
-		return Flux.error( new IllegalStateException( description , cause ) );
+		return Flux.defer( () -> Flux.error( new IllegalStateException( description == null ? "" : description , cause ) ) );
 		}
 	
 	//</editor-fold>
 	
-	
-	
-	
 	//<editor-fold desc="error utils Mono">
 	
-	
-	
 	/**
-	 * Alias for Mono.error(new NullPointerException())
+	 * Only when subscription, lazily produce Mono.error with NullPointerException()
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Mono}.
@@ -1408,11 +1359,11 @@ public final class Preconditions
 	
 	public static <T> Mono<T> nullPointerMonoError()
 		{
-		return error( new NullPointerException() );
+		return defer( () -> error( new NullPointerException() ) );
 		}
 	
 	/**
-	 * Alias for  Mono.error(new NullPointerException(description))
+	 * Only when subscription, lazily produce Mono.error with NullPointerException(description)
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Mono}.
@@ -1424,11 +1375,11 @@ public final class Preconditions
 	
 	public static <T> Mono<T> nullPointerMonoError( String description )
 		{
-		return Mono.error( new NullPointerException( description ) );
+		return defer( () -> Mono.error( new NullPointerException( description == null ? "" : description ) ) );
 		}
 	
 	/**
-	 * Alias for  Mono.error(new IllegalArgumentException())
+	 * Only when subscription, lazily produce Mono.error with IllegalArgumentException()
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Mono}.
@@ -1438,11 +1389,11 @@ public final class Preconditions
 	
 	public static <T> Mono<T> illegalArgumentMonoError()
 		{
-		return Mono.error( new IllegalArgumentException() );
+		return defer( () -> error( new IllegalArgumentException() ) );
 		}
 	
 	/**
-	 * Alias for  Mono.error(new IllegalArgumentException(description))
+	 * Only when subscription, lazily produce Mono.error with IllegalArgumentException(description)
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Mono}.
@@ -1454,11 +1405,11 @@ public final class Preconditions
 	
 	public static <T> Mono<T> illegalArgumentMonoError( String description )
 		{
-		return Mono.error( new IllegalArgumentException( description ) );
+		return defer( () -> error( new IllegalArgumentException( description == null ? "" : description ) ) );
 		}
 	
 	/**
-	 * Alias for  Mono.error(new IllegalArgumentException(description,cause))
+	 * Only when subscription, lazily produce Mono.error with IllegalArgumentException(description,cause)
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Mono}.
@@ -1471,13 +1422,13 @@ public final class Preconditions
 	 */
 	
 	public static <T> Mono<T> illegalArgumentMonoError( String description ,
-	                                                Throwable cause )
+	                                                    Throwable cause )
 		{
-		return Mono.error( new IllegalArgumentException( description , cause ) );
+		return defer( () -> error( new IllegalArgumentException( description == null ? "" : description , cause ) ) );
 		}
 	
 	/**
-	 * Alias for  Mono.error(new IllegalStateException())
+	 * Only when subscription, lazily produce Mono.error with IllegalStateException()
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Mono}.
@@ -1487,11 +1438,11 @@ public final class Preconditions
 	
 	public static <T> Mono<T> illegalStateMonoError()
 		{
-		return Mono.error( new IllegalStateException() );
+		return defer( () -> error( new IllegalStateException() ) );
 		}
 	
 	/**
-	 * Alias for  Mono.error(new IllegalStateException(description))
+	 * Only when subscription, lazily produce Mono.error with  IllegalStateException(description)
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Mono}.
@@ -1503,11 +1454,11 @@ public final class Preconditions
 	
 	public static <T> Mono<T> illegalStateMonoError( String description )
 		{
-		return Mono.error( new IllegalStateException( description ) );
+		return defer( () -> error( new IllegalStateException( description == null ? "" : description ) ) );
 		}
 	
 	/**
-	 * Alias for  Mono.error(new IllegalStateException(description,cause))
+	 * Only when subscription, lazily produce Mono.error with IllegalStateException(description,cause)
 	 *
 	 * @param <T>
 	 * 	Component type of the {@code Mono}.
@@ -1520,9 +1471,9 @@ public final class Preconditions
 	 */
 	
 	public static <T> Mono<T> illegalStateMonoError( String description ,
-	                                             Throwable cause )
+	                                                 Throwable cause )
 		{
-		return Mono.error( new IllegalStateException( description , cause ) );
+		return defer( () -> error( new IllegalStateException( description == null ? "" : description , cause ) ) );
 		}
 	
 	//</editor-fold>

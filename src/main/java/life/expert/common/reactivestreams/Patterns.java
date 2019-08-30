@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import lombok.NonNull;//@NOTNULL
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,7 +104,7 @@ public final class Patterns
 		{
 		if( tryObject == null )
 			{
-			return error( new NullPointerException( "Input argument Try-object is null" ) );
+			return nullPointerMonoError( "Input argument Try-object is null" );
 			}
 		
 		return tryObject.map( Mono::justOrEmpty )
@@ -124,7 +125,7 @@ public final class Patterns
 		{
 		if( tryObject == null )
 			{
-			return error( new NullPointerException( "Input argument Try-object is null" ) );
+			return nullPointerMonoError( "Input argument Try-object is null" );
 			}
 		
 		return tryObject.map( Mono::just )
@@ -145,7 +146,7 @@ public final class Patterns
 		{
 		if( tryObject == null )
 			{
-			return Flux.error( new NullPointerException( "Input argument Try-object is null" ) );
+			return nullPointerError( "Input argument Try-object is null" );
 			}
 		
 		return tryObject.map( Mono::justOrEmpty )
@@ -167,11 +168,59 @@ public final class Patterns
 		{
 		if( tryObject == null )
 			{
-			return Flux.error( new NullPointerException( "Input argument Try-object is null" ) );
+			return nullPointerError( "Input argument Try-object is null" );
 			}
 		
 		return tryObject.map( Flux::just )
 		                .getOrElseGet( Flux::error );
+		}
+	
+	//</editor-fold>
+	
+	//<editor-fold desc="gently flux to try">
+	
+	/**
+	 * Try from Mono. Mono with error event transforms Failure
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param mono
+	 * 	the mono object
+	 *
+	 * @return the Try
+	 */
+	public static <T> Try<T> tryFromMono( Mono<T> mono )
+		{
+		if( mono == null )
+			{
+			return nullPointerFailure( "Input argument Mono-object is null" );
+			}
+		
+		return mono.map( e -> (Try<T>) Success( e ) )
+		           .onErrorResume( err -> just( Failure( err ) ) )
+		           .block();
+		}
+	
+	/**
+	 * Try from Flux. Mono with error event transforms Failure
+	 *
+	 * @param <T>
+	 * 	the type parameter
+	 * @param flux
+	 * 	the flux object
+	 *
+	 * @return the Try
+	 */
+	public static <T> Try<T> tryFromFlux( Flux<T> flux )
+		{
+		if( flux == null )
+			{
+			return nullPointerFailure( "Input argument Flux-object is null" );
+			}
+		
+		return flux.map( e -> (Try<T>) Success( e ) )
+		           .onErrorResume( err -> Flux.just( Failure( err ) ) )
+		           .blockFirst();
 		}
 	
 	//</editor-fold>
@@ -226,7 +275,7 @@ public final class Patterns
 	
 	//</editor-fold>
 	
-	//<editor-fold desc="simple for iterators">
+	//<editor-fold desc="simple range=for(1..8)">
 	
 	/**
 	 * Range of Integers from start to end, even in reverse order.

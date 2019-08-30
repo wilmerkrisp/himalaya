@@ -47,25 +47,25 @@ class SolidStringTest
 	
 	private static final String STRING_IS_BLANK_FAILURE = "Failure(java.lang.IllegalArgumentException: String must not be blank.)";
 	
-	@Test
-	void tryOfTest()
-		{
-		
-		assert SolidString.tryOf( GOOD_STRING )
-		                  .get()
-		                  .toString()
-		                  .equals( STRIPPED_STRING );
-		
-		assert SolidString.tryOf( BLANK_STRING )
-		                  .toString()
-		                  .equals( STRING_IS_BLANK_FAILURE );
-		
-		assert SolidString.tryOf( NULL_STRING )
-		                  .toString()
-		                  .equals( STRING_IS_NULL_FAILURE );
-		
-		//log( SolidString.tryOf( NULL_STRING ).toString() );
-		}
+//	@Test
+//	void tryOfTest()
+//		{
+//
+//		assert SolidString.tryOf( GOOD_STRING )
+//		                  .get()
+//		                  .toString()
+//		                  .equals( STRIPPED_STRING );
+//
+//		assert SolidString.tryOf( BLANK_STRING )
+//		                  .toString()
+//		                  .equals( STRING_IS_BLANK_FAILURE );
+//
+//		assert SolidString.tryOf( NULL_STRING )
+//		                  .toString()
+//		                  .equals( STRING_IS_NULL_FAILURE );
+//
+//		//log( SolidString.tryOf( NULL_STRING ).toString() );
+//		}
 	
 	@Test
 	void ofTest()
@@ -86,20 +86,20 @@ class SolidStringTest
 		
 		}
 	
-	@Test
-	void optionalOfTest()
-		{
-		assert SolidString.optionalOf( GOOD_STRING )
-		                  .get()
-		                  .toString()
-		                  .equals( STRIPPED_STRING );
-		
-		assert SolidString.optionalOf( BLANK_STRING ).isEmpty();
-		
-		
-		assert SolidString.optionalOf( NULL_STRING ).isEmpty();
-		
-		}
+//	@Test
+//	void optionalOfTest()
+//		{
+//		assert SolidString.optionalOf( GOOD_STRING )
+//		                  .get()
+//		                  .toString()
+//		                  .equals( STRIPPED_STRING );
+//
+//		assert SolidString.optionalOf( BLANK_STRING ).isEmpty();
+//
+//
+//		assert SolidString.optionalOf( NULL_STRING ).isEmpty();
+//
+//		}
 	
 	@Test
 	void monoOfTest()

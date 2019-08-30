@@ -5,6 +5,7 @@ package life.expert.common.reactivestreams;
 import life.expert.common.function.CheckedUtils;
 import life.expert.common.reactivestreams.Preconditions;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -12,10 +13,12 @@ import java.time.Duration;
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 
 import org.apache.commons.lang3.StringUtils;            //isNotBlank
+import reactor.core.publisher.Hooks;
 import reactor.core.publisher.Mono;
 import reactor.function.TupleUtils;
 import reactor.test.StepVerifier;
 
+import static life.expert.common.reactivestreams.Patterns.tryFromFlux;
 import static reactor.core.publisher.Mono.*;
 import static life.expert.common.async.LogUtils.*;        //logAtInfo
 
@@ -35,6 +38,44 @@ import static life.expert.common.async.LogUtils.*;        //logAtInfo
 
 class PatternsTest
 	{
+	
+	
+	@BeforeEach
+	void setUp()
+		{
+		/*Spring Reactor global error log handler*/
+		Hooks.onOperatorError( ( err , data ) ->
+		                       {
+		                       String s = ( data == null ) ? "No additional data" : "Additional data" + data.toString();
+		                       print( "Global Stream Error: %s %s",s,err );
+		                       //logger_.error( s , err );
+		                       return err;
+		                       } );
+		}
+	
+	@Test
+	void tryFromMonoTest()
+		{
+		
+		}
+	
+	@Test
+	void tryFromFluxTest()
+		{
+		var a=tryFromFlux(Experiments.succflux( "OKK" ));
+		System.out.println("1) " +a);
+		assert a.isSuccess();
+		
+		var b=tryFromFlux(Experiments.errflux( "ERR" ));
+		System.out.println("2) " +b);
+		assert b.isFailure();
+		
+		
+//		var b=tryFromFlux(Experiments.excflux( "ERR" ));
+//		System.out.println("2) " +b);
+//		assert b.isFailure();
+		}
+
 	
 	/*
 	full analog of:
@@ -69,227 +110,10 @@ o.subscribe( logAtInfoConsumer( "NEXT" ) , logAtInfoConsumer( "ERROR" ) , logAtI
 				             justOrEmpty( string3 ).filter( StringUtils::isNotBlank ) );//.map( TupleUtils.function( PatternsTest::meth1 )) ;
 		//@formatter:on
 	* */
-	@Test
-	void forTest1()
-		{
-		var a = "one";
-		var b = "two";
-		var c = "three";
-		
-		var o = meth1( a,b,c );
-		//o.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
-		
-		StepVerifier.setDefaultTimeout( Duration.ofSeconds( 1 ) );
-		StepVerifier.create( o )
-		            .expectSubscription()
-		            .expectNext( "otvet+onetwothree" )
-		            .expectComplete()
-		            .verify();
-		
-		
-		}
-	
-	
-	@Test
-	void forTest2()
-		{
-		String a = null;
-		var    b = "two";
-		var    c = "three";
-		
-		var o = meth1( a , b , c );
-		//o.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
-		
-		
-		
-		StepVerifier.setDefaultTimeout( Duration.ofSeconds( 1 ) );
-		StepVerifier.create( o )
-		            .expectError()
-		            .verify();
-		
-		
-		}
-	
-	
-	@Test
-	void forTest3()
-		{
-		String a = "";
-		var    b = "two";
-		var    c = "three";
-		
-		
-		var o = meth1( a , b , c );
-		//o.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
-		
-		
-		StepVerifier.setDefaultTimeout( Duration.ofSeconds( 1 ) );
-		StepVerifier.create( o )
-		            .expectError()
-		            .verify();
-		}
 	
 	
 	
-	@Test
-	void forTest4()
-		{
-		String a = "error";
-		var    b = "two";
-		var    c = "three";
-		
-		
-		var o = meth1err( a , b , c );
-		//o.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
-		
-		StepVerifier.setDefaultTimeout( Duration.ofSeconds( 1 ) );
-		StepVerifier.create( o )
-		            .expectError()
-		            .verify();
-		}
-	
-	
-	
-	@Test
-	void forTest5()
-		{
-		String a = null;
-		var    b = "two";
-		var    c = "three";
-		
-		
-		var o = meth1noerr( a , b , c );
-		//o.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
-		
-		StepVerifier.setDefaultTimeout( Duration.ofSeconds( 1 ) );
-		StepVerifier.create( o )
-		            .expectComplete()
-		            .verify();
-		}
- 
-	
-	
-	public static Mono<String> meth1( final String string1 ,
-	                                  final String string2 ,
-	                                  final String string3 )
-		{
-//		//@formatter:off
-//		return zip( justOrEmpty( string1 ).filter( StringUtils::isNotBlank ).single().onErrorMap( illegalArgumentException( "Invalid param1" ) ),
-//		            justOrEmpty( string2 ).filter( StringUtils::isNotBlank ).single().onErrorMap( illegalArgumentException( "Invalid param2" ) ) ,
-//		            justOrEmpty( string3 ).filter( StringUtils::isNotBlank ).single().onErrorMap( illegalArgumentException( "Invalid param3" ) ) )
-//			                .map( TupleUtils.function( PatternsTest::meth1_ )).single() ;
-//		//@formatter:on
-		
-		//@formatter:off
-		return zip( Preconditions.checkArgument( string1,StringUtils::isNotBlank,"invalid param1" ) ,
-		            justOrEmpty( string2 ).filter( StringUtils::isNotBlank ).single().onErrorMap( CheckedUtils.illegalArgumentException( "Invalid param2" ) ) ,
-		            justOrEmpty( string3 ).filter( StringUtils::isNotBlank ).single().onErrorMap( CheckedUtils.illegalArgumentException( "Invalid param3" ) ) )
-			                .map( TupleUtils.function( PatternsTest::meth1_ )).single() ;
-		//@formatter:on
-		
-		}
-	
-	public static String meth1_( final String string1 ,
-	                             final String string2 ,
-	                             final String string3 )
-		{
-		//throw new RuntimeException( " cause " );
-		return "otvet+" + string1 + string2 + string3;
-		}
-	
-	public static Mono<String> meth1err( final String string1 ,
-	                                     final String string2 ,
-	                                     final String string3 )
-		{
-		//@formatter:off
-		return zip( justOrEmpty( string1 ).filter( StringUtils::isNotBlank ).single().onErrorMap( CheckedUtils.illegalArgumentException( "Invalid param1" ) ),
-		            justOrEmpty( string2 ).filter( StringUtils::isNotBlank ).single().onErrorMap( CheckedUtils.illegalArgumentException( "Invalid param2" ) ) ,
-		            justOrEmpty( string3 ).filter( StringUtils::isNotBlank ).single().onErrorMap( CheckedUtils.illegalArgumentException( "Invalid param3" ) ) )
-			                .map( TupleUtils.function( PatternsTest::meth1err_ )).single() ;
-		//@formatter:on
-		
-		}
-	
-	public static String meth1err_( final String string1 ,
-	                                final String string2 ,
-	                                final String string3 )
-		{
-		throw new RuntimeException( " cause " );
-		///return "otvet+" + string1 + string2 + string3;
-		}
-	
-	public static Mono<String> meth1noerr( final String string1 ,
-	                                       final String string2 ,
-	                                       final String string3 )
-		{
-		//		//@formatter:off
-//		return zip( justOrEmpty( string1 ).filter( StringUtils::isNotBlank ).single().onErrorMap( illegalArgumentException( "Invalid param1" ) ),
-//		            justOrEmpty( string2 ).filter( StringUtils::isNotBlank ).single().onErrorMap( illegalArgumentException( "Invalid param2" ) ) ,
-//		            justOrEmpty( string3 ).filter( StringUtils::isNotBlank ).single().onErrorMap( illegalArgumentException( "Invalid param3" ) ) )
-//			                .map( TupleUtils.function( PatternsTest::meth1_ )).single() ;
-//		//@formatter:on
-		
-		//@formatter:off
-		return zip( justOrEmpty( string1 ) ,
-		            justOrEmpty( string2 )  ,
-		            justOrEmpty( string3 )  )
-			                .map( TupleUtils.function( PatternsTest::meth1_ )) ;
-		//@formatter:on
-		
-		}
-	
-	@Test
-	void checkArgumentTest()
-		{
-		var o = Preconditions.checkArgument( null , StringUtils::isNotBlank , "arg is blank" );
-		//o.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
-		
-		StepVerifier.setDefaultTimeout( Duration.ofSeconds( 1 ) );
-		StepVerifier.create( o )
-		            .expectError()
-		            .verify();
-			
-		}
-	
-	@Test
-	void checkArgumentTest2()
-		{
-		var o = Preconditions.checkArgument( " " , StringUtils::isNotBlank , "arg is blank" );
-		//o.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
-		
-		StepVerifier.setDefaultTimeout( Duration.ofSeconds( 1 ) );
-		StepVerifier.create( o )
-		            .expectError()
-		            .verify();
-		}
-	
-	@Test
-	void checkArgumentTest3()
-		{
-		var o = Preconditions.checkArgument( "i " , null , "arg is blank" );
-		//o.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
-		
-		StepVerifier.setDefaultTimeout( Duration.ofSeconds( 1 ) );
-		StepVerifier.create( o )
-		            .expectError()
-		            .verify();
-			
-		}
-	
-	@Test
-	void checkArgumentTest4()
-		{
-		var o = Preconditions.checkArgument( "i " , StringUtils::isNotBlank , "arg is blank" );
-		//o.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
-		
-		StepVerifier.setDefaultTimeout( Duration.ofSeconds( 1 ) );
-		StepVerifier.create( o )
-		            .expectSubscription()
-		            .expectNext( "i " )
-		            .expectComplete()
-		            .verify();
-			
-		}
+
 	
 	
 	

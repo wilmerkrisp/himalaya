@@ -10,6 +10,7 @@ package life.expert.common.function;
 //                                            Wilmer Krisp 2019/02/05
 //--------------------------------------------------------------------------------------------------------
 
+import io.vavr.Tuple1;
 import io.vavr.Tuple2;
 import io.vavr.Tuple3;
 import io.vavr.Tuple4;
@@ -43,6 +44,22 @@ import java.util.function.Predicate;
  */
 public class TupleUtils
 	{
+	/**
+	 * Returns a {@link Consumer} of {@link Tuple1} that wraps a consumer of the component values of the tuple
+	 *
+	 * @param consumer
+	 * 	the component value consumer
+	 * @param <T1>
+	 * 	the type of the first value
+
+	 *
+	 * @return the wrapper consumer
+	 */
+	public static <T1> Consumer<Tuple1<T1>> consumer( Consumer<T1> consumer )
+		{
+		return tuple -> consumer.accept( tuple._1 );
+		}
+	
 	/**
 	 * Returns a {@link Consumer} of {@link Tuple2} that wraps a consumer of the component values of the tuple
 	 *
@@ -202,6 +219,23 @@ public class TupleUtils
 	public static <T1, T2, T3, T4, T5, T6, T7, T8> Consumer<Tuple8<T1,T2,T3,T4,T5,T6,T7,T8>> consumer( Consumer8<T1,T2,T3,T4,T5,T6,T7,T8> consumer )
 		{
 		return tuple -> consumer.accept( tuple._1 , tuple._2 , tuple._3 , tuple._4 , tuple._5 , tuple._6 , tuple._7 , tuple._8 );
+		}
+	
+	/**
+	 * Returns a {@link Function} of {@link Tuple1} that wraps a function of the component values of the tuple
+	 *
+	 * @param function
+	 * 	the component value function
+	 * @param <T1>
+	 * 	the type of the first value
+	 * @param <R>
+	 * 	the type of the result of the function
+	 *
+	 * @return the wrapper function
+	 */
+	public static <T1, R> Function<Tuple1<T1>,R> function( Function<T1,R> function )
+		{
+		return tuple -> function.apply( tuple._1 );
 		}
 	
 	/**
@@ -377,6 +411,22 @@ public class TupleUtils
 	public static <T1, T2, T3, T4, T5, T6, T7, T8, R> Function<Tuple8<T1,T2,T3,T4,T5,T6,T7,T8>,R> function( Function8<T1,T2,T3,T4,T5,T6,T7,T8,R> function )
 		{
 		return tuple -> function.apply( tuple._1 , tuple._2 , tuple._3 , tuple._4 , tuple._5 , tuple._6 , tuple._7 , tuple._8 );
+		}
+	
+	
+	/**
+	 * Returns a {@link Predicate} of {@link Tuple1} that wraps a predicate of the component values of the tuple
+	 *
+	 * @param predicate
+	 * 	the component value predicate
+	 * @param <T1>
+	 * 	the type of the first value
+	 *
+	 * @return the wrapper predicate
+	 */
+	public static <T1> Predicate<Tuple1<T1>> predicate( Predicate<T1> predicate )
+		{
+		return tuple -> predicate.test( tuple._1  );
 		}
 	
 	/**

@@ -13,21 +13,16 @@ package life.expert.value.numeric;
 import com.google.common.collect.ComparisonChain;
 import io.vavr.match.annotation.Patterns;
 import io.vavr.match.annotation.Unapply;
+import life.expert.common.function.TupleUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;//@NOTNULL
 
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 
-import java.util.Optional;
-
 //import static  reactor.function.TupleUtils.*; //reactor's tuple->R INTO func->R
-
-import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
-import static life.expert.common.reactivestreams.Patterns.*;    //reactive helper functions
 
 //import static io.vavr.API.*;                           //conflicts with my reactive For-comprehension
 
@@ -41,18 +36,23 @@ import static io.vavr.API.unchecked;    //checked->unchecked
 import static io.vavr.API.Function;     //lambda->Function3
 import static io.vavr.API.Tuple;
 
-import io.vavr.control.Try;                               //try
 import reactor.core.publisher.Mono;
-
-import static io.vavr.API.Success;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple1;
+
+import static reactor.core.publisher.Mono.*;
+//import static  reactor.function.TupleUtils.*; //reactor's tuple->R INTO func->R
+
+import static life.expert.common.reactivestreams.Preconditions.*; //reactive check
 
 /**
  * <pre>
  * Simple value-object long wrapper.
  * Class invariant: value &gt; 0
+ *
+ * 	- only the monoOf.. factory methods is allowed, because it allows you to lazily create objects only with a real subscription
+ *  	- 'of' - factory method is prohibited because it is intended only for easy creation of objects in tests, please use pure functional methods monoOf.., without raise exceptions.
  *
  * Preconditions: none
  * Postconditions: none
@@ -81,83 +81,146 @@ public final class PositiveLong
 	 * @return long
 	 * 	the long primitive value
 	 */
-	 private final long longNumber;
+	private final long number;
+	
+	/*
+       Other factories use this method to create an object.
+       He himself calls the private constructor to create the object.
+       * */
+	private static Mono<PositiveLong> monoOf_( final long number )
+		{
+		return fromSupplier( () -> new PositiveLong( number ) );
+		}
 	
 	/**
-	 * Classic factory method.
-	 * Not recomended with functional style because raise Exception.
+	 * Create PositiveLong from long
+	 * Only the monoOf.. factory methods is allowed, because it allows you to lazily create objects only with a real subscription
 	 *
 	 * @param number
-	 * 	the long primitive value
+	 * 	the number
 	 *
-	 * @return the positive long
+	 * @return the Mono with lazyli created object
+	 *
+	 * @implNote to create objects, this method calls the private factory monoOf_
+	 */
+	public static Mono<PositiveLong> monoOf( final long number )
+		{
+		if( number < 1 )
+			return illegalArgumentMonoError( "Input argument must posititve >0 ." );
+		else
+			return monoOf_( number );
+		}
+	
+	/**
+	 * <pre>
+	 * Classic fabric method for creating positive number.
+	 * This factory method is prohibited because it is intended only for easy creation of objects in tests
+	 *
+	 * @param number the number
+	 * @return the always positive number
+	 * @throws IllegalArgumentException if number not positive
+	 * @deprecated please use pure functional methods monoOf.., without raise exceptions. </pre>
 	 */
 	@Deprecated
 	public static PositiveLong of( final long number )
 		{
-		return tryOf( number ).get();
+		return monoOf( number ).block();
 		}
 	
 	/**
-	 * Factory method returns Vavr's Try.
+	 * Create PositiveLong from Tuple
+	 * The method helps with conversion operations Tuple-&gt;PositiveLong
 	 *
-	 * @param number
-	 * 	the long primitive value
+	 * @param tuple
+	 * 	the tuple
 	 *
-	 * @return Try with PositiveLong
+	 * @return the Mono with lazyli created object
 	 */
-	public static Try<PositiveLong> tryOf( final long number )
+	public static Mono<PositiveLong> monoOfTuple( Tuple1<Long> tuple )
 		{
-		if( number < 1 )
-			return illegalArgumentFailure( "Input argument must posititve >0 ." );
+		if( tuple == null )
+			return illegalArgumentMonoError( "Input tuple must not be null." );
 		else
-			return Success( new PositiveLong( number ) );
-			
+			return TupleUtils.function( PositiveLong::monoOf )
+			                 .apply( tuple );
 		}
 	
 	/**
-	 * Factory method returns Optional.
+	 * Create PositiveLong from Mono with Tuple inside
+	 * The method helps chaining flows together
 	 *
-	 * @param number
-	 * 	the long primitive value
+	 * @param tuple
+	 * 	the tuple
 	 *
-	 * @return Optional with PositiveInteger
+	 * @return the Mono with lazyli created object
 	 */
-	public static Optional<PositiveLong> optionalOf( final long number )
+	public static Mono<PositiveLong> monoOfMonoWithTuple( Mono<Tuple1<Long>> tuple )
 		{
-		return tryOf( number ).toJavaOptional();
+		if( tuple == null )
+			return illegalArgumentMonoError( "Input Mono must not be null." );
+		else
+			return tuple.flatMap( PositiveLong::monoOfTuple );
 		}
 	
 	/**
-	 * Factory method returns Reactor's Mono.
+	 * Create PositiveLong from Mono with positive number inside
+	 * The method helps chaining flows together
 	 *
 	 * @param number
-	 * 	the long primitive value
+	 * 	the number
 	 *
-	 * @return Mono with PositiveInteger
+	 * @return the Mono with lazyli created object
 	 */
-	public static Mono<PositiveLong> monoOf( final long number )
+	public static Mono<PositiveLong> monoOfMono( Mono<Long> number )
 		{
-		return monoFromTry( tryOf( number ) );
+		if( number == null )
+			return illegalArgumentMonoError( "Input Mono must not be null." );
+		else
+			return number.flatMap( PositiveLong::monoOf );
 		}
 	
+	/**
+	 * Standard Copy Factory
+	 *
+	 * @param other
+	 * 	the other
+	 *
+	 * @return the Mono with lazyli created object
+	 *
+	 * @implNote to create objects, this method calls the private factory monoOf_
+	 */
+	public static Mono<PositiveLong> copyOf( final PositiveLong other )
+		{
+		return monoOf_( other.getNumber() );
+		}
+	
+	/**
+	 * pattern matching in vavr
+	 * - you need add static import to method with pattern matching
+	 * import static life.expert.value.string.NonBlankStringPatterns.*;
+	 *
+	 * @param object
+	 * 	the object
+	 *
+	 * @return the tuple 1
+	 */
 	@Unapply
 	static Tuple1<Long> PositiveLong( PositiveLong object )
 		{
-		return Tuple.of( object.getLongNumber() );
+		return Tuple.of( object.getNumber() );
 		}
 	
 	@Override
 	public String toString()
 		{
-		return "" + this.longNumber;
+		return "" + this.number;
 		}
 	
 	@Override
 	public int compareTo( PositiveLong o )
 		{
 		return ComparisonChain.start()
-		                      .compare( this.longNumber , o.longNumber )
+		                      .compare( this.number , o.number )
 		                      .result();
 		}
 	}
