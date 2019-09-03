@@ -322,5 +322,8 @@ delegate IDE build/run actions to gradle
 
 * monitoring and outer recovery from failures outside the scope of this code
 
+== Architecture with JArchitect
+image:https://www.jarchitect.com/assets/img/transparentlogo.png["JArchitecture",width=170,link="www.jarchitect.com"]
+Architecture diagrams is also presented for comparison (coming soon!), built with JArchitect. Thanks to Codegear / CppDepend for the JArchitect.
 
 
