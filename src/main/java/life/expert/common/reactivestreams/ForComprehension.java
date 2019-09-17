@@ -124,7 +124,6 @@ public final class ForComprehension
 	public static <T1, T2> Publisher<T2> For( Flux<T1> ts1 ,
 	                                          Function<? super Flux<T1>,? extends Publisher<T2>> ts2 )
 		{
-		
 		return ts1.flatMap( t1 -> justOrEmpty( t1 ).flux()
 		                                           .transform( ts2 ) );
 		}
@@ -146,7 +145,6 @@ public final class ForComprehension
 	public static <T1, T2> Mono<T2> For( Mono<T1> ts1 ,
 	                                     Function<? super Mono<T1>,? extends Mono<T2>> ts2 )
 		{
-		
 		return ts1.flatMap( t1 -> justOrEmpty( t1 ).transform( ts2 ) );
 		}
 	

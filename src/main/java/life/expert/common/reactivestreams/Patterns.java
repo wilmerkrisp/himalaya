@@ -10,53 +10,29 @@ package life.expert.common.reactivestreams;
 //                                            Wilmer Krisp 2019/02/05
 //--------------------------------------------------------------------------------------------------------
 
-import io.vavr.*;
-
+import io.vavr.CheckedConsumer;
+import io.vavr.CheckedFunction1;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import io.vavr.control.Try;
-import lombok.experimental.ExtensionMethod;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-
-import lombok.NonNull;//@NOTNULL
-
-import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static java.text.MessageFormat.format;           //format string
-
-import java.util.Objects;
-import java.util.ResourceBundle;
-
-import static com.google.common.base.Preconditions.*;   //checkArgument
-//import static life.expert.common.base.Preconditions.*;  //checkCollection
-import static org.apache.commons.lang3.Validate.*;      //notEmpty(collection)
-
-import org.apache.commons.lang3.StringUtils;            //isNotBlank
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
-import java.util.function.*;                            //producer supplier
+import java.util.function.Function;
 
-import static java.util.stream.Collectors.*;            //toList streamAPI
-import static java.util.function.Predicate.*;           //isEqual streamAPI
-
-import java.util.Optional;
-
-import static reactor.core.publisher.Mono.*;
-import static reactor.core.scheduler.Schedulers.*;
-import static life.expert.common.async.LogUtils.*;        //logAtInfo
-import static life.expert.common.function.NullableUtils.*;//.map(nullableFunction)
-import static life.expert.common.function.CheckedUtils.*;// .map(consumerToBoolean)
-import static life.expert.common.base.Objects.*;          //deepCopyOfObject
+import static io.vavr.API.Failure;
+import static io.vavr.API.Success;
+import static life.expert.common.async.LogUtils.logAtErrorFunction;
+import static life.expert.common.function.CheckedUtils.nullPointerFailure;
+import static life.expert.common.function.CheckedUtils.uncheckedFunction;
 import static life.expert.common.reactivestreams.Preconditions.*;
+import static reactor.core.publisher.Mono.just;
+import static reactor.core.publisher.Mono.never;
 
-import static io.vavr.API.*;                              //switch
-import static io.vavr.Predicates.*;                       //switch - case
-import static io.vavr.Patterns.*;                         //switch - case - success/failure
-import static cyclops.control.Trampoline.more;
-import static cyclops.control.Trampoline.done;
+//import static life.expert.common.base.Preconditions.*;  //checkCollection
 
 //import java.util.List;                                  //usual list
 //import io.vavr.collection.List;                         //immutable List
@@ -103,9 +79,7 @@ public final class Patterns
 	public static <T> Mono<T> monoFromNullableTry( Try<T> tryObject )
 		{
 		if( tryObject == null )
-			{
 			return nullPointerMonoError( "Input argument Try-object is null" );
-			}
 		
 		return tryObject.map( Mono::justOrEmpty )
 		                .getOrElseGet( Mono::error );
@@ -124,9 +98,7 @@ public final class Patterns
 	public static <T> Mono<T> monoFromTry( Try<T> tryObject )
 		{
 		if( tryObject == null )
-			{
 			return nullPointerMonoError( "Input argument Try-object is null" );
-			}
 		
 		return tryObject.map( Mono::just )
 		                .getOrElseGet( Mono::error );
@@ -145,9 +117,7 @@ public final class Patterns
 	public static <T> Flux<T> fluxFromNullableTry( Try<T> tryObject )
 		{
 		if( tryObject == null )
-			{
 			return nullPointerError( "Input argument Try-object is null" );
-			}
 		
 		return tryObject.map( Mono::justOrEmpty )
 		                .map( Mono::flux )
@@ -167,9 +137,7 @@ public final class Patterns
 	public static <T> Flux<T> fluxFromTry( Try<T> tryObject )
 		{
 		if( tryObject == null )
-			{
 			return nullPointerError( "Input argument Try-object is null" );
-			}
 		
 		return tryObject.map( Flux::just )
 		                .getOrElseGet( Flux::error );
@@ -192,9 +160,7 @@ public final class Patterns
 	public static <T> Try<T> tryFromMono( Mono<T> mono )
 		{
 		if( mono == null )
-			{
 			return nullPointerFailure( "Input argument Mono-object is null" );
-			}
 		
 		return mono.map( e -> (Try<T>) Success( e ) )
 		           .onErrorResume( err -> just( Failure( err ) ) )
@@ -214,9 +180,7 @@ public final class Patterns
 	public static <T> Try<T> tryFromFlux( Flux<T> flux )
 		{
 		if( flux == null )
-			{
 			return nullPointerFailure( "Input argument Flux-object is null" );
-			}
 		
 		return flux.map( e -> (Try<T>) Success( e ) )
 		           .onErrorResume( err -> Flux.just( Failure( err ) ) )

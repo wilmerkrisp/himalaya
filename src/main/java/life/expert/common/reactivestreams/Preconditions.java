@@ -536,7 +536,6 @@ public final class Preconditions
 	                                                                               Predicate5<T1,T2,T3,T4,T5> predicate ,
 	                                                                               String message )
 		{
-		
 		if( predicate == null )
 			return nullPointerMonoError( "Predicate must not be null" );
 		else if( !( predicate.test( argument1 , argument2 , argument3 , argument4 , argument5 ) ) )
@@ -673,7 +672,6 @@ public final class Preconditions
 	                                                                                      Predicate6<T1,T2,T3,T4,T5,T6> predicate ,
 	                                                                                      String message )
 		{
-		
 		if( predicate == null )
 			return nullPointerMonoError( "Predicate must not be null" );
 		else if( !( predicate.test( argument1 , argument2 , argument3 , argument4 , argument5 , argument6 ) ) )
@@ -1143,7 +1141,6 @@ public final class Preconditions
 	public static <T> Mono<T> checkTrue( boolean condition ,
 	                                     String message )
 		{
-		
 		return condition ? empty() : error( new IllegalArgumentException( message == null ? "Condition should be true" : message ) );
 		}
 	
