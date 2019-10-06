@@ -18,21 +18,15 @@ import cyclops.function.checked.CheckedBiPredicate;
 import io.vavr.CheckedConsumer;
 import io.vavr.CheckedFunction0;
 import io.vavr.CheckedFunction1;
-import io.vavr.CheckedFunction2;
 import io.vavr.CheckedPredicate;
 import io.vavr.CheckedRunnable;
-import io.vavr.Function1;
 import io.vavr.Function3;
-import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
 import reactor.function.*;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -43,8 +37,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static life.expert.common.async.LogUtils.logAtErrorFunction;
-import static life.expert.common.async.LogUtils.printFunction;
-import static reactor.core.publisher.Mono.never;
+import static life.expert.common.async.PrintUtils.printFunction;
 
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 

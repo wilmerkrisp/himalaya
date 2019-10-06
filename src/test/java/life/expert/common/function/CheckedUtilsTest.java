@@ -2,16 +2,15 @@ package life.expert.common.function;
 
 
 
-import static life.expert.common.async.LogUtils.printConsumer;
-import static life.expert.common.async.LogUtils.printRunnable;
+import static life.expert.common.async.PrintUtils.printConsumer;
+import static life.expert.common.async.PrintUtils.printRunnable;
 import static life.expert.common.function.CheckedUtils.*;
 import static reactor.core.publisher.Mono.justOrEmpty;
 
 import io.vavr.control.Try;
 
-import life.expert.common.async.ThreadUtils;
+import life.expert.common.async.PrintUtils;
 import life.expert.common.reactivestreams.Patterns;
-import life.expert.common.reactivestreams.Preconditions;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
@@ -22,7 +21,6 @@ import java.time.Duration;
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 
 import static reactor.core.scheduler.Schedulers.*;
-import static life.expert.common.async.LogUtils.*;
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 
 //import java.util.List;                                 //usual list
@@ -137,7 +135,7 @@ class CheckedUtilsTest
 		                                  throw new IOException();
 		                                  } ) )
 		         .sequential()
-		         .onErrorContinue( printBiConsumer( "CONTINUEE" ) );
+		         .onErrorContinue( PrintUtils.printBiConsumer( "CONTINUEE" ) );
 		
 		//b.subscribe( printConsumer( "NEXT" ) , printConsumer( "ERROR" ) , printRunnable( "COMPLETE" ) );
 		

@@ -56,6 +56,7 @@ requires static lombok;
 
 ///requires org.jetbrains.annotations;
 //requires error.prone.annotations;
+
 requires transitive org.reactivestreams;
 requires transitive reactor.core;
 requires transitive reactor.extra;
@@ -67,13 +68,14 @@ requires com.google.common;
 requires org.apache.commons.lang3;
 
 
-requires gson;
+
 requires transitive cyclops;
 requires error.prone.annotations;
 requires org.apache.commons.io;
 
 requires transitive vavr;
 requires static vavr.match;
+requires com.google.gson;
 
 //requires manifold.ext;
 

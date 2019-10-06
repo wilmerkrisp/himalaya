@@ -2,25 +2,16 @@ package life.expert.common.reactivestreams;
 
 
 
-import life.expert.common.function.CheckedUtils;
-import life.expert.common.reactivestreams.Preconditions;
+import life.expert.common.async.PrintUtils;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-
 //import static life.expert.common.base.Preconditions.*;  //checkCollection
 
-import org.apache.commons.lang3.StringUtils;            //isNotBlank
 import reactor.core.publisher.Hooks;
-import reactor.core.publisher.Mono;
-import reactor.function.TupleUtils;
-import reactor.test.StepVerifier;
 
 import static life.expert.common.reactivestreams.Patterns.tryFromFlux;
-import static reactor.core.publisher.Mono.*;
-import static life.expert.common.async.LogUtils.*;        //logAtInfo
 
 //switch
 
@@ -47,7 +38,7 @@ class PatternsTest
 		Hooks.onOperatorError( ( err , data ) ->
 		                       {
 		                       String s = ( data == null ) ? "No additional data" : "Additional data" + data.toString();
-		                       print( "Global Stream Error: %s %s",s,err );
+		                       PrintUtils.print( "Global Stream Error: %s %s", s, err );
 		                       //logger_.error( s , err );
 		                       return err;
 		                       } );
